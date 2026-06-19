@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Documents;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/search-apis/search-shards/
+ */
 class Routing
 {
     /**

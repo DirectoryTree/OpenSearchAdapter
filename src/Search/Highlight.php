@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
+/**
+ * @see https://docs.opensearch.org/latest/search-plugins/searching-data/highlight/
+ */
 class Highlight implements RawResponseInterface
 {
     /**

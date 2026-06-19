@@ -5,6 +5,12 @@ namespace DirectoryTree\OpenSearchAdapter\Indices;
 use OpenSearch\Client;
 use OpenSearch\Namespaces\IndicesNamespace;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/index-apis/create-index/
+ * @see https://docs.opensearch.org/latest/api-reference/index-apis/put-mapping/
+ * @see https://docs.opensearch.org/latest/api-reference/index-apis/update-settings/
+ * @see https://docs.opensearch.org/latest/api-reference/index-apis/alias/
+ */
 class IndexManager
 {
     /**
@@ -63,14 +69,11 @@ class IndexManager
             'index' => $index->name(),
         ];
 
-        $mapping = $index->mapping() === null ? [] : $index->mapping()->toArray();
-        $settings = $index->settings() === null ? [] : $index->settings()->toArray();
-
-        if (! empty($mapping)) {
+        if ($mapping = $index->mapping()?->toArray()) {
             $params['body']['mappings'] = $mapping;
         }
 
-        if (! empty($settings)) {
+        if ($settings = $index->settings()?->toArray()) {
             $params['body']['settings'] = $settings;
         }
 

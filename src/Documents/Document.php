@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Documents;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/document-apis/index-document/
+ */
 class Document
 {
     /**
@@ -28,7 +31,7 @@ class Document
      */
     public function content(?string $key = null): mixed
     {
-        if ($key === null) {
+        if (is_null($key)) {
             return $this->content;
         }
 

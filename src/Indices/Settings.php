@@ -5,6 +5,8 @@ namespace DirectoryTree\OpenSearchAdapter\Indices;
 use BadMethodCallException;
 
 /**
+ * @see https://docs.opensearch.org/latest/install-and-configure/configuring-opensearch/index-settings/
+ *
  * @method $this index(array $configuration)
  * @method $this analysis(array $configuration)
  */

@@ -4,6 +4,9 @@ namespace DirectoryTree\OpenSearchAdapter\Exceptions;
 
 use ErrorException;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/document-apis/bulk/
+ */
 class BulkRequestException extends ErrorException
 {
     /**

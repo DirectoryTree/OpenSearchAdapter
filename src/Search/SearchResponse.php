@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+ */
 class SearchResponse implements RawResponseInterface
 {
     /**

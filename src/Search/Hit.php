@@ -4,6 +4,9 @@ namespace DirectoryTree\OpenSearchAdapter\Search;
 
 use DirectoryTree\OpenSearchAdapter\Documents\Document;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+ */
 class Hit implements RawResponseInterface
 {
     /**

@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
+/**
+ * @see https://docs.opensearch.org/latest/search-plugins/searching-data/did-you-mean/
+ */
 class Suggestion implements RawResponseInterface
 {
     /**

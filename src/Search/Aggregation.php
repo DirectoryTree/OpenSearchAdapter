@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
+/**
+ * @see https://docs.opensearch.org/latest/aggregations/
+ */
 class Aggregation implements RawResponseInterface
 {
     /**

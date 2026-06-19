@@ -27,7 +27,6 @@
     },
     "require": {
         "php": "^8.2",
-        "guzzlehttp/guzzle": "^7.0",
         "opensearch-project/opensearch-php": "^2.6"
     },
     "require-dev": {

@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
+/**
+ * @see https://docs.opensearch.org/latest/aggregations/
+ */
 class Bucket implements RawResponseInterface
 {
     /**

@@ -7,6 +7,11 @@ use DirectoryTree\OpenSearchAdapter\Search\SearchRequest;
 use DirectoryTree\OpenSearchAdapter\Search\SearchResponse;
 use OpenSearch\Client;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/document-apis/bulk/
+ * @see https://docs.opensearch.org/latest/api-reference/document-apis/delete-by-query/
+ * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+ */
 class DocumentManager
 {
     /**

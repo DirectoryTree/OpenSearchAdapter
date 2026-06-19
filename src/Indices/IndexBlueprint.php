@@ -2,6 +2,9 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Indices;
 
+/**
+ * @see https://docs.opensearch.org/latest/api-reference/index-apis/create-index/
+ */
 class IndexBlueprint
 {
     /**

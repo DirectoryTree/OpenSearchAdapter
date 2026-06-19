@@ -6,6 +6,9 @@ use BadMethodCallException;
 use Closure;
 
 /**
+ * @see https://docs.opensearch.org/latest/field-types/
+ * @see https://docs.opensearch.org/latest/mappings/
+ *
  * @method $this alias(string $name, array|null $parameters = null)
  * @method $this binary(string $name, array|null $parameters = null)
  * @method $this boolean(string $name, array|null $parameters = null)
