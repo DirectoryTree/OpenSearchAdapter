@@ -7,14 +7,25 @@ use ErrorException;
 class BulkRequestException extends ErrorException
 {
     /**
+     * Create a new bulk request exception from an OpenSearch response.
+     *
+     * @param  array<string, mixed>  $response
+     */
+    public static function fromResponse(array $response): self
+    {
+        return new self($response, self::makeMessageFromResponse($response));
+    }
+
+    /**
      * Create a new bulk request exception instance.
      *
      * @param  array<string, mixed>  $response
      */
     public function __construct(
         protected array $response,
+        string $message = '',
     ) {
-        parent::__construct($this->makeErrorFromResponse());
+        parent::__construct($message);
     }
 
     /**
@@ -42,9 +53,9 @@ class BulkRequestException extends ErrorException
     /**
      * Create the exception message from the OpenSearch bulk response.
      */
-    protected function makeErrorFromResponse(): string
+    protected static function makeMessageFromResponse(array $response): string
     {
-        $items = $this->response['items'] ?? [];
+        $items = $response['items'] ?? [];
         $count = count($items);
 
         $reason = sprintf('%s did not complete successfully.', $count > 0 ? $count.' bulk operation(s)' : 'One or more');

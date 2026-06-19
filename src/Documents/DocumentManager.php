@@ -49,7 +49,7 @@ class DocumentManager
         $response = $this->client->bulk($params);
 
         if ($response['errors']) {
-            throw new BulkRequestException($response);
+            throw BulkRequestException::fromResponse($response);
         }
 
         return $this;
@@ -87,7 +87,7 @@ class DocumentManager
         $response = $this->client->bulk($params);
 
         if ($response['errors']) {
-            throw new BulkRequestException($response);
+            throw BulkRequestException::fromResponse($response);
         }
 
         return $this;

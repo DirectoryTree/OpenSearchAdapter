@@ -150,6 +150,7 @@ class Mapping
     public function toArray(): array
     {
         $mapping = [];
+
         $properties = $this->properties->toArray();
 
         if (isset($this->isFieldNamesEnabled)) {
