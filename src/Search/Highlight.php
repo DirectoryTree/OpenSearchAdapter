@@ -10,11 +10,6 @@ class Highlight implements RawResponseInterface
      * @param  array<string, array<int, string>>  $highlight
      */
     public function __construct(
-        /**
-         * The raw OpenSearch highlight payload.
-         *
-         * @var array<string, array<int, string>>
-         */
         protected array $highlight,
     ) {}
 

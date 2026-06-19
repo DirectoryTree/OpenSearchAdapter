@@ -10,11 +10,6 @@ class Bucket implements RawResponseInterface
      * @param  array<string, mixed>  $bucket
      */
     public function __construct(
-        /**
-         * The raw OpenSearch bucket payload.
-         *
-         * @var array<string, mixed>
-         */
         protected array $bucket,
     ) {}
 

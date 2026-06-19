@@ -10,11 +10,6 @@ class Suggestion implements RawResponseInterface
      * @param  array<string, mixed>  $suggestion
      */
     public function __construct(
-        /**
-         * The raw OpenSearch suggestion payload.
-         *
-         * @var array<string, mixed>
-         */
         protected array $suggestion,
     ) {}
 

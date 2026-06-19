@@ -6,21 +6,12 @@ class IndexBlueprint
 {
     /**
      * Create a new index blueprint instance.
+     *
+     * @param  string  $name  The index name.
      */
     public function __construct(
-        /**
-         * The index name.
-         */
         protected string $name,
-
-        /**
-         * The index mapping definition.
-         */
         protected ?Mapping $mapping = null,
-
-        /**
-         * The index settings definition.
-         */
         protected ?Settings $settings = null,
     ) {}
 

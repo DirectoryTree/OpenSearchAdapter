@@ -10,11 +10,6 @@ class SearchResponse implements RawResponseInterface
      * @param  array<string, mixed>  $response
      */
     public function __construct(
-        /**
-         * The raw OpenSearch search response.
-         *
-         * @var array<string, mixed>
-         */
         protected array $response,
     ) {}
 

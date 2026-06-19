@@ -7,19 +7,11 @@ class Document
     /**
      * Create a new document instance.
      *
+     * @param  string  $id  The OpenSearch document identifier.
      * @param  array<string, mixed>  $content
      */
     public function __construct(
-        /**
-         * The OpenSearch document identifier.
-         */
         protected string $id,
-
-        /**
-         * The document source payload.
-         *
-         * @var array<string, mixed>
-         */
         protected array $content,
     ) {}
 

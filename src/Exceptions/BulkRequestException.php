@@ -12,11 +12,6 @@ class BulkRequestException extends ErrorException
      * @param  array<string, mixed>  $response
      */
     public function __construct(
-        /**
-         * The OpenSearch bulk response.
-         *
-         * @var array<string, mixed>
-         */
         protected array $response,
     ) {
         parent::__construct($this->makeErrorFromResponse());

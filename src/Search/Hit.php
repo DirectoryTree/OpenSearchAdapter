@@ -12,11 +12,6 @@ class Hit implements RawResponseInterface
      * @param  array<string, mixed>  $hit
      */
     public function __construct(
-        /**
-         * The raw OpenSearch hit payload.
-         *
-         * @var array<string, mixed>
-         */
         protected array $hit,
     ) {}
 

@@ -7,24 +7,13 @@ class Alias
     /**
      * Create a new alias instance.
      *
+     * @param  string  $name  The alias name.
      * @param  array<string, mixed>|null  $filter
+     * @param  string|null  $routing  The optional alias routing value.
      */
     public function __construct(
-        /**
-         * The alias name.
-         */
         protected string $name,
-
-        /**
-         * The optional alias filter.
-         *
-         * @var array<string, mixed>|null
-         */
         protected ?array $filter = null,
-
-        /**
-         * The optional alias routing value.
-         */
         protected ?string $routing = null,
     ) {}
 

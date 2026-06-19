@@ -10,11 +10,6 @@ class Aggregation implements RawResponseInterface
      * @param  array<string, mixed>  $aggregation
      */
     public function __construct(
-        /**
-         * The raw OpenSearch aggregation payload.
-         *
-         * @var array<string, mixed>
-         */
         protected array $aggregation,
     ) {}
 

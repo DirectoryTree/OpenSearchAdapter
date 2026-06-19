@@ -13,9 +13,6 @@ class DocumentManager
      * Create a new document manager instance.
      */
     public function __construct(
-        /**
-         * The OpenSearch client instance.
-         */
         protected Client $client,
     ) {}
 
