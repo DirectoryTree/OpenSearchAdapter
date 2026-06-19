@@ -1,0 +1,45 @@
+{
+    "name": "directorytree/opensearch-adapter",
+    "description": "A PHP adapter for the official OpenSearch PHP client",
+    "keywords": [
+        "opensearch",
+        "adapter",
+        "client",
+        "php"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "DirectoryTree",
+            "email": "support@directorytree.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DirectoryTree\\OpenSearchAdapter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DirectoryTree\\OpenSearchAdapter\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "opensearch-project/opensearch-php": "^2.6",
+        "symfony/http-client": "^8.1",
+        "nyholm/psr7": "^1.8"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "pestphp/pest": "^3.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "pestphp/pest-plugin": true
+        }
+    }
+}
