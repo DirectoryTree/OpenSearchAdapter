@@ -2,8 +2,6 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
-use Illuminate\Support\Collection;
-
 class Highlight implements RawResponseInterface
 {
     /**
@@ -23,11 +21,11 @@ class Highlight implements RawResponseInterface
     /**
      * Get highlighted snippets for the given field.
      *
-     * @return Collection<int, string>
+     * @return array<int, string>
      */
-    public function snippets(string $field): Collection
+    public function snippets(string $field): array
     {
-        return collect($this->highlight[$field] ?? []);
+        return $this->highlight[$field] ?? [];
     }
 
     /**

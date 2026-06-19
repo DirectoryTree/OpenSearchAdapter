@@ -74,11 +74,11 @@ Documents contain the OpenSearch document ID and source payload:
 ```php
 use DirectoryTree\OpenSearchAdapter\Documents\Document;
 
-$documents->index('books', collect([
+$documents->index('books', [
     new Document('1', [
         'title' => 'The Hobbit',
     ]),
-]));
+]);
 ```
 
 Routing values can be attached by document ID:
@@ -88,11 +88,11 @@ use DirectoryTree\OpenSearchAdapter\Documents\Routing;
 
 $routing = (new Routing)->add('1', 'tenant-1');
 
-$documents->index('books', collect([
+$documents->index('books', [
     new Document('1', [
         'title' => 'The Hobbit',
     ]),
-]), routing: $routing);
+], routing: $routing);
 ```
 
 ## Searching Documents
@@ -118,9 +118,10 @@ $response = $documents->search('books', $request);
 
 $total = $response->total();
 
-$hits = $response->hits()->map(function ($hit) {
-    return $hit->document()->content();
-});
+$hits = array_map(
+    fn ($hit) => $hit->document()->content(),
+    $response->hits(),
+);
 ```
 
 ## Aliases
@@ -148,6 +149,6 @@ $aliases = $indices->getAliases('books');
 Search response objects expose the original OpenSearch payload through `raw()`:
 
 ```php
-$rawHit = $response->hits()->first()->raw();
+$rawHit = $response->hits()[0]->raw();
 $rawResponse = $response->raw();
 ```

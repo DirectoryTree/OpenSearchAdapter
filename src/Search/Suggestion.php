@@ -2,8 +2,6 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
-use Illuminate\Support\Collection;
-
 class Suggestion implements RawResponseInterface
 {
     /**
@@ -47,11 +45,11 @@ class Suggestion implements RawResponseInterface
     /**
      * Get the suggestion options.
      *
-     * @return Collection<int, array<string, mixed>>
+     * @return array<int, array<string, mixed>>
      */
-    public function options(): Collection
+    public function options(): array
     {
-        return collect($this->suggestion['options']);
+        return $this->suggestion['options'];
     }
 
     /**

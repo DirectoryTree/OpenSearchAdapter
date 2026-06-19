@@ -20,7 +20,7 @@ test('hits can be retrieved', function () {
     ]);
 
     $this->assertEquals(
-        collect([new Hit(['_id' => '1', '_source' => ['title' => 'foo']])]),
+        [new Hit(['_id' => '1', '_source' => ['title' => 'foo']])],
         $searchResponse->hits()
     );
 });
@@ -35,12 +35,12 @@ test('total number of hits can be retrieved', function () {
     $this->assertSame(100, $searchResponse->total());
 });
 
-test('empty collection is returned when suggestions are not present', function () {
+test('empty array is returned when suggestions are not present', function () {
     $searchResponse = new SearchResponse([
         'hits' => [],
     ]);
 
-    $this->assertEquals(collect(), $searchResponse->suggestions());
+    $this->assertSame([], $searchResponse->suggestions());
 });
 
 test('suggestions can be retrieved', function () {
@@ -64,8 +64,8 @@ test('suggestions can be retrieved', function () {
         ],
     ]);
 
-    $this->assertEquals(collect([
-        'color_suggestion' => collect([
+    $this->assertEquals([
+        'color_suggestion' => [
             new Suggestion([
                 'text' => 'red',
                 'offset' => 0,
@@ -78,8 +78,8 @@ test('suggestions can be retrieved', function () {
                 'length' => 4,
                 'options' => [],
             ]),
-        ]),
-    ]), $searchResponse->suggestions());
+        ],
+    ], $searchResponse->suggestions());
 });
 
 test('aggregations can be retrieved', function () {
@@ -92,11 +92,11 @@ test('aggregations can be retrieved', function () {
         ],
     ]);
 
-    $this->assertEquals(collect([
+    $this->assertEquals([
         'min_price' => new Aggregation([
             'value' => 10,
         ]),
-    ]), $searchResponse->aggregations());
+    ], $searchResponse->aggregations());
 });
 
 test('raw representation can be retrieved', function () {

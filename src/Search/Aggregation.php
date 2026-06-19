@@ -2,8 +2,6 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
-use Illuminate\Support\Collection;
-
 class Aggregation implements RawResponseInterface
 {
     /**
@@ -23,15 +21,13 @@ class Aggregation implements RawResponseInterface
     /**
      * Get the aggregation buckets.
      *
-     * @return Collection<int, Bucket>
+     * @return array<int, Bucket>
      */
-    public function buckets(): Collection
+    public function buckets(): array
     {
         $buckets = $this->aggregation['buckets'] ?? [];
 
-        return collect($buckets)->map(static function (array $bucket) {
-            return new Bucket($bucket);
-        });
+        return array_map(static fn (array $bucket) => new Bucket($bucket), $buckets);
     }
 
     /**

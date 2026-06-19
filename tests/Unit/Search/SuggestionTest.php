@@ -33,13 +33,13 @@ test('options can be retrieved', function () {
         ],
     ]);
 
-    $this->assertEquals(collect([
+    $this->assertEquals([
         [
             'text' => 'foo',
             'score' => 0.8,
             'freq' => 1,
         ],
-    ]), $suggestion->options());
+    ], $suggestion->options());
 });
 
 test('raw representation can be retrieved', function () {

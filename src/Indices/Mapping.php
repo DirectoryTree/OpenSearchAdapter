@@ -3,8 +3,6 @@
 namespace DirectoryTree\OpenSearchAdapter\Indices;
 
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
  * @method $this alias(string $name, array|null $parameters = null)
@@ -48,10 +46,8 @@ use Illuminate\Support\Traits\ForwardsCalls;
  * @method $this tokenCount(string $name, array|null $parameters = null)
  * @method $this wildcard(string $name, array|null $parameters = null)
  */
-class Mapping implements Arrayable
+class Mapping
 {
-    use ForwardsCalls;
-
     /**
      * Indicates if OpenSearch should index field names.
      */
@@ -141,7 +137,7 @@ class Mapping implements Arrayable
      */
     public function __call(string $method, array $parameters): self
     {
-        $this->forwardCallTo($this->properties, $method, $parameters);
+        $this->properties->{$method}(...$parameters);
 
         return $this;
     }

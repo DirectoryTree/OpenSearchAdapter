@@ -256,7 +256,7 @@ test('aliases can be retrieved', function () {
         ]);
 
     $this->assertEquals(
-        collect([$aliasName => new Alias($aliasName)]),
+        [$aliasName => new Alias($aliasName)],
         $this->indexManager->getAliases($indexName)
     );
 });

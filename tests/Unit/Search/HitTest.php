@@ -79,10 +79,10 @@ test('inner hits can be retrieved', function () {
         '_score' => 1.6,
     ]);
 
-    $nestedInnerHits = $this->hit->innerHits()->get('nested');
+    $nestedInnerHits = $this->hit->innerHits()['nested'];
 
     $this->assertCount(1, $nestedInnerHits);
-    $this->assertEquals($innerHit, $nestedInnerHits->first());
+    $this->assertEquals($innerHit, $nestedInnerHits[0]);
 });
 
 test('raw representation can be retrieved', function () {

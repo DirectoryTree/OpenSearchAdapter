@@ -4,8 +4,6 @@ namespace DirectoryTree\OpenSearchAdapter\Indices;
 
 use BadMethodCallException;
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Str;
 
 /**
  * @method $this alias(string $name, array|null $parameters = null)
@@ -47,7 +45,7 @@ use Illuminate\Support\Str;
  * @method $this tokenCount(string $name, array|null $parameters = null)
  * @method $this wildcard(string $name, array|null $parameters = null)
  */
-class MappingProperties implements Arrayable
+class MappingProperties
 {
     /**
      * The property definitions.
@@ -101,7 +99,7 @@ class MappingProperties implements Arrayable
             throw new BadMethodCallException(sprintf('Invalid number of arguments for %s method', $method));
         }
 
-        $property = ['type' => Str::snake($method)];
+        $property = ['type' => $this->snake($method)];
 
         if (isset($arguments[1])) {
             $property += $arguments[1];
@@ -139,5 +137,13 @@ class MappingProperties implements Arrayable
         }
 
         return $parameters;
+    }
+
+    /**
+     * Convert a camel-case field type into an OpenSearch snake-case type.
+     */
+    protected function snake(string $value): string
+    {
+        return strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $value));
     }
 }

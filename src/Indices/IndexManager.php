@@ -2,7 +2,6 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Indices;
 
-use Illuminate\Support\Collection;
 use OpenSearch\Client;
 use OpenSearch\Namespaces\IndicesNamespace;
 
@@ -180,23 +179,26 @@ class IndexManager
     /**
      * Get the aliases for the given index.
      *
-     * @return Collection<string, Alias>
+     * @return array<string, Alias>
      */
-    public function getAliases(string $indexName): Collection
+    public function getAliases(string $indexName): array
     {
         $response = $this->indices->getAlias([
             'index' => $indexName,
         ]);
 
         $aliases = $response[$indexName]['aliases'] ?? [];
+        $results = [];
 
-        return collect($aliases)->map(static function (array $parameters, string $name) {
-            return new Alias(
+        foreach ($aliases as $name => $parameters) {
+            $results[$name] = new Alias(
                 $name,
                 $parameters['filter'] ?? null,
                 $parameters['routing'] ?? null
             );
-        });
+        }
+
+        return $results;
     }
 
     /**

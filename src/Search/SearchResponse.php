@@ -2,8 +2,6 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
-use Illuminate\Support\Collection;
-
 class SearchResponse implements RawResponseInterface
 {
     /**
@@ -23,15 +21,13 @@ class SearchResponse implements RawResponseInterface
     /**
      * Get the search hits.
      *
-     * @return Collection<int, Hit>
+     * @return array<int, Hit>
      */
-    public function hits(): Collection
+    public function hits(): array
     {
         $hits = $this->response['hits']['hits'];
 
-        return collect($hits)->map(static function (array $hit) {
-            return new Hit($hit);
-        });
+        return array_map(static fn (array $hit) => new Hit($hit), $hits);
     }
 
     /**
@@ -45,31 +41,31 @@ class SearchResponse implements RawResponseInterface
     /**
      * Get the suggestions grouped by suggestion name.
      *
-     * @return Collection<string, Collection<int, Suggestion>>
+     * @return array<string, array<int, Suggestion>>
      */
-    public function suggestions(): Collection
+    public function suggestions(): array
     {
         $suggest = $this->response['suggest'] ?? [];
 
-        return collect($suggest)->map(static function (array $suggestions) {
-            return collect($suggestions)->map(static function (array $suggestion) {
-                return new Suggestion($suggestion);
-            });
-        });
+        return array_map(
+            static fn (array $suggestions) => array_map(
+                static fn (array $suggestion) => new Suggestion($suggestion),
+                $suggestions,
+            ),
+            $suggest,
+        );
     }
 
     /**
      * Get the aggregations keyed by aggregation name.
      *
-     * @return Collection<string, Aggregation>
+     * @return array<string, Aggregation>
      */
-    public function aggregations(): Collection
+    public function aggregations(): array
     {
         $aggregations = $this->response['aggregations'] ?? [];
 
-        return collect($aggregations)->map(static function (array $aggregation) {
-            return new Aggregation($aggregation);
-        });
+        return array_map(static fn (array $aggregation) => new Aggregation($aggregation), $aggregations);
     }
 
     /**

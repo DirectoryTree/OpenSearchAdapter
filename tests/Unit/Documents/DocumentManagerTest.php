@@ -35,10 +35,10 @@ test('documents can be indexed with refresh', function () {
             'items' => [],
         ]);
 
-    $documents = collect([
+    $documents = [
         new Document('1', ['title' => 'Doc 1']),
         new Document('2', ['title' => 'Doc 2']),
-    ]);
+    ];
 
     $this->assertSame($this->documentManager, $this->documentManager->index('test', $documents, true));
 });
@@ -61,9 +61,9 @@ test('documents can be indexed without refresh', function () {
             'items' => [],
         ]);
 
-    $documents = collect([
+    $documents = [
         new Document('1', ['title' => 'Doc 1']),
-    ]);
+    ];
 
     $this->assertSame($this->documentManager, $this->documentManager->index('test', $documents, false));
 });
@@ -88,10 +88,10 @@ test('documents can be indexed with custom routing', function () {
             'items' => [],
         ]);
 
-    $documents = collect([
+    $documents = [
         new Document('1', ['title' => 'Doc 1']),
         new Document('2', ['title' => 'Doc 2']),
-    ]);
+    ];
 
     $routing = (new Routing)
         ->add('1', 'Doc1')
@@ -268,9 +268,9 @@ test('exception is thrown when index operation was unsuccessful', function () {
 
     $this->expectException(BulkRequestException::class);
 
-    $documents = collect([
+    $documents = [
         new Document('1', ['title' => 'Doc 1']),
-    ]);
+    ];
 
     $this->documentManager->index('test', $documents);
 });

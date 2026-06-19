@@ -3,14 +3,12 @@
 namespace DirectoryTree\OpenSearchAdapter\Indices;
 
 use BadMethodCallException;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Str;
 
 /**
  * @method $this index(array $configuration)
  * @method $this analysis(array $configuration)
  */
-class Settings implements Arrayable
+class Settings
 {
     /**
      * The index settings payload.
@@ -32,7 +30,7 @@ class Settings implements Arrayable
             throw new BadMethodCallException(sprintf('Invalid number of arguments for %s method', $method));
         }
 
-        $this->settings[Str::snake($method)] = $arguments[0];
+        $this->settings[$this->snake($method)] = $arguments[0];
 
         return $this;
     }
@@ -45,5 +43,13 @@ class Settings implements Arrayable
     public function toArray(): array
     {
         return $this->settings;
+    }
+
+    /**
+     * Convert a camel-case settings group into snake case.
+     */
+    protected function snake(string $value): string
+    {
+        return strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $value));
     }
 }

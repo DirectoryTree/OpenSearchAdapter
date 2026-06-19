@@ -12,20 +12,20 @@ test('snippets can be retrieved for highlighted field', function () {
         ],
     ]);
 
-    $this->assertEquals(collect([
+    $this->assertEquals([
         ' with the <em>number</em>',
         '  <em>1</em>',
-    ]), $highlight->snippets('message'));
+    ], $highlight->snippets('message'));
 });
 
-test('empty collection is returned when trying to retrieve snippets for non existing field', function () {
+test('empty array is returned when trying to retrieve snippets for non existing field', function () {
     $highlight = new Highlight([
         'foo' => [
             'test fragment',
         ],
     ]);
 
-    $this->assertEquals(collect(), $highlight->snippets('bar'));
+    $this->assertSame([], $highlight->snippets('bar'));
 });
 
 test('raw representation can be retrieved', function () {

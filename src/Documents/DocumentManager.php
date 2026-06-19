@@ -5,7 +5,6 @@ namespace DirectoryTree\OpenSearchAdapter\Documents;
 use DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException;
 use DirectoryTree\OpenSearchAdapter\Search\SearchRequest;
 use DirectoryTree\OpenSearchAdapter\Search\SearchResponse;
-use Illuminate\Support\Collection;
 use OpenSearch\Client;
 
 class DocumentManager
@@ -23,13 +22,13 @@ class DocumentManager
     /**
      * Index the given documents into OpenSearch.
      *
-     * @param  Collection<int, Document>  $documents
+     * @param  array<int, Document>  $documents
      *
      * @throws BulkRequestException
      */
     public function index(
         string $indexName,
-        Collection $documents,
+        array $documents,
         bool $refresh = false,
         ?Routing $routing = null
     ): self {

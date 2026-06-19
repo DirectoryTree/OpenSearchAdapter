@@ -19,12 +19,12 @@ beforeEach(function () {
 });
 
 test('buckets can be retrieved', function () {
-    $this->assertEquals(collect([
+    $this->assertEquals([
         new Bucket([
             'key' => 'electronic',
             'doc_count' => 6,
         ]),
-    ]), $this->aggregation->buckets());
+    ], $this->aggregation->buckets());
 });
 
 test('raw representation can be retrieved', function () {

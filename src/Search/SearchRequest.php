@@ -2,9 +2,7 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
-use Illuminate\Contracts\Support\Arrayable;
-
-class SearchRequest implements Arrayable
+class SearchRequest
 {
     /**
      * The OpenSearch search request payload.

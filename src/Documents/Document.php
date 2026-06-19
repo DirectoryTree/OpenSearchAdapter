@@ -2,10 +2,7 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Documents;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
-
-class Document implements Arrayable
+class Document
 {
     /**
      * Create a new document instance.
@@ -39,7 +36,11 @@ class Document implements Arrayable
      */
     public function content(?string $key = null): mixed
     {
-        return Arr::get($this->content, $key);
+        if ($key === null) {
+            return $this->content;
+        }
+
+        return $this->content[$key] ?? null;
     }
 
     /**

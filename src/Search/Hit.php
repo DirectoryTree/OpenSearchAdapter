@@ -3,7 +3,6 @@
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
 use DirectoryTree\OpenSearchAdapter\Documents\Document;
-use Illuminate\Support\Collection;
 
 class Hit implements RawResponseInterface
 {
@@ -60,17 +59,19 @@ class Hit implements RawResponseInterface
     /**
      * Get the inner hits grouped by relationship name.
      *
-     * @return Collection<string, Collection<int, self>>
+     * @return array<string, array<int, self>>
      */
-    public function innerHits(): Collection
+    public function innerHits(): array
     {
         $innerHits = $this->hit['inner_hits'] ?? [];
 
-        return collect($innerHits)->map(static function (array $hits) {
-            return collect($hits['hits']['hits'])->map(static function (array $hit) {
-                return new self($hit);
-            });
-        });
+        return array_map(
+            static fn (array $hits) => array_map(
+                static fn (array $hit) => new self($hit),
+                $hits['hits']['hits'],
+            ),
+            $innerHits,
+        );
     }
 
     /**
