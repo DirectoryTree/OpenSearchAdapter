@@ -8,27 +8,23 @@ use Illuminate\Support\Arr;
 class Document implements Arrayable
 {
     /**
-     * The OpenSearch document identifier.
-     */
-    protected string $id;
-
-    /**
-     * The document source payload.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $content;
-
-    /**
      * Create a new document instance.
      *
      * @param  array<string, mixed>  $content
      */
-    public function __construct(string $id, array $content)
-    {
-        $this->id = $id;
-        $this->content = $content;
-    }
+    public function __construct(
+        /**
+         * The OpenSearch document identifier.
+         */
+        protected string $id,
+
+        /**
+         * The document source payload.
+         *
+         * @var array<string, mixed>
+         */
+        protected array $content,
+    ) {}
 
     /**
      * Get the document identifier.

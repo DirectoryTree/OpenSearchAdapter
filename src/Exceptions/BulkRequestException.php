@@ -7,21 +7,18 @@ use ErrorException;
 class BulkRequestException extends ErrorException
 {
     /**
-     * The OpenSearch bulk response.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $response;
-
-    /**
      * Create a new bulk request exception instance.
      *
      * @param  array<string, mixed>  $response
      */
-    public function __construct(array $response)
-    {
-        $this->response = $response;
-
+    public function __construct(
+        /**
+         * The OpenSearch bulk response.
+         *
+         * @var array<string, mixed>
+         */
+        protected array $response,
+    ) {
         parent::__construct($this->makeErrorFromResponse());
     }
 

@@ -5,29 +5,24 @@ namespace DirectoryTree\OpenSearchAdapter\Indices;
 class IndexBlueprint
 {
     /**
-     * The index name.
-     */
-    protected string $name;
-
-    /**
-     * The index mapping definition.
-     */
-    protected ?Mapping $mapping;
-
-    /**
-     * The index settings definition.
-     */
-    protected ?Settings $settings;
-
-    /**
      * Create a new index blueprint instance.
      */
-    public function __construct(string $name, ?Mapping $mapping = null, ?Settings $settings = null)
-    {
-        $this->name = $name;
-        $this->mapping = $mapping;
-        $this->settings = $settings;
-    }
+    public function __construct(
+        /**
+         * The index name.
+         */
+        protected string $name,
+
+        /**
+         * The index mapping definition.
+         */
+        protected ?Mapping $mapping = null,
+
+        /**
+         * The index settings definition.
+         */
+        protected ?Settings $settings = null,
+    ) {}
 
     /**
      * Get the index name.

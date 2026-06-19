@@ -7,21 +7,18 @@ use Illuminate\Support\Collection;
 class Aggregation implements RawResponseInterface
 {
     /**
-     * The raw OpenSearch aggregation payload.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $aggregation;
-
-    /**
      * Create a new aggregation instance.
      *
      * @param  array<string, mixed>  $aggregation
      */
-    public function __construct(array $aggregation)
-    {
-        $this->aggregation = $aggregation;
-    }
+    public function __construct(
+        /**
+         * The raw OpenSearch aggregation payload.
+         *
+         * @var array<string, mixed>
+         */
+        protected array $aggregation,
+    ) {}
 
     /**
      * Get the aggregation buckets.

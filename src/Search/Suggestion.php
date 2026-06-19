@@ -7,21 +7,18 @@ use Illuminate\Support\Collection;
 class Suggestion implements RawResponseInterface
 {
     /**
-     * The raw OpenSearch suggestion payload.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $suggestion;
-
-    /**
      * Create a new suggestion instance.
      *
      * @param  array<string, mixed>  $suggestion
      */
-    public function __construct(array $suggestion)
-    {
-        $this->suggestion = $suggestion;
-    }
+    public function __construct(
+        /**
+         * The raw OpenSearch suggestion payload.
+         *
+         * @var array<string, mixed>
+         */
+        protected array $suggestion,
+    ) {}
 
     /**
      * Get the suggestion text.

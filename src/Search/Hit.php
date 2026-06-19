@@ -8,21 +8,18 @@ use Illuminate\Support\Collection;
 class Hit implements RawResponseInterface
 {
     /**
-     * The raw OpenSearch hit payload.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $hit;
-
-    /**
      * Create a new hit instance.
      *
      * @param  array<string, mixed>  $hit
      */
-    public function __construct(array $hit)
-    {
-        $this->hit = $hit;
-    }
+    public function __construct(
+        /**
+         * The raw OpenSearch hit payload.
+         *
+         * @var array<string, mixed>
+         */
+        protected array $hit,
+    ) {}
 
     /**
      * Get the index name for the hit.

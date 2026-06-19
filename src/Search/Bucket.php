@@ -5,21 +5,18 @@ namespace DirectoryTree\OpenSearchAdapter\Search;
 class Bucket implements RawResponseInterface
 {
     /**
-     * The raw OpenSearch bucket payload.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $bucket;
-
-    /**
      * Create a new bucket instance.
      *
      * @param  array<string, mixed>  $bucket
      */
-    public function __construct(array $bucket)
-    {
-        $this->bucket = $bucket;
-    }
+    public function __construct(
+        /**
+         * The raw OpenSearch bucket payload.
+         *
+         * @var array<string, mixed>
+         */
+        protected array $bucket,
+    ) {}
 
     /**
      * Get the number of documents in the bucket.

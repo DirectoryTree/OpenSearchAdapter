@@ -7,21 +7,18 @@ use Illuminate\Support\Collection;
 class SearchResponse implements RawResponseInterface
 {
     /**
-     * The raw OpenSearch search response.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $response;
-
-    /**
      * Create a new search response instance.
      *
      * @param  array<string, mixed>  $response
      */
-    public function __construct(array $response)
-    {
-        $this->response = $response;
-    }
+    public function __construct(
+        /**
+         * The raw OpenSearch search response.
+         *
+         * @var array<string, mixed>
+         */
+        protected array $response,
+    ) {}
 
     /**
      * Get the search hits.

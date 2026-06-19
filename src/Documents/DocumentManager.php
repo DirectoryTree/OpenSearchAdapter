@@ -11,17 +11,14 @@ use OpenSearch\Client;
 class DocumentManager
 {
     /**
-     * The OpenSearch client instance.
-     */
-    protected Client $client;
-
-    /**
      * Create a new document manager instance.
      */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
+    public function __construct(
+        /**
+         * The OpenSearch client instance.
+         */
+        protected Client $client,
+    ) {}
 
     /**
      * Index the given documents into OpenSearch.
