@@ -9,326 +9,292 @@ use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
 use DirectoryTree\OpenSearchAdapter\Indices\Settings;
 use OpenSearch\Client;
 use OpenSearch\Namespaces\IndicesNamespace;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 
-class IndexManagerTest extends TestCase
-{
-    /**
-     * @var MockObject
-     */
-    protected $indices;
+beforeEach(function () {
+    $client = $this->createMock(Client::class);
+    $this->indices = $this->createMock(IndicesNamespace::class);
 
-    /**
-     * @var IndexManager
-     */
-    protected $indexManager;
+    $client
+        ->method('indices')
+        ->willReturn($this->indices);
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $this->indexManager = new IndexManager($client);
+});
 
-        $client = $this->createMock(Client::class);
-        $this->indices = $this->createMock(IndicesNamespace::class);
+test('index can be opened', function () {
+    $indexName = 'foo';
 
-        $client
-            ->method('indices')
-            ->willReturn($this->indices);
+    $this->indices
+        ->expects($this->once())
+        ->method('open')
+        ->with([
+            'index' => $indexName,
+        ]);
 
-        $this->indexManager = new IndexManager($client);
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->open($indexName));
+});
 
-    public function test_index_can_be_opened(): void
-    {
-        $indexName = 'foo';
+test('index can be closed', function () {
+    $indexName = 'foo';
 
-        $this->indices
-            ->expects($this->once())
-            ->method('open')
-            ->with([
-                'index' => $indexName,
-            ]);
+    $this->indices
+        ->expects($this->once())
+        ->method('close')
+        ->with([
+            'index' => $indexName,
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->open($indexName));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->close($indexName));
+});
 
-    public function test_index_can_be_closed(): void
-    {
-        $indexName = 'foo';
+test('index existence can be checked', function () {
+    $indexName = 'foo';
 
-        $this->indices
-            ->expects($this->once())
-            ->method('close')
-            ->with([
-                'index' => $indexName,
-            ]);
+    $this->indices
+        ->expects($this->once())
+        ->method('exists')
+        ->with([
+            'index' => $indexName,
+        ])
+        ->willReturn(true);
 
-        $this->assertSame($this->indexManager, $this->indexManager->close($indexName));
-    }
+    $this->assertTrue($this->indexManager->exists($indexName));
+});
 
-    public function test_index_existence_can_be_checked(): void
-    {
-        $indexName = 'foo';
+test('index can be created without mapping and settings', function () {
+    $index = new IndexBlueprint('foo');
 
-        $this->indices
-            ->expects($this->once())
-            ->method('exists')
-            ->with([
-                'index' => $indexName,
-            ])
-            ->willReturn(true);
+    $this->indices
+        ->expects($this->once())
+        ->method('create')
+        ->with([
+            'index' => $index->name(),
+        ]);
 
-        $this->assertTrue($this->indexManager->exists($indexName));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->create($index));
+});
 
-    public function test_index_can_be_created_without_mapping_and_settings(): void
-    {
-        $index = new IndexBlueprint('foo');
+test('index can be created without mapping', function () {
+    $settings = (new Settings)->index(['number_of_replicas' => 2]);
+    $index = new IndexBlueprint('foo', null, $settings);
 
-        $this->indices
-            ->expects($this->once())
-            ->method('create')
-            ->with([
-                'index' => $index->name(),
-            ]);
-
-        $this->assertSame($this->indexManager, $this->indexManager->create($index));
-    }
-
-    public function test_index_can_be_created_without_mapping(): void
-    {
-        $settings = (new Settings)->index(['number_of_replicas' => 2]);
-        $index = new IndexBlueprint('foo', null, $settings);
-
-        $this->indices
-            ->expects($this->once())
-            ->method('create')
-            ->with([
-                'index' => $index->name(),
-                'body' => [
-                    'settings' => [
-                        'index' => [
-                            'number_of_replicas' => 2,
-                        ],
+    $this->indices
+        ->expects($this->once())
+        ->method('create')
+        ->with([
+            'index' => $index->name(),
+            'body' => [
+                'settings' => [
+                    'index' => [
+                        'number_of_replicas' => 2,
                     ],
                 ],
-            ]);
+            ],
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->create($index));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->create($index));
+});
 
-    public function test_index_can_be_created_without_settings(): void
-    {
-        $mapping = (new Mapping)->text('foo');
-        $index = new IndexBlueprint('bar', $mapping);
+test('index can be created without settings', function () {
+    $mapping = (new Mapping)->text('foo');
+    $index = new IndexBlueprint('bar', $mapping);
 
-        $this->indices
-            ->expects($this->once())
-            ->method('create')
-            ->with([
-                'index' => $index->name(),
-                'body' => [
-                    'mappings' => [
-                        'properties' => [
-                            'foo' => [
-                                'type' => 'text',
-                            ],
-                        ],
-                    ],
-                ],
-            ]);
-
-        $this->assertSame($this->indexManager, $this->indexManager->create($index));
-    }
-
-    public function test_index_can_be_created_with_empty_settings_and_mapping(): void
-    {
-        $index = new IndexBlueprint('foo', new Mapping, new Settings);
-
-        $this->indices
-            ->expects($this->once())
-            ->method('create')
-            ->with([
-                'index' => $index->name(),
-            ]);
-
-        $this->assertSame($this->indexManager, $this->indexManager->create($index));
-    }
-
-    public function test_index_can_be_created_with_raw_mapping_and_settings(): void
-    {
-        $indexName = 'foo';
-        $mapping = ['properties' => ['bar' => ['type' => 'text']]];
-        $settings = ['index' => ['number_of_replicas' => 2]];
-
-        $this->indices
-            ->expects($this->once())
-            ->method('create')
-            ->with([
-                'index' => $indexName,
-                'body' => [
-                    'mappings' => $mapping,
-                    'settings' => $settings,
-                ],
-            ]);
-
-        $this->assertSame($this->indexManager, $this->indexManager->createRaw($indexName, $mapping, $settings));
-    }
-
-    public function test_mapping_can_be_updated(): void
-    {
-        $indexName = 'foo';
-        $mapping = (new Mapping)->text('bar');
-
-        $this->indices
-            ->expects($this->once())
-            ->method('putMapping')
-            ->with([
-                'index' => $indexName,
-                'body' => [
+    $this->indices
+        ->expects($this->once())
+        ->method('create')
+        ->with([
+            'index' => $index->name(),
+            'body' => [
+                'mappings' => [
                     'properties' => [
-                        'bar' => [
+                        'foo' => [
                             'type' => 'text',
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->putMapping($indexName, $mapping));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->create($index));
+});
 
-    public function test_mapping_can_be_updated_with_raw_data(): void
-    {
-        $indexName = 'foo';
-        $mapping = ['properties' => ['bar' => ['type' => 'text']]];
+test('index can be created with empty settings and mapping', function () {
+    $index = new IndexBlueprint('foo', new Mapping, new Settings);
 
-        $this->indices
-            ->expects($this->once())
-            ->method('putMapping')
-            ->with([
-                'index' => $indexName,
-                'body' => $mapping,
-            ]);
+    $this->indices
+        ->expects($this->once())
+        ->method('create')
+        ->with([
+            'index' => $index->name(),
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->putMappingRaw($indexName, $mapping));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->create($index));
+});
 
-    public function test_settings_can_be_updated(): void
-    {
-        $indexName = 'foo';
-        $settings = (new Settings)->index(['number_of_replicas' => 2]);
+test('index can be created with raw mapping and settings', function () {
+    $indexName = 'foo';
+    $mapping = ['properties' => ['bar' => ['type' => 'text']]];
+    $settings = ['index' => ['number_of_replicas' => 2]];
 
-        $this->indices
-            ->expects($this->once())
-            ->method('putSettings')
-            ->with([
-                'index' => $indexName,
-                'body' => [
-                    'settings' => [
-                        'index' => [
-                            'number_of_replicas' => 2,
-                        ],
+    $this->indices
+        ->expects($this->once())
+        ->method('create')
+        ->with([
+            'index' => $indexName,
+            'body' => [
+                'mappings' => $mapping,
+                'settings' => $settings,
+            ],
+        ]);
+
+    $this->assertSame($this->indexManager, $this->indexManager->createRaw($indexName, $mapping, $settings));
+});
+
+test('mapping can be updated', function () {
+    $indexName = 'foo';
+    $mapping = (new Mapping)->text('bar');
+
+    $this->indices
+        ->expects($this->once())
+        ->method('putMapping')
+        ->with([
+            'index' => $indexName,
+            'body' => [
+                'properties' => [
+                    'bar' => [
+                        'type' => 'text',
                     ],
                 ],
-            ]);
+            ],
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->putSettings($indexName, $settings));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->putMapping($indexName, $mapping));
+});
 
-    public function test_settings_can_be_updated_with_raw_data(): void
-    {
-        $indexName = 'foo';
-        $settings = ['index' => ['number_of_replicas' => 2]];
+test('mapping can be updated with raw data', function () {
+    $indexName = 'foo';
+    $mapping = ['properties' => ['bar' => ['type' => 'text']]];
 
-        $this->indices
-            ->expects($this->once())
-            ->method('putSettings')
-            ->with([
-                'index' => $indexName,
-                'body' => [
-                    'settings' => $settings,
-                ],
-            ]);
+    $this->indices
+        ->expects($this->once())
+        ->method('putMapping')
+        ->with([
+            'index' => $indexName,
+            'body' => $mapping,
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->putSettingsRaw($indexName, $settings));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->putMappingRaw($indexName, $mapping));
+});
 
-    public function test_index_can_be_dropped(): void
-    {
-        $indexName = 'foo';
+test('settings can be updated', function () {
+    $indexName = 'foo';
+    $settings = (new Settings)->index(['number_of_replicas' => 2]);
 
-        $this->indices
-            ->expects($this->once())
-            ->method('delete')
-            ->with([
-                'index' => $indexName,
-            ]);
-
-        $this->assertSame($this->indexManager, $this->indexManager->drop($indexName));
-    }
-
-    public function test_aliases_can_be_retrieved(): void
-    {
-        $indexName = 'foo';
-        $aliasName = 'bar';
-
-        $this->indices
-            ->expects($this->once())
-            ->method('getAlias')
-            ->with([
-                'index' => $indexName,
-            ])
-            ->willReturn([
-                $indexName => [
-                    'aliases' => [
-                        $aliasName => [],
+    $this->indices
+        ->expects($this->once())
+        ->method('putSettings')
+        ->with([
+            'index' => $indexName,
+            'body' => [
+                'settings' => [
+                    'index' => [
+                        'number_of_replicas' => 2,
                     ],
                 ],
-            ]);
+            ],
+        ]);
 
-        $this->assertEquals(
-            collect([$aliasName => new Alias($aliasName)]),
-            $this->indexManager->getAliases($indexName)
-        );
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->putSettings($indexName, $settings));
+});
 
-    public function test_alias_can_be_created(): void
-    {
-        $indexName = 'foo';
-        $alias = (new Alias('bar', ['term' => ['user_id' => 12]], '12'));
+test('settings can be updated with raw data', function () {
+    $indexName = 'foo';
+    $settings = ['index' => ['number_of_replicas' => 2]];
 
-        $this->indices
-            ->expects($this->once())
-            ->method('putAlias')
-            ->with([
-                'index' => $indexName,
-                'name' => $alias->name(),
-                'body' => [
-                    'routing' => '12',
-                    'filter' => [
-                        'term' => [
-                            'user_id' => 12,
-                        ],
+    $this->indices
+        ->expects($this->once())
+        ->method('putSettings')
+        ->with([
+            'index' => $indexName,
+            'body' => [
+                'settings' => $settings,
+            ],
+        ]);
+
+    $this->assertSame($this->indexManager, $this->indexManager->putSettingsRaw($indexName, $settings));
+});
+
+test('index can be dropped', function () {
+    $indexName = 'foo';
+
+    $this->indices
+        ->expects($this->once())
+        ->method('delete')
+        ->with([
+            'index' => $indexName,
+        ]);
+
+    $this->assertSame($this->indexManager, $this->indexManager->drop($indexName));
+});
+
+test('aliases can be retrieved', function () {
+    $indexName = 'foo';
+    $aliasName = 'bar';
+
+    $this->indices
+        ->expects($this->once())
+        ->method('getAlias')
+        ->with([
+            'index' => $indexName,
+        ])
+        ->willReturn([
+            $indexName => [
+                'aliases' => [
+                    $aliasName => [],
+                ],
+            ],
+        ]);
+
+    $this->assertEquals(
+        collect([$aliasName => new Alias($aliasName)]),
+        $this->indexManager->getAliases($indexName)
+    );
+});
+
+test('alias can be created', function () {
+    $indexName = 'foo';
+    $alias = (new Alias('bar', ['term' => ['user_id' => 12]], '12'));
+
+    $this->indices
+        ->expects($this->once())
+        ->method('putAlias')
+        ->with([
+            'index' => $indexName,
+            'name' => $alias->name(),
+            'body' => [
+                'routing' => '12',
+                'filter' => [
+                    'term' => [
+                        'user_id' => 12,
                     ],
                 ],
-            ]);
+            ],
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->putAlias($indexName, $alias));
-    }
+    $this->assertSame($this->indexManager, $this->indexManager->putAlias($indexName, $alias));
+});
 
-    public function test_alias_can_be_deleted(): void
-    {
-        $indexName = 'foo';
-        $aliasName = 'bar';
+test('alias can be deleted', function () {
+    $indexName = 'foo';
+    $aliasName = 'bar';
 
-        $this->indices
-            ->expects($this->once())
-            ->method('deleteAlias')
-            ->with([
-                'index' => $indexName,
-                'name' => $aliasName,
-            ]);
+    $this->indices
+        ->expects($this->once())
+        ->method('deleteAlias')
+        ->with([
+            'index' => $indexName,
+            'name' => $aliasName,
+        ]);
 
-        $this->assertSame($this->indexManager, $this->indexManager->deleteAlias($indexName, $aliasName));
-    }
-}
+    $this->assertSame($this->indexManager, $this->indexManager->deleteAlias($indexName, $aliasName));
+});

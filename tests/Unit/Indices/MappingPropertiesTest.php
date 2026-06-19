@@ -3,164 +3,147 @@
 namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 
 use BadMethodCallException;
-use Closure;
 use DirectoryTree\OpenSearchAdapter\Indices\MappingProperties;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 
-class MappingPropertiesTest extends TestCase
-{
-    public static function parametersProvider(): array
-    {
-        return [
-            [
-                'type' => 'geoPoint',
-                'name' => 'location',
-                'parameters' => [
-                    'null_value' => null,
-                ],
-                'expected' => [
-                    'location' => [
-                        'type' => 'geo_point',
-                        'null_value' => null,
-                    ],
-                ],
+dataset('mapping property setters', [
+    [
+        'type' => 'geoPoint',
+        'name' => 'location',
+        'parameters' => [
+            'null_value' => null,
+        ],
+        'expected' => [
+            'location' => [
+                'type' => 'geo_point',
+                'null_value' => null,
             ],
-            [
+        ],
+    ],
+    [
+        'type' => 'text',
+        'name' => 'description',
+        'parameters' => [
+            'boost' => 1,
+        ],
+        'expected' => [
+            'description' => [
                 'type' => 'text',
-                'name' => 'description',
-                'parameters' => [
-                    'boost' => 1,
-                ],
-                'expected' => [
-                    'description' => [
-                        'type' => 'text',
-                        'boost' => 1,
-                    ],
+                'boost' => 1,
+            ],
+        ],
+    ],
+    [
+        'type' => 'keyword',
+        'name' => 'age',
+        'parameters' => null,
+        'expected' => [
+            'age' => [
+                'type' => 'keyword',
+            ],
+        ],
+    ],
+    [
+        'type' => 'object',
+        'name' => 'user',
+        'parameters' => [
+            'properties' => [
+                'age' => [
+                    'type' => 'keyword',
                 ],
             ],
-            [
-                'type' => 'keyword',
-                'name' => 'age',
-                'parameters' => null,
-                'expected' => [
+        ],
+        'expected' => [
+            'user' => [
+                'type' => 'object',
+                'properties' => [
                     'age' => [
                         'type' => 'keyword',
                     ],
                 ],
             ],
-            [
+        ],
+    ],
+    [
+        'type' => 'object',
+        'name' => 'user',
+        'parameters' => [
+            'properties' => (new MappingProperties)->keyword('age'),
+        ],
+        'expected' => [
+            'user' => [
                 'type' => 'object',
-                'name' => 'user',
-                'parameters' => static function (MappingProperties $properties) {
-                    $properties->integer('age');
+                'properties' => [
+                    'age' => [
+                        'type' => 'keyword',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    [
+        'type' => 'object',
+        'name' => 'user',
+        'parameters' => null,
+        'expected' => [
+            'user' => [
+                'type' => 'object',
+            ],
+        ],
+    ],
+]);
 
-                    return [
-                        'properties' => $properties,
-                        'dynamic' => true,
-                    ];
-                },
-                'expected' => [
-                    'user' => [
-                        'type' => 'object',
-                        'properties' => [
-                            'age' => [
-                                'type' => 'integer',
-                            ],
-                        ],
-                        'dynamic' => true,
-                    ],
-                ],
-            ],
-            [
-                'type' => 'object',
-                'name' => 'user',
-                'parameters' => [
-                    'properties' => [
-                        'age' => [
-                            'type' => 'keyword',
-                        ],
-                    ],
-                ],
-                'expected' => [
-                    'user' => [
-                        'type' => 'object',
-                        'properties' => [
-                            'age' => [
-                                'type' => 'keyword',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'type' => 'object',
-                'name' => 'user',
-                'parameters' => [
-                    'properties' => (new MappingProperties)->keyword('age'),
-                ],
-                'expected' => [
-                    'user' => [
-                        'type' => 'object',
-                        'properties' => [
-                            'age' => [
-                                'type' => 'keyword',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'type' => 'object',
-                'name' => 'user',
-                'parameters' => null,
-                'expected' => [
-                    'user' => [
-                        'type' => 'object',
-                    ],
-                ],
-            ],
-            [
-                'type' => 'nested',
-                'name' => 'user',
-                'parameters' => static function (MappingProperties $properties) {
-                    $properties->keyword('age');
+test('property setter', function (string $type, string $name, $parameters, array $expected) {
+    $actual = (new MappingProperties)->$type($name, $parameters);
+    $this->assertEquals($expected, $actual->toArray());
+})->with('mapping property setters');
 
-                    return [
-                        'properties' => $properties,
-                        'dynamic' => true,
-                    ];
-                },
-                'expected' => [
-                    'user' => [
-                        'type' => 'nested',
-                        'properties' => [
-                            'age' => [
-                                'type' => 'keyword',
-                            ],
-                        ],
-                        'dynamic' => true,
-                    ],
-                ],
-            ],
+test('object properties may be configured with a closure', function () {
+    $actual = (new MappingProperties)->object('user', static function (MappingProperties $properties) {
+        $properties->integer('age');
+
+        return [
+            'properties' => $properties,
+            'dynamic' => true,
         ];
-    }
+    });
 
-    /**
-     * @param  Closure|array  $parameters
-     */
-    #[DataProvider('parametersProvider')]
-    #[TestDox('Test $type property setter')]
-    public function test_property_setter(string $type, string $name, $parameters, array $expected): void
-    {
-        $actual = (new MappingProperties)->$type($name, $parameters);
-        $this->assertEquals($expected, $actual->toArray());
-    }
+    $this->assertEquals([
+        'user' => [
+            'type' => 'object',
+            'properties' => [
+                'age' => [
+                    'type' => 'integer',
+                ],
+            ],
+            'dynamic' => true,
+        ],
+    ], $actual->toArray());
+});
 
-    public function test_exception_is_thrown_when_setter_receives_invalid_number_of_arguments(): void
-    {
-        $this->expectException(BadMethodCallException::class);
-        (new MappingProperties)->text();
-    }
-}
+test('nested properties may be configured with a closure', function () {
+    $actual = (new MappingProperties)->nested('user', static function (MappingProperties $properties) {
+        $properties->keyword('age');
+
+        return [
+            'properties' => $properties,
+            'dynamic' => true,
+        ];
+    });
+
+    $this->assertEquals([
+        'user' => [
+            'type' => 'nested',
+            'properties' => [
+                'age' => [
+                    'type' => 'keyword',
+                ],
+            ],
+            'dynamic' => true,
+        ],
+    ], $actual->toArray());
+});
+
+test('exception is thrown when setter receives invalid number of arguments', function () {
+    $this->expectException(BadMethodCallException::class);
+    (new MappingProperties)->text();
+});
