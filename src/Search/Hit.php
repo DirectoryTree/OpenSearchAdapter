@@ -7,23 +7,42 @@ use Illuminate\Support\Collection;
 
 class Hit implements RawResponseInterface
 {
+    /**
+     * The raw OpenSearch hit payload.
+     *
+     * @var array<string, mixed>
+     */
     protected array $hit;
 
+    /**
+     * Create a new hit instance.
+     *
+     * @param  array<string, mixed>  $hit
+     */
     public function __construct(array $hit)
     {
         $this->hit = $hit;
     }
 
+    /**
+     * Get the index name for the hit.
+     */
     public function indexName(): string
     {
         return $this->hit['_index'];
     }
 
+    /**
+     * Get the score for the hit.
+     */
     public function score(): ?float
     {
         return $this->hit['_score'];
     }
 
+    /**
+     * Get the document for the hit.
+     */
     public function document(): Document
     {
         return new Document(
@@ -32,12 +51,20 @@ class Hit implements RawResponseInterface
         );
     }
 
+    /**
+     * Get the highlight for the hit.
+     */
     public function highlight(): ?Highlight
     {
         return isset($this->hit['highlight']) ?
             new Highlight($this->hit['highlight']) : null;
     }
 
+    /**
+     * Get the inner hits grouped by relationship name.
+     *
+     * @return Collection<string, Collection<int, self>>
+     */
     public function innerHits(): Collection
     {
         $innerHits = $this->hit['inner_hits'] ?? [];
@@ -49,6 +76,11 @@ class Hit implements RawResponseInterface
         });
     }
 
+    /**
+     * Get the raw OpenSearch hit payload.
+     *
+     * @return array<string, mixed>
+     */
     public function raw(): array
     {
         return $this->hit;

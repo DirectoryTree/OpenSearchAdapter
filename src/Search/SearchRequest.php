@@ -6,8 +6,18 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class SearchRequest implements Arrayable
 {
+    /**
+     * The OpenSearch search request payload.
+     *
+     * @var array<string, mixed>
+     */
     protected array $request = [];
 
+    /**
+     * Create a new search request instance.
+     *
+     * @param  array<string, mixed>|null  $query
+     */
     public function __construct(?array $query = null)
     {
         if (isset($query)) {
@@ -15,6 +25,11 @@ class SearchRequest implements Arrayable
         }
     }
 
+    /**
+     * Set the highlight definition.
+     *
+     * @param  array<string, mixed>  $highlight
+     */
     public function highlight(array $highlight): self
     {
         $this->request['body']['highlight'] = $highlight;
@@ -22,6 +37,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the sort definition.
+     *
+     * @param  array<int|string, mixed>  $sort
+     */
     public function sort(array $sort): self
     {
         $this->request['body']['sort'] = $sort;
@@ -29,6 +49,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the rescore definition.
+     *
+     * @param  array<string, mixed>  $rescore
+     */
     public function rescore(array $rescore): self
     {
         $this->request['body']['rescore'] = $rescore;
@@ -36,6 +61,9 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the result offset.
+     */
     public function from(int $from): self
     {
         $this->request['body']['from'] = $from;
@@ -43,6 +71,9 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the maximum number of results.
+     */
     public function size(int $size): self
     {
         $this->request['body']['size'] = $size;
@@ -50,6 +81,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the suggest definition.
+     *
+     * @param  array<string, mixed>  $suggest
+     */
     public function suggest(array $suggest): self
     {
         $this->request['body']['suggest'] = $suggest;
@@ -57,6 +93,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the source filtering definition.
+     *
+     * @param  bool|string|array<int|string, mixed>  $source
+     */
     public function source(bool|string|array $source): self
     {
         $this->request['body']['_source'] = $source;
@@ -64,6 +105,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the field collapse definition.
+     *
+     * @param  array<string, mixed>  $collapse
+     */
     public function collapse(array $collapse): self
     {
         $this->request['body']['collapse'] = $collapse;
@@ -71,6 +117,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the aggregation definitions.
+     *
+     * @param  array<string, mixed>  $aggregations
+     */
     public function aggregations(array $aggregations): self
     {
         $this->request['body']['aggregations'] = $aggregations;
@@ -78,6 +129,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the post filter definition.
+     *
+     * @param  array<string, mixed>  $postFilter
+     */
     public function postFilter(array $postFilter): self
     {
         $this->request['body']['post_filter'] = $postFilter;
@@ -85,6 +141,9 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set total-hit tracking.
+     */
     public function trackTotalHits(int|bool $trackTotalHits): self
     {
         $this->request['body']['track_total_hits'] = $trackTotalHits;
@@ -92,6 +151,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set index boost definitions.
+     *
+     * @param  array<int, array<string, int|float>>  $indicesBoost
+     */
     public function indicesBoost(array $indicesBoost): self
     {
         $this->request['body']['indices_boost'] = $indicesBoost;
@@ -99,6 +163,9 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set score tracking.
+     */
     public function trackScores(bool $trackScores): self
     {
         $this->request['body']['track_scores'] = $trackScores;
@@ -106,6 +173,9 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the minimum score.
+     */
     public function minScore(float $minScore): self
     {
         $this->request['body']['min_score'] = $minScore;
@@ -113,6 +183,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set script fields.
+     *
+     * @param  array<string, mixed>  $scriptFields
+     */
     public function scriptFields(array $scriptFields): self
     {
         $this->request['body']['script_fields'] = $scriptFields;
@@ -120,6 +195,9 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the OpenSearch search type.
+     */
     public function searchType(string $searchType): self
     {
         $this->request['search_type'] = $searchType;
@@ -127,6 +205,9 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Set the OpenSearch search preference.
+     */
     public function preference(string $preference): self
     {
         $this->request['preference'] = $preference;
@@ -134,6 +215,11 @@ class SearchRequest implements Arrayable
         return $this;
     }
 
+    /**
+     * Get the OpenSearch search request payload.
+     *
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return $this->request;

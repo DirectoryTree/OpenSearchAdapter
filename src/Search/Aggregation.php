@@ -6,15 +6,27 @@ use Illuminate\Support\Collection;
 
 class Aggregation implements RawResponseInterface
 {
+    /**
+     * The raw OpenSearch aggregation payload.
+     *
+     * @var array<string, mixed>
+     */
     protected array $aggregation;
 
+    /**
+     * Create a new aggregation instance.
+     *
+     * @param  array<string, mixed>  $aggregation
+     */
     public function __construct(array $aggregation)
     {
         $this->aggregation = $aggregation;
     }
 
     /**
-     * @return Collection|Bucket[]
+     * Get the aggregation buckets.
+     *
+     * @return Collection<int, Bucket>
      */
     public function buckets(): Collection
     {
@@ -25,6 +37,11 @@ class Aggregation implements RawResponseInterface
         });
     }
 
+    /**
+     * Get the raw OpenSearch aggregation payload.
+     *
+     * @return array<string, mixed>
+     */
     public function raw(): array
     {
         return $this->aggregation;

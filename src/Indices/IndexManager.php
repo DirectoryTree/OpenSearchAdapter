@@ -8,13 +8,22 @@ use OpenSearch\Namespaces\IndicesNamespace;
 
 class IndexManager
 {
+    /**
+     * The OpenSearch indices namespace.
+     */
     protected IndicesNamespace $indices;
 
+    /**
+     * Create a new index manager instance.
+     */
     public function __construct(Client $client)
     {
         $this->indices = $client->indices();
     }
 
+    /**
+     * Open the given index.
+     */
     public function open(string $indexName): self
     {
         $this->indices->open([
@@ -24,6 +33,9 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Close the given index.
+     */
     public function close(string $indexName): self
     {
         $this->indices->close([
@@ -33,6 +45,9 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Determine if the given index exists.
+     */
     public function exists(string $indexName): bool
     {
         return $this->indices->exists([
@@ -40,6 +55,9 @@ class IndexManager
         ]);
     }
 
+    /**
+     * Create an index from the given blueprint.
+     */
     public function create(IndexBlueprint $index): self
     {
         $params = [
@@ -62,6 +80,12 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Create an index using raw mapping and settings arrays.
+     *
+     * @param  array<string, mixed>|null  $mapping
+     * @param  array<string, mixed>|null  $settings
+     */
     public function createRaw(string $indexName, ?array $mapping = null, ?array $settings = null): self
     {
         $params = [
@@ -81,6 +105,9 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Update the mapping for the given index.
+     */
     public function putMapping(string $indexName, Mapping $mapping): self
     {
         $this->indices->putMapping([
@@ -91,6 +118,11 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Update the mapping for the given index using a raw array.
+     *
+     * @param  array<string, mixed>  $mapping
+     */
     public function putMappingRaw(string $indexName, array $mapping): self
     {
         $this->indices->putMapping([
@@ -101,6 +133,9 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Update the settings for the given index.
+     */
     public function putSettings(string $indexName, Settings $settings): self
     {
         $this->indices->putSettings([
@@ -113,6 +148,11 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Update the settings for the given index using a raw array.
+     *
+     * @param  array<string, mixed>  $settings
+     */
     public function putSettingsRaw(string $indexName, array $settings): self
     {
         $this->indices->putSettings([
@@ -125,6 +165,9 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Delete the given index.
+     */
     public function drop(string $indexName): self
     {
         $this->indices->delete([
@@ -135,7 +178,9 @@ class IndexManager
     }
 
     /**
-     * @return Collection|Alias[]
+     * Get the aliases for the given index.
+     *
+     * @return Collection<string, Alias>
      */
     public function getAliases(string $indexName): Collection
     {
@@ -154,6 +199,9 @@ class IndexManager
         });
     }
 
+    /**
+     * Create or update an alias for the given index.
+     */
     public function putAlias(string $indexName, Alias $alias): self
     {
         $params = [
@@ -174,6 +222,9 @@ class IndexManager
         return $this;
     }
 
+    /**
+     * Delete the given alias from the index.
+     */
     public function deleteAlias(string $indexName, string $aliasName): self
     {
         $this->indices->deleteAlias([

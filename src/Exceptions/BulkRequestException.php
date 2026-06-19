@@ -6,8 +6,18 @@ use ErrorException;
 
 class BulkRequestException extends ErrorException
 {
+    /**
+     * The OpenSearch bulk response.
+     *
+     * @var array<string, mixed>
+     */
     protected array $response;
 
+    /**
+     * Create a new bulk request exception instance.
+     *
+     * @param  array<string, mixed>  $response
+     */
     public function __construct(array $response)
     {
         $this->response = $response;
@@ -15,6 +25,11 @@ class BulkRequestException extends ErrorException
         parent::__construct($this->makeErrorFromResponse());
     }
 
+    /**
+     * Get the exception context.
+     *
+     * @return array{response: array<string, mixed>}
+     */
     public function context(): array
     {
         return [
@@ -22,11 +37,19 @@ class BulkRequestException extends ErrorException
         ];
     }
 
+    /**
+     * Get the OpenSearch bulk response.
+     *
+     * @return array<string, mixed>
+     */
     public function getResponse(): array
     {
         return $this->response;
     }
 
+    /**
+     * Create the exception message from the OpenSearch bulk response.
+     */
     protected function makeErrorFromResponse(): string
     {
         $items = $this->response['items'] ?? [];

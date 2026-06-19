@@ -1,6 +1,6 @@
 # OpenSearch Adapter
 
-A PHP adapter for the official [OpenSearch PHP client](https://github.com/opensearch-project/opensearch-php).
+A PHP adapter for the [OpenSearch PHP client](https://github.com/opensearch-project/opensearch-php).
 
 ## Installation
 
@@ -10,9 +10,9 @@ Install the package with Composer:
 composer require directorytree/opensearch-adapter
 ```
 
-## Usage
+## Creating Managers
 
-Create the adapter managers with an `OpenSearch\Client` instance:
+Create the adapter managers from an `OpenSearch\Client` instance:
 
 ```php
 use DirectoryTree\OpenSearchAdapter\Documents\DocumentManager;
@@ -23,4 +23,131 @@ $documents = new DocumentManager($client);
 $indices = new IndexManager($client);
 ```
 
-The adapter provides value objects for documents, index mappings, settings, aliases, search requests, and search responses.
+## Managing Indices
+
+Use an index blueprint when you want fluent mapping and settings builders:
+
+```php
+use DirectoryTree\OpenSearchAdapter\Indices\IndexBlueprint;
+use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
+use DirectoryTree\OpenSearchAdapter\Indices\Settings;
+
+$mapping = (new Mapping)
+    ->keyword('id')
+    ->text('title')
+    ->object('author', [
+        'properties' => [
+            'name' => ['type' => 'text'],
+        ],
+    ]);
+
+$settings = (new Settings)->index([
+    'number_of_shards' => 1,
+    'number_of_replicas' => 0,
+]);
+
+$indices->create(new IndexBlueprint('books', $mapping, $settings));
+```
+
+Raw OpenSearch arrays are supported when you already have a mapping or settings payload:
+
+```php
+$indices->createRaw(
+    'books',
+    mapping: [
+        'properties' => [
+            'title' => ['type' => 'text'],
+        ],
+    ],
+    settings: [
+        'index' => [
+            'number_of_shards' => 1,
+        ],
+    ],
+);
+```
+
+## Indexing Documents
+
+Documents contain the OpenSearch document ID and source payload:
+
+```php
+use DirectoryTree\OpenSearchAdapter\Documents\Document;
+
+$documents->index('books', collect([
+    new Document('1', [
+        'title' => 'The Hobbit',
+    ]),
+]));
+```
+
+Routing values can be attached by document ID:
+
+```php
+use DirectoryTree\OpenSearchAdapter\Documents\Routing;
+
+$routing = (new Routing)->add('1', 'tenant-1');
+
+$documents->index('books', collect([
+    new Document('1', [
+        'title' => 'The Hobbit',
+    ]),
+]), routing: $routing);
+```
+
+## Searching Documents
+
+Build a search request with raw OpenSearch query fragments:
+
+```php
+use DirectoryTree\OpenSearchAdapter\Search\SearchRequest;
+
+$request = (new SearchRequest([
+    'match' => [
+        'title' => 'hobbit',
+    ],
+]))
+    ->size(10)
+    ->highlight([
+        'fields' => [
+            'title' => new stdClass,
+        ],
+    ]);
+
+$response = $documents->search('books', $request);
+
+$total = $response->total();
+
+$hits = $response->hits()->map(function ($hit) {
+    return $hit->document()->content();
+});
+```
+
+## Aliases
+
+Aliases can include optional filters and routing values:
+
+```php
+use DirectoryTree\OpenSearchAdapter\Indices\Alias;
+
+$indices->putAlias('books', new Alias(
+    'tenant-books',
+    filter: [
+        'term' => [
+            'tenant_id' => 1,
+        ],
+    ],
+    routing: 'tenant-1',
+));
+
+$aliases = $indices->getAliases('books');
+```
+
+## Raw Responses
+
+Search response objects expose the original OpenSearch payload through `raw()`:
+
+```php
+$rawHit = $response->hits()->first()->raw();
+$rawResponse = $response->raw();
+```

@@ -1,6 +1,6 @@
 {
     "name": "directorytree/opensearch-adapter",
-    "description": "A PHP adapter for the official OpenSearch PHP client",
+    "description": "A PHP adapter for the OpenSearch PHP client",
     "keywords": [
         "opensearch",
         "adapter",

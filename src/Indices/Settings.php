@@ -12,8 +12,18 @@ use Illuminate\Support\Str;
  */
 class Settings implements Arrayable
 {
+    /**
+     * The index settings payload.
+     *
+     * @var array<string, mixed>
+     */
     protected array $settings = [];
 
+    /**
+     * Set an OpenSearch settings group.
+     *
+     * @param  array<int, mixed>  $arguments
+     */
     public function __call(string $method, array $arguments): self
     {
         $argumentsCount = count($arguments);
@@ -27,6 +37,11 @@ class Settings implements Arrayable
         return $this;
     }
 
+    /**
+     * Get the OpenSearch settings payload.
+     *
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return $this->settings;

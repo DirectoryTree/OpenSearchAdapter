@@ -10,15 +10,25 @@ use OpenSearch\Client;
 
 class DocumentManager
 {
+    /**
+     * The OpenSearch client instance.
+     */
     protected Client $client;
 
+    /**
+     * Create a new document manager instance.
+     */
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
     /**
-     * @param  Collection|Document[]  $documents
+     * Index the given documents into OpenSearch.
+     *
+     * @param  Collection<int, Document>  $documents
+     *
+     * @throws BulkRequestException
      */
     public function index(
         string $indexName,
@@ -53,7 +63,11 @@ class DocumentManager
     }
 
     /**
-     * @param  string[]  $documentIds
+     * Delete the given documents from OpenSearch.
+     *
+     * @param  array<int, string>  $documentIds
+     *
+     * @throws BulkRequestException
      */
     public function delete(
         string $indexName,
@@ -86,6 +100,11 @@ class DocumentManager
         return $this;
     }
 
+    /**
+     * Delete documents that match the given OpenSearch query.
+     *
+     * @param  array<string, mixed>  $query
+     */
     public function deleteByQuery(string $indexName, array $query, bool $refresh = false): self
     {
         $params = [
@@ -99,6 +118,9 @@ class DocumentManager
         return $this;
     }
 
+    /**
+     * Search an index using the given search request.
+     */
     public function search(string $indexName, SearchRequest $request): SearchResponse
     {
         $params = array_merge($request->toArray(), ['index' => $indexName]);
