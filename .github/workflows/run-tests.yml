@@ -22,7 +22,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        opensearch: [2.19.3]
+        opensearch: [2.19.3, 3.7.0]
         php: [8.4, 8.3, 8.2]
 
     name: P${{ matrix.php }} - OS${{ matrix.opensearch }} - ${{ matrix.os }}
