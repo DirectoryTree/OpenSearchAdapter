@@ -2,4 +2,4 @@
 
 use PHPUnit\Framework\TestCase;
 
-uses(TestCase::class)->in('Unit');
+uses(TestCase::class)->in('Integration', 'Unit');
