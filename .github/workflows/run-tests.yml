@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     services:
       opensearch:
-        image: opensearchproject/opensearch:2.13.0
+        image: opensearchproject/opensearch:${{ matrix.opensearch }}
         env:
           discovery.type: single-node
           DISABLE_SECURITY_PLUGIN: true
@@ -22,9 +22,10 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
+        opensearch: [2.19.3]
         php: [8.4, 8.3, 8.2]
 
-    name: P${{ matrix.php }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - OS${{ matrix.opensearch }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
