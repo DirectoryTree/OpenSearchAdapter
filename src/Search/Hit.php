@@ -19,6 +19,35 @@ class Hit implements RawResponseInterface
     ) {}
 
     /**
+     * Create a fake search hit instance.
+     *
+     * @param  Document|array<string, mixed>  $source
+     * @param  array<string, mixed>  $attributes
+     */
+    public static function fake(Document|array $source = [], string $index = 'test', string $id = '1', ?float $score = null, array $attributes = []): static
+    {
+        if ($source instanceof Document) {
+            $id = $source->id();
+            $source = $source->source();
+        }
+
+        if (array_key_exists('_source', $source) || array_key_exists('_id', $source)) {
+            return new static(array_merge([
+                '_index' => $index,
+                '_id' => $id,
+                '_score' => $score,
+            ], $source, $attributes));
+        }
+
+        return new static(array_merge([
+            '_index' => $index,
+            '_id' => $id,
+            '_score' => $score,
+            '_source' => $source,
+        ], $attributes));
+    }
+
+    /**
      * Get the index name for the hit.
      */
     public function index(): string

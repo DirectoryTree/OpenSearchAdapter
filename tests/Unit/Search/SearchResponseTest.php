@@ -2,6 +2,7 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 
+use DirectoryTree\OpenSearchAdapter\Documents\Document;
 use DirectoryTree\OpenSearchAdapter\Search\Aggregation;
 use DirectoryTree\OpenSearchAdapter\Search\Hit;
 use DirectoryTree\OpenSearchAdapter\Search\SearchResponse;
@@ -189,4 +190,49 @@ test('raw representation can be retrieved', function () {
             ],
         ],
     ], $searchResponse->raw());
+});
+
+test('fake response can be created without hits', function () {
+    $searchResponse = SearchResponse::fake();
+
+    expect($searchResponse->hits())->toBe([])
+        ->and($searchResponse->total())->toBe(0);
+});
+
+test('fake response can be created with documents', function () {
+    $searchResponse = SearchResponse::fake([
+        new Document('1', ['title' => 'First']),
+        new Document('2', ['title' => 'Second']),
+    ], 'posts');
+
+    expect($searchResponse->total())->toBe(2)
+        ->and($searchResponse->hits()[0]->index())->toBe('posts')
+        ->and($searchResponse->hits()[0]->id())->toBe('1')
+        ->and($searchResponse->hits()[0]->source())->toBe(['title' => 'First']);
+});
+
+test('fake response can be created with source arrays', function () {
+    $searchResponse = SearchResponse::fake([
+        ['title' => 'First'],
+    ]);
+
+    expect($searchResponse->hits()[0]->id())->toBe('1')
+        ->and($searchResponse->hits()[0]->source())->toBe(['title' => 'First']);
+});
+
+test('fake response can be created with raw hits', function () {
+    $searchResponse = SearchResponse::fake([
+        [
+            '_index' => 'articles',
+            '_id' => 'post-1',
+            '_score' => 4.2,
+            '_source' => [
+                'title' => 'First',
+            ],
+        ],
+    ]);
+
+    expect($searchResponse->hits()[0]->index())->toBe('articles')
+        ->and($searchResponse->hits()[0]->id())->toBe('post-1')
+        ->and($searchResponse->hits()[0]->score())->toBe(4.2);
 });

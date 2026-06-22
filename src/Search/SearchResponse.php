@@ -2,6 +2,8 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Search;
 
+use DirectoryTree\OpenSearchAdapter\Documents\Document;
+
 /**
  * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
  */
@@ -15,6 +17,28 @@ class SearchResponse implements RawResponseInterface
     public function __construct(
         protected array $response,
     ) {}
+
+    /**
+     * Create a fake search response instance.
+     *
+     * @param  array<int, Document|Hit|array<string, mixed>>  $hits
+     */
+    public static function fake(array $hits = [], string $index = 'test'): static
+    {
+        return new static([
+            'hits' => [
+                'total' => [
+                    'value' => count($hits),
+                    'relation' => 'eq',
+                ],
+                'hits' => array_map(fn (Document|Hit|array $hit, int $position) => match (true) {
+                    $hit instanceof Hit => $hit->raw(),
+                    $hit instanceof Document => Hit::fake($hit, $index)->raw(),
+                    default => Hit::fake($hit, $index, (string) ($position + 1))->raw(),
+                }, array_values($hits), array_keys(array_values($hits))),
+            ],
+        ]);
+    }
 
     /**
      * Get the search hits.

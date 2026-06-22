@@ -13,6 +13,13 @@ test('document getters', function () {
     $this->assertNull($document->get('missing'));
 });
 
+test('fake document can be created', function () {
+    $document = Document::fake('123456', ['title' => 'book']);
+
+    expect($document->id())->toBe('123456')
+        ->and($document->source())->toBe(['title' => 'book']);
+});
+
 test('array casting', function () {
     $document = new Document('1', ['title' => 'test']);
 

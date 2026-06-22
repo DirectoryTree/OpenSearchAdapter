@@ -19,6 +19,16 @@ class Document
     ) {}
 
     /**
+     * Create a fake document instance.
+     *
+     * @param  array<string, mixed>  $source
+     */
+    public static function fake(string $id = '1', array $source = []): static
+    {
+        return new static($id, $source);
+    }
+
+    /**
      * Get the document identifier.
      */
     public function id(): string

@@ -54,6 +54,38 @@ test('index name can be retrieved', function () {
     $this->assertSame('test', $this->hit->index());
 });
 
+test('fake hit can be created from source', function () {
+    $hit = Hit::fake(['title' => 'foo'], index: 'posts', id: '123', score: 4.2);
+
+    expect($hit->index())->toBe('posts')
+        ->and($hit->id())->toBe('123')
+        ->and($hit->score())->toBe(4.2)
+        ->and($hit->source())->toBe(['title' => 'foo']);
+});
+
+test('fake hit can be created from a document', function () {
+    $hit = Hit::fake(Document::fake('123', ['title' => 'foo']), index: 'posts');
+
+    expect($hit->index())->toBe('posts')
+        ->and($hit->id())->toBe('123')
+        ->and($hit->source())->toBe(['title' => 'foo']);
+});
+
+test('fake hit can be created from raw hit attributes', function () {
+    $hit = Hit::fake([
+        '_index' => 'articles',
+        '_id' => 'post-1',
+        '_score' => 4.2,
+        '_source' => [
+            'title' => 'First',
+        ],
+    ]);
+
+    expect($hit->index())->toBe('articles')
+        ->and($hit->id())->toBe('post-1')
+        ->and($hit->score())->toBe(4.2);
+});
+
 test('document can be retrieved', function () {
     $this->assertEquals(
         new Document('1', ['title' => 'foo']),

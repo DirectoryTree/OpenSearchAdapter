@@ -84,3 +84,9 @@ test('fake document manager records searches and returns configured responses', 
 
     $documents->assertSearched('posts', $request);
 });
+
+test('fake document manager can be constructed with a search response', function () {
+    $documents = new FakeDocumentManager($response = SearchResponse::fake());
+
+    expect($documents->search('posts', new SearchRequest))->toBe($response);
+});

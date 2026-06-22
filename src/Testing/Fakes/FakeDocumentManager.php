@@ -43,21 +43,15 @@ class FakeDocumentManager implements DocumentManagerInterface
     protected array $searched = [];
 
     /**
-     * The response that should be returned for searches.
-     */
-    protected SearchResponse $response;
-
-    /**
      * Create a new fake document manager instance.
      */
-    public function __construct()
-    {
-        $this->response = new SearchResponse([
+    public function __construct(
+        protected SearchResponse $response = new SearchResponse([
             'hits' => [
                 'hits' => [],
             ],
-        ]);
-    }
+        ]),
+    ) {}
 
     /**
      * Set the search response returned by the fake.
