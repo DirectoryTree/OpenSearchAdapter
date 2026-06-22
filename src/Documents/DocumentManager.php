@@ -12,7 +12,7 @@ use OpenSearch\Client;
  * @see https://docs.opensearch.org/latest/api-reference/document-apis/delete-by-query/
  * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
  */
-class DocumentManager
+class DocumentManager implements DocumentManagerInterface
 {
     /**
      * Create a new document manager instance.
@@ -28,7 +28,7 @@ class DocumentManager
      *
      * @throws BulkRequestException
      */
-    public function index(string $index, array $documents, bool $refresh = false, ?DocumentRouting $routing = null): self
+    public function index(string $index, array $documents, bool $refresh = false, ?DocumentRouting $routing = null): static
     {
         $params = [
             'index' => $index,
@@ -59,7 +59,7 @@ class DocumentManager
      *
      * @throws BulkRequestException
      */
-    public function delete(string $index, array $ids, bool $refresh = false, ?DocumentRouting $routing = null): self
+    public function delete(string $index, array $ids, bool $refresh = false, ?DocumentRouting $routing = null): static
     {
         $params = [
             'index' => $index,
@@ -91,7 +91,7 @@ class DocumentManager
      *
      * @param  array<string, mixed>  $query
      */
-    public function deleteByQuery(string $index, array $query, bool $refresh = false): self
+    public function deleteByQuery(string $index, array $query, bool $refresh = false): static
     {
         $this->client->deleteByQuery([
             'index' => $index,
