@@ -41,14 +41,10 @@ class DocumentManager
         ];
 
         foreach ($documents as $document) {
-            $index = ['_id' => $document->id()];
-
-            if ($routing && $routing->has($document->id())) {
-                $index['routing'] = $routing->get($document->id());
-            }
-
-            $params['body'][] = compact('index');
-            $params['body'][] = $document->source();
+            array_push(
+                $params['body'],
+                ...$document->toBulkIndex($routing?->get($document->id()))
+            );
         }
 
         $response = $this->client->bulk($params);

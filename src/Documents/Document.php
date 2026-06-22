@@ -45,6 +45,25 @@ class Document
     }
 
     /**
+     * Get the OpenSearch bulk index operation payload.
+     *
+     * @return array{0: array{index: array<string, string>}, 1: array<string, mixed>}
+     */
+    public function toBulkIndex(?string $routing = null): array
+    {
+        $index = ['_id' => $this->id];
+
+        if (! is_null($routing)) {
+            $index['routing'] = $routing;
+        }
+
+        return [
+            compact('index'),
+            $this->source,
+        ];
+    }
+
+    /**
      * Get the array representation of the document.
      *
      * @return array{id: string, source: array<string, mixed>}

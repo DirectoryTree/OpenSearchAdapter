@@ -21,3 +21,21 @@ test('array casting', function () {
         'source' => ['title' => 'test'],
     ], $document->toArray());
 });
+
+test('bulk index payload can be retrieved', function () {
+    $document = new Document('1', ['title' => 'test']);
+
+    $this->assertSame([
+        ['index' => ['_id' => '1']],
+        ['title' => 'test'],
+    ], $document->toBulkIndex());
+});
+
+test('bulk index payload can be retrieved with routing', function () {
+    $document = new Document('1', ['title' => 'test']);
+
+    $this->assertSame([
+        ['index' => ['_id' => '1', 'routing' => 'tenant-1']],
+        ['title' => 'test'],
+    ], $document->toBulkIndex('tenant-1'));
+});
