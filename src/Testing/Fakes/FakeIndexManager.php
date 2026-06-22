@@ -15,13 +15,6 @@ use PHPUnit\Framework\Assert as PHPUnit;
 class FakeIndexManager implements IndexManagerInterface
 {
     /**
-     * The index names that should exist.
-     *
-     * @var array<int, string>
-     */
-    protected array $existing = [];
-
-    /**
      * The opened index names.
      *
      * @var array<int, string>
@@ -85,14 +78,13 @@ class FakeIndexManager implements IndexManagerInterface
     protected array $deletedAliases = [];
 
     /**
-     * Seed the fake with an existing index.
+     * Create a new fake index manager instance.
+     *
+     * @param  array<int, string>  $existing
      */
-    public function withIndex(string $index): static
-    {
-        $this->existing[] = $index;
-
-        return $this;
-    }
+    public function __construct(
+        protected array $existing = [],
+    ) {}
 
     /**
      * Open the given index.
@@ -130,7 +122,7 @@ class FakeIndexManager implements IndexManagerInterface
     public function create(IndexBlueprint $index): static
     {
         $this->created[] = $index;
-        $this->withIndex($index->name());
+        $this->existing[] = $index->name();
 
         return $this;
     }

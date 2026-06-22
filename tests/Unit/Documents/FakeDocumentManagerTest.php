@@ -51,7 +51,6 @@ test('fake document manager records delete by query operations', function () {
 });
 
 test('fake document manager records searches and returns configured responses', function () {
-    $documents = new FakeDocumentManager;
     $request = new SearchRequest([
         'match' => [
             'title' => 'OpenSearch',
@@ -76,9 +75,9 @@ test('fake document manager records searches and returns configured responses', 
         ],
     ]);
 
-    $result = $documents
-        ->respondWith($response)
-        ->search('posts', $request);
+    $documents = new FakeDocumentManager($response);
+
+    $result = $documents->search('posts', $request);
 
     expect($result)->toBe($response);
 

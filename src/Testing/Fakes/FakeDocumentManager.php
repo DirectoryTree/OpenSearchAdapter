@@ -46,22 +46,8 @@ class FakeDocumentManager implements DocumentManagerInterface
      * Create a new fake document manager instance.
      */
     public function __construct(
-        protected SearchResponse $response = new SearchResponse([
-            'hits' => [
-                'hits' => [],
-            ],
-        ]),
+        protected SearchResponse $response = new SearchResponse,
     ) {}
-
-    /**
-     * Set the search response returned by the fake.
-     */
-    public function respondWith(SearchResponse $response): static
-    {
-        $this->response = $response;
-
-        return $this;
-    }
 
     /**
      * Index the given documents into OpenSearch.

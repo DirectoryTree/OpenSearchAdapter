@@ -16,9 +16,9 @@ test('fake index manager tracks index existence', function () {
 
     expect($indices->exists('posts'))->toBeFalse();
 
-    $indices
-        ->withIndex('posts')
-        ->assertChecked('posts');
+    $indices->assertChecked('posts');
+
+    $indices = new FakeIndexManager(existing: ['posts']);
 
     expect($indices->exists('posts'))->toBeTrue();
 });
@@ -64,7 +64,7 @@ test('fake index manager records open and close operations', function () {
 });
 
 test('fake index manager records deleted indices', function () {
-    $indices = (new FakeIndexManager)->withIndex('posts');
+    $indices = new FakeIndexManager(existing: ['posts']);
 
     $indices->delete('posts');
 

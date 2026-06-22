@@ -15,7 +15,7 @@ class SearchResponse implements RawResponseInterface
      * @param  array<string, mixed>  $response
      */
     public function __construct(
-        protected array $response,
+        protected array $response = [],
     ) {}
 
     /**
@@ -47,7 +47,7 @@ class SearchResponse implements RawResponseInterface
      */
     public function hits(): array
     {
-        $hits = $this->response['hits']['hits'];
+        $hits = $this->response['hits']['hits'] ?? [];
 
         return array_map(fn (array $hit) => new Hit($hit), $hits);
     }

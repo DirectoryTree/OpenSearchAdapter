@@ -10,6 +10,14 @@ use DirectoryTree\OpenSearchAdapter\Search\ShardStatistics;
 use DirectoryTree\OpenSearchAdapter\Search\Suggestion;
 use DirectoryTree\OpenSearchAdapter\Search\TotalHits;
 
+test('empty response can be created', function () {
+    $searchResponse = new SearchResponse;
+
+    expect($searchResponse->hits())->toBe([])
+        ->and($searchResponse->total())->toBeNull()
+        ->and($searchResponse->raw())->toBe([]);
+});
+
 test('hits can be retrieved', function () {
     $searchResponse = new SearchResponse([
         'hits' => [
