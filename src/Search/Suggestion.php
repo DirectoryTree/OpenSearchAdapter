@@ -43,11 +43,14 @@ class Suggestion implements RawResponseInterface
     /**
      * Get the suggestion options.
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<int, SuggestionOption>
      */
     public function options(): array
     {
-        return $this->suggestion['options'];
+        return array_map(
+            static fn (array $option) => new SuggestionOption($option),
+            $this->suggestion['options'],
+        );
     }
 
     /**

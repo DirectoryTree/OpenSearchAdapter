@@ -21,7 +21,7 @@ class Hit implements RawResponseInterface
     /**
      * Get the index name for the hit.
      */
-    public function indexName(): string
+    public function index(): string
     {
         return $this->hit['_index'];
     }
@@ -35,14 +35,69 @@ class Hit implements RawResponseInterface
     }
 
     /**
+     * Get the document identifier for the hit.
+     */
+    public function id(): string
+    {
+        return $this->hit['_id'];
+    }
+
+    /**
+     * Get the document source for the hit.
+     *
+     * @return array<string, mixed>
+     */
+    public function source(): array
+    {
+        return $this->hit['_source'] ?? [];
+    }
+
+    /**
      * Get the document for the hit.
      */
     public function document(): Document
     {
-        return new Document(
-            $this->hit['_id'],
-            $this->hit['_source'] ?? []
-        );
+        return new Document($this->id(), $this->source());
+    }
+
+    /**
+     * Get the returned document fields.
+     *
+     * @return array<string, mixed>
+     */
+    public function fields(): array
+    {
+        return $this->hit['fields'] ?? [];
+    }
+
+    /**
+     * Get the hit sort values.
+     *
+     * @return array<int, mixed>
+     */
+    public function sort(): array
+    {
+        return $this->hit['sort'] ?? [];
+    }
+
+    /**
+     * Get the matched query names.
+     *
+     * @return array<int, string>
+     */
+    public function matchedQueries(): array
+    {
+        return $this->hit['matched_queries'] ?? [];
+    }
+
+    /**
+     * Get the score explanation.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function explanation(): ?array
+    {
+        return $this->hit['_explanation'] ?? null;
     }
 
     /**
@@ -50,8 +105,11 @@ class Hit implements RawResponseInterface
      */
     public function highlight(): ?Highlight
     {
-        return isset($this->hit['highlight']) ?
-            new Highlight($this->hit['highlight']) : null;
+        if (isset($this->hit['highlight'])) {
+            return new Highlight($this->hit['highlight']);
+        }
+
+        return null;
     }
 
     /**
@@ -61,15 +119,10 @@ class Hit implements RawResponseInterface
      */
     public function innerHits(): array
     {
-        $innerHits = $this->hit['inner_hits'] ?? [];
-
-        return array_map(
-            static fn (array $hits) => array_map(
-                static fn (array $hit) => new self($hit),
-                $hits['hits']['hits'],
-            ),
-            $innerHits,
-        );
+        return array_map(fn (array $hits) => array_map(
+            fn (array $hit) => new self($hit),
+            $hits['hits']['hits'],
+        ), $this->hit['inner_hits'] ?? []);
     }
 
     /**

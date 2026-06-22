@@ -29,11 +29,47 @@ class SearchResponse implements RawResponseInterface
     }
 
     /**
+     * Get the search execution time in milliseconds.
+     */
+    public function took(): ?int
+    {
+        return $this->response['took'] ?? null;
+    }
+
+    /**
+     * Determine if the search timed out.
+     */
+    public function timedOut(): bool
+    {
+        return $this->response['timed_out'] ?? false;
+    }
+
+    /**
+     * Get the search shard statistics.
+     */
+    public function shards(): ?ShardStatistics
+    {
+        return isset($this->response['_shards'])
+            ? new ShardStatistics($this->response['_shards'])
+            : null;
+    }
+
+    /**
+     * Get the total hit count metadata.
+     */
+    public function totalHits(): ?TotalHits
+    {
+        return isset($this->response['hits']['total'])
+            ? new TotalHits($this->response['hits']['total'])
+            : null;
+    }
+
+    /**
      * Get the total number of matching documents.
      */
     public function total(): ?int
     {
-        return $this->response['hits']['total']['value'] ?? null;
+        return $this->totalHits()?->value();
     }
 
     /**

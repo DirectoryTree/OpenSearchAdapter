@@ -14,6 +14,15 @@ beforeEach(function () {
             'title' => 'foo',
         ],
         '_score' => 1.3,
+        'fields' => [
+            'created_at' => ['2026-01-01T00:00:00.000Z'],
+        ],
+        'sort' => [1.3, '1'],
+        'matched_queries' => ['title_match'],
+        '_explanation' => [
+            'value' => 1.3,
+            'description' => 'score explanation',
+        ],
         'highlight' => [
             'title' => [
                 ' <em>foo</em> ',
@@ -42,7 +51,7 @@ beforeEach(function () {
 });
 
 test('index name can be retrieved', function () {
-    $this->assertSame('test', $this->hit->indexName());
+    $this->assertSame('test', $this->hit->index());
 });
 
 test('document can be retrieved', function () {
@@ -69,6 +78,35 @@ test('score can be retrieved', function () {
     $this->assertSame(1.3, $this->hit->score());
 });
 
+test('document identifier can be retrieved', function () {
+    $this->assertSame('1', $this->hit->id());
+});
+
+test('source can be retrieved', function () {
+    $this->assertSame(['title' => 'foo'], $this->hit->source());
+});
+
+test('fields can be retrieved', function () {
+    $this->assertSame([
+        'created_at' => ['2026-01-01T00:00:00.000Z'],
+    ], $this->hit->fields());
+});
+
+test('sort values can be retrieved', function () {
+    $this->assertSame([1.3, '1'], $this->hit->sort());
+});
+
+test('matched queries can be retrieved', function () {
+    $this->assertSame(['title_match'], $this->hit->matchedQueries());
+});
+
+test('explanation can be retrieved', function () {
+    $this->assertSame([
+        'value' => 1.3,
+        'description' => 'score explanation',
+    ], $this->hit->explanation());
+});
+
 test('inner hits can be retrieved', function () {
     $innerHit = new Hit([
         '_id' => '2',
@@ -93,6 +131,15 @@ test('raw representation can be retrieved', function () {
             'title' => 'foo',
         ],
         '_score' => 1.3,
+        'fields' => [
+            'created_at' => ['2026-01-01T00:00:00.000Z'],
+        ],
+        'sort' => [1.3, '1'],
+        'matched_queries' => ['title_match'],
+        '_explanation' => [
+            'value' => 1.3,
+            'description' => 'score explanation',
+        ],
         'highlight' => [
             'title' => [
                 ' <em>foo</em> ',

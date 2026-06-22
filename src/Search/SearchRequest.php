@@ -17,11 +17,11 @@ class SearchRequest
     /**
      * Create a new search request instance.
      *
-     * @param  array<string, mixed>|null  $query
+     * @param  array<string, mixed>  $query
      */
-    public function __construct(?array $query = null)
+    public function __construct(array $query = [])
     {
-        if (isset($query)) {
+        if (! empty($query)) {
             $this->request['body']['query'] = $query;
         }
     }

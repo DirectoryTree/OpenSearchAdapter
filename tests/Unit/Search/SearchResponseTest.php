@@ -5,7 +5,9 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 use DirectoryTree\OpenSearchAdapter\Search\Aggregation;
 use DirectoryTree\OpenSearchAdapter\Search\Hit;
 use DirectoryTree\OpenSearchAdapter\Search\SearchResponse;
+use DirectoryTree\OpenSearchAdapter\Search\ShardStatistics;
 use DirectoryTree\OpenSearchAdapter\Search\Suggestion;
+use DirectoryTree\OpenSearchAdapter\Search\TotalHits;
 
 test('hits can be retrieved', function () {
     $searchResponse = new SearchResponse([
@@ -33,6 +35,62 @@ test('total number of hits can be retrieved', function () {
     ]);
 
     $this->assertSame(100, $searchResponse->total());
+});
+
+test('total hit metadata can be retrieved', function () {
+    $searchResponse = new SearchResponse([
+        'hits' => [
+            'total' => [
+                'value' => 100,
+                'relation' => 'eq',
+            ],
+        ],
+    ]);
+
+    $this->assertEquals(
+        new TotalHits(['value' => 100, 'relation' => 'eq']),
+        $searchResponse->totalHits()
+    );
+});
+
+test('integer total hit metadata can be retrieved', function () {
+    $searchResponse = new SearchResponse([
+        'hits' => [
+            'total' => 100,
+        ],
+    ]);
+
+    $this->assertEquals(
+        new TotalHits(100),
+        $searchResponse->totalHits()
+    );
+    $this->assertSame(100, $searchResponse->total());
+});
+
+test('execution metadata can be retrieved', function () {
+    $searchResponse = new SearchResponse([
+        'took' => 12,
+        'timed_out' => true,
+        '_shards' => [
+            'total' => 3,
+            'successful' => 3,
+            'skipped' => 0,
+            'failed' => 0,
+        ],
+        'hits' => [],
+    ]);
+
+    $this->assertSame(12, $searchResponse->took());
+    $this->assertTrue($searchResponse->timedOut());
+    $this->assertEquals(
+        new ShardStatistics([
+            'total' => 3,
+            'successful' => 3,
+            'skipped' => 0,
+            'failed' => 0,
+        ]),
+        $searchResponse->shards()
+    );
 });
 
 test('empty array is returned when suggestions are not present', function () {

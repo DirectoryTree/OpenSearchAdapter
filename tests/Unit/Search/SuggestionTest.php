@@ -3,6 +3,7 @@
 namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 
 use DirectoryTree\OpenSearchAdapter\Search\Suggestion;
+use DirectoryTree\OpenSearchAdapter\Search\SuggestionOption;
 
 test('text can be retrieved', function () {
     $suggestion = new Suggestion(['text' => 'foo']);
@@ -34,11 +35,11 @@ test('options can be retrieved', function () {
     ]);
 
     $this->assertEquals([
-        [
+        new SuggestionOption([
             'text' => 'foo',
             'score' => 0.8,
             'freq' => 1,
-        ],
+        ]),
     ], $suggestion->options());
 });
 

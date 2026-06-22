@@ -17,19 +17,19 @@ class Bucket implements RawResponseInterface
     ) {}
 
     /**
-     * Get the number of documents in the bucket.
-     */
-    public function docCount(): int
-    {
-        return $this->bucket['doc_count'] ?? 0;
-    }
-
-    /**
      * Get the bucket key.
      */
     public function key(): mixed
     {
         return $this->bucket['key'];
+    }
+
+    /**
+     * Get the number of documents in the bucket.
+     */
+    public function docCount(): int
+    {
+        return $this->bucket['doc_count'] ?? 0;
     }
 
     /**
