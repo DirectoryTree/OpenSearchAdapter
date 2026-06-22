@@ -44,9 +44,50 @@ $mapping = (new Mapping)
 $settings = (new Settings)->index([
     'number_of_shards' => 1,
     'number_of_replicas' => 0,
+    'refresh_interval' => '1s',
 ]);
 
 $indices->create(new IndexBlueprint('books', $mapping, $settings));
+```
+
+Use `field()` for less common, custom, or newer OpenSearch field types:
+
+```php
+$mapping = (new Mapping)->field('embedding', 'custom_vector', [
+    'dimension' => 1536,
+]);
+```
+
+Settings include top-level setters for common OpenSearch settings groups:
+
+```php
+$settings = (new Settings)
+    ->index([
+        'number_of_shards' => 1,
+        'number_of_replicas' => 0,
+    ])
+    ->analysis([
+        'analyzer' => [
+            'content' => [
+                'type' => 'custom',
+                'tokenizer' => 'whitespace',
+            ],
+        ],
+    ])
+    ->similarity([
+        'default' => [
+            'type' => 'BM25',
+        ],
+    ]);
+```
+
+Use `set()` for top-level settings groups that do not have a dedicated method:
+
+```php
+$settings = (new Settings)
+    ->set('custom_group', [
+        'enabled' => true,
+    ]);
 ```
 
 ## Indexing Documents

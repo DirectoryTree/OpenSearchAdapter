@@ -2,14 +2,8 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Indices;
 
-use BadMethodCallException;
-use DirectoryTree\OpenSearchAdapter\Support\Str;
-
 /**
  * @see https://docs.opensearch.org/latest/install-and-configure/configuring-opensearch/index-settings/
- *
- * @method $this index(array $configuration)
- * @method $this analysis(array $configuration)
  */
 class Settings
 {
@@ -21,21 +15,45 @@ class Settings
     protected array $settings = [];
 
     /**
-     * Set an OpenSearch settings group.
+     * Set a top-level OpenSearch settings group.
      *
-     * @param  array<int, mixed>  $arguments
+     * @param  array<string, mixed>  $configuration
      */
-    public function __call(string $method, array $arguments): self
+    public function set(string $group, array $configuration): self
     {
-        $argumentsCount = count($arguments);
-
-        if ($argumentsCount === 0 || $argumentsCount > 1) {
-            throw new BadMethodCallException(sprintf('Invalid number of arguments for %s method', $method));
-        }
-
-        $this->settings[Str::snake($method)] = $arguments[0];
+        $this->settings[$group] = $configuration;
 
         return $this;
+    }
+
+    /**
+     * Set index-level OpenSearch settings.
+     *
+     * @param  array<string, mixed>  $configuration
+     */
+    public function index(array $configuration): self
+    {
+        return $this->set('index', $configuration);
+    }
+
+    /**
+     * Set index analysis settings.
+     *
+     * @param  array<string, mixed>  $configuration
+     */
+    public function analysis(array $configuration): self
+    {
+        return $this->set('analysis', $configuration);
+    }
+
+    /**
+     * Set index similarity settings.
+     *
+     * @param  array<string, mixed>  $configuration
+     */
+    public function similarity(array $configuration): self
+    {
+        return $this->set('similarity', $configuration);
     }
 
     /**

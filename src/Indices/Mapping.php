@@ -7,47 +7,6 @@ use Closure;
 /**
  * @see https://docs.opensearch.org/latest/field-types/
  * @see https://docs.opensearch.org/latest/mappings/
- *
- * @method $this alias(string $name, array $parameters = [])
- * @method $this binary(string $name, array $parameters = [])
- * @method $this boolean(string $name, array $parameters = [])
- * @method $this byte(string $name, array $parameters = [])
- * @method $this completion(string $name, array $parameters = [])
- * @method $this constantKeyword(string $name, array $parameters = [])
- * @method $this date(string $name, array $parameters = [])
- * @method $this dateNanos(string $name, array $parameters = [])
- * @method $this dateRange(string $name, array $parameters = [])
- * @method $this denseVector(string $name, array $parameters = [])
- * @method $this double(string $name, array $parameters = [])
- * @method $this doubleRange(string $name, array $parameters = [])
- * @method $this flattened(string $name, array $parameters = [])
- * @method $this float(string $name, array $parameters = [])
- * @method $this floatRange(string $name, array $parameters = [])
- * @method $this geoPoint(string $name, array $parameters = [])
- * @method $this geoShape(string $name, array $parameters = [])
- * @method $this halfFloat(string $name, array $parameters = [])
- * @method $this histogram(string $name)
- * @method $this integer(string $name, array $parameters = [])
- * @method $this integerRange(string $name, array $parameters = [])
- * @method $this ip(string $name, array $parameters = [])
- * @method $this ipRange(string $name, array $parameters = [])
- * @method $this join(string $name, array $parameters = [])
- * @method $this keyword(string $name, array $parameters = [])
- * @method $this long(string $name, array $parameters = [])
- * @method $this longRange(string $name, array $parameters = [])
- * @method $this nested(string $name, Closure|array $parameters = [])
- * @method $this object(string $name, Closure|array $parameters = [])
- * @method $this percolator(string $name)
- * @method $this rankFeature(string $name, array $parameters = [])
- * @method $this rankFeatures(string $name)
- * @method $this scaledFloat(string $name, array $parameters = [])
- * @method $this searchAsYouType(string $name, array $parameters = [])
- * @method $this shape(string $name, array $parameters = [])
- * @method $this short(string $name, array $parameters = [])
- * @method $this sparseVector(string $name)
- * @method $this text(string $name, array $parameters = [])
- * @method $this tokenCount(string $name, array $parameters = [])
- * @method $this wildcard(string $name, array $parameters = [])
  */
 class Mapping
 {
@@ -79,6 +38,506 @@ class Mapping
     public function __construct()
     {
         $this->properties = new MappingProperties;
+    }
+
+    /**
+     * Get the mapping properties builder.
+     */
+    public function properties(): MappingProperties
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Add a field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function field(string $name, string $type, array $parameters = []): self
+    {
+        $this->properties->field($name, $type, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add an alias field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function alias(string $name, array $parameters = []): self
+    {
+        $this->properties->alias($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a binary field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function binary(string $name, array $parameters = []): self
+    {
+        $this->properties->binary($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a boolean field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function boolean(string $name, array $parameters = []): self
+    {
+        $this->properties->boolean($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a byte field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function byte(string $name, array $parameters = []): self
+    {
+        $this->properties->byte($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a completion field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function completion(string $name, array $parameters = []): self
+    {
+        $this->properties->completion($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a constant keyword field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function constantKeyword(string $name, array $parameters = []): self
+    {
+        $this->properties->constantKeyword($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a date field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function date(string $name, array $parameters = []): self
+    {
+        $this->properties->date($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a date nanos field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function dateNanos(string $name, array $parameters = []): self
+    {
+        $this->properties->dateNanos($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a date range field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function dateRange(string $name, array $parameters = []): self
+    {
+        $this->properties->dateRange($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a dense vector field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function denseVector(string $name, array $parameters = []): self
+    {
+        $this->properties->denseVector($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a double field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function double(string $name, array $parameters = []): self
+    {
+        $this->properties->double($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a double range field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function doubleRange(string $name, array $parameters = []): self
+    {
+        $this->properties->doubleRange($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a flattened field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function flattened(string $name, array $parameters = []): self
+    {
+        $this->properties->flattened($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a float field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function float(string $name, array $parameters = []): self
+    {
+        $this->properties->float($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a float range field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function floatRange(string $name, array $parameters = []): self
+    {
+        $this->properties->floatRange($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a geo point field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function geoPoint(string $name, array $parameters = []): self
+    {
+        $this->properties->geoPoint($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a geo shape field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function geoShape(string $name, array $parameters = []): self
+    {
+        $this->properties->geoShape($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a half float field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function halfFloat(string $name, array $parameters = []): self
+    {
+        $this->properties->halfFloat($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a histogram field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function histogram(string $name, array $parameters = []): self
+    {
+        $this->properties->histogram($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add an integer field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function integer(string $name, array $parameters = []): self
+    {
+        $this->properties->integer($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add an integer range field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function integerRange(string $name, array $parameters = []): self
+    {
+        $this->properties->integerRange($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add an IP field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function ip(string $name, array $parameters = []): self
+    {
+        $this->properties->ip($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add an IP range field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function ipRange(string $name, array $parameters = []): self
+    {
+        $this->properties->ipRange($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a join field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function join(string $name, array $parameters = []): self
+    {
+        $this->properties->join($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a keyword field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function keyword(string $name, array $parameters = []): self
+    {
+        $this->properties->keyword($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a long field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function long(string $name, array $parameters = []): self
+    {
+        $this->properties->long($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a long range field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function longRange(string $name, array $parameters = []): self
+    {
+        $this->properties->longRange($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add an object field definition.
+     *
+     * @param  Closure|array<string, mixed>  $parameters
+     */
+    public function object(string $name, Closure|array $parameters = []): self
+    {
+        $this->properties->object($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a nested field definition.
+     *
+     * @param  Closure|array<string, mixed>  $parameters
+     */
+    public function nested(string $name, Closure|array $parameters = []): self
+    {
+        $this->properties->nested($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a percolator field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function percolator(string $name, array $parameters = []): self
+    {
+        $this->properties->percolator($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a rank feature field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function rankFeature(string $name, array $parameters = []): self
+    {
+        $this->properties->rankFeature($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a rank features field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function rankFeatures(string $name, array $parameters = []): self
+    {
+        $this->properties->rankFeatures($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a scaled float field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function scaledFloat(string $name, array $parameters = []): self
+    {
+        $this->properties->scaledFloat($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a search-as-you-type field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function searchAsYouType(string $name, array $parameters = []): self
+    {
+        $this->properties->searchAsYouType($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a shape field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function shape(string $name, array $parameters = []): self
+    {
+        $this->properties->shape($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a short field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function short(string $name, array $parameters = []): self
+    {
+        $this->properties->short($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a sparse vector field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function sparseVector(string $name, array $parameters = []): self
+    {
+        $this->properties->sparseVector($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a text field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function text(string $name, array $parameters = []): self
+    {
+        $this->properties->text($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a token count field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function tokenCount(string $name, array $parameters = []): self
+    {
+        $this->properties->tokenCount($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a wildcard field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function wildcard(string $name, array $parameters = []): self
+    {
+        $this->properties->wildcard($name, $parameters);
+
+        return $this;
     }
 
     /**
@@ -129,18 +588,6 @@ class Mapping
     public function dynamicTemplate(string $name, array $parameters): self
     {
         $this->dynamicTemplates[] = [$name => $parameters];
-
-        return $this;
-    }
-
-    /**
-     * Forward dynamic property definitions to the mapping properties builder.
-     *
-     * @param  array<int, mixed>  $parameters
-     */
-    public function __call(string $method, array $parameters): self
-    {
-        $this->properties->{$method}(...$parameters);
 
         return $this;
     }

@@ -2,7 +2,6 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 
-use BadMethodCallException;
 use DirectoryTree\OpenSearchAdapter\Indices\MappingProperties;
 
 dataset('mapping property setters', [
@@ -97,6 +96,19 @@ test('property setter', function (string $type, string $name, $parameters, array
     $this->assertEquals($expected, $actual->toArray());
 })->with('mapping property setters');
 
+test('field can be set using a custom type', function () {
+    $actual = (new MappingProperties)->field('embedding', 'custom_vector', [
+        'dimension' => 1536,
+    ]);
+
+    $this->assertSame([
+        'embedding' => [
+            'type' => 'custom_vector',
+            'dimension' => 1536,
+        ],
+    ], $actual->toArray());
+});
+
 test('object properties may be configured with a closure', function () {
     $actual = (new MappingProperties)->object('user', function (MappingProperties $properties) {
         $properties->integer('age');
@@ -141,9 +153,4 @@ test('nested properties may be configured with a closure', function () {
             'dynamic' => true,
         ],
     ], $actual->toArray());
-});
-
-test('exception is thrown when setter receives invalid number of arguments', function () {
-    $this->expectException(BadMethodCallException::class);
-    (new MappingProperties)->text();
 });

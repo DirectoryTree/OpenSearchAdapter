@@ -2,37 +2,20 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 
-use BadMethodCallException;
 use DirectoryTree\OpenSearchAdapter\Indices\Settings;
 
-dataset('settings options', [
-    [
-        'option' => 'index',
-        'configuration' => [
-            'number_of_replicas' => 2,
-        ],
-        'expected' => [
-            'index' => [
-                'number_of_replicas' => 2,
+test('top level settings group can be set', function () {
+    $settings = (new Settings)->set('analysis', [
+        'analyzer' => [
+            'content' => [
+                'type' => 'custom',
+                'tokenizer' => 'whitespace',
             ],
         ],
-    ],
-    [
-        'option' => 'index',
-        'configuration' => [
-            'number_of_replicas' => 2,
-            'refresh_interval' => -1,
-        ],
-        'expected' => [
-            'index' => [
-                'number_of_replicas' => 2,
-                'refresh_interval' => -1,
-            ],
-        ],
-    ],
-    [
-        'option' => 'analysis',
-        'configuration' => [
+    ]);
+
+    $this->assertSame([
+        'analysis' => [
             'analyzer' => [
                 'content' => [
                     'type' => 'custom',
@@ -40,27 +23,59 @@ dataset('settings options', [
                 ],
             ],
         ],
-        'expected' => [
-            'analysis' => [
-                'analyzer' => [
-                    'content' => [
-                        'type' => 'custom',
-                        'tokenizer' => 'whitespace',
-                    ],
+    ], $settings->toArray());
+});
+
+test('index settings can be set', function () {
+    $settings = (new Settings)->index([
+        'number_of_replicas' => 2,
+        'refresh_interval' => -1,
+    ]);
+
+    $this->assertSame([
+        'index' => [
+            'number_of_replicas' => 2,
+            'refresh_interval' => -1,
+        ],
+    ], $settings->toArray());
+});
+
+test('analysis settings can be set', function () {
+    $settings = (new Settings)->analysis([
+        'analyzer' => [
+            'content' => [
+                'type' => 'custom',
+                'tokenizer' => 'whitespace',
+            ],
+        ],
+    ]);
+
+    $this->assertSame([
+        'analysis' => [
+            'analyzer' => [
+                'content' => [
+                    'type' => 'custom',
+                    'tokenizer' => 'whitespace',
                 ],
             ],
         ],
-    ],
-]);
+    ], $settings->toArray());
+});
 
-test('option setter', function (string $option, array $configuration, array $expected) {
-    $actual = (new Settings)->$option($configuration);
-    $this->assertSame($expected, $actual->toArray());
-})->with('settings options');
+test('similarity settings can be set', function () {
+    $settings = (new Settings)->similarity([
+        'default' => [
+            'type' => 'BM25',
+        ],
+    ]);
 
-test('exception is thrown when setter receives invalid number of arguments', function () {
-    $this->expectException(BadMethodCallException::class);
-    (new Settings)->index();
+    $this->assertSame([
+        'similarity' => [
+            'default' => [
+                'type' => 'BM25',
+            ],
+        ],
+    ], $settings->toArray());
 });
 
 test('default array casting', function () {

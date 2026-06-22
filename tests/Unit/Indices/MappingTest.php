@@ -91,3 +91,32 @@ test('configured array casting', function () {
         ],
     ], $mapping->toArray());
 });
+
+test('field can be set using a custom type', function () {
+    $mapping = (new Mapping)->field('embedding', 'custom_vector', [
+        'dimension' => 1536,
+    ]);
+
+    $this->assertSame([
+        'properties' => [
+            'embedding' => [
+                'type' => 'custom_vector',
+                'dimension' => 1536,
+            ],
+        ],
+    ], $mapping->toArray());
+});
+
+test('properties builder can be retrieved', function () {
+    $mapping = new Mapping;
+
+    $mapping->properties()->keyword('id');
+
+    $this->assertSame([
+        'properties' => [
+            'id' => [
+                'type' => 'keyword',
+            ],
+        ],
+    ], $mapping->toArray());
+});
