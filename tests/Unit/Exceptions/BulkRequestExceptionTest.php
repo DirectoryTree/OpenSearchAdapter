@@ -58,7 +58,7 @@ test('first error message from response is given in exception message', function
     $exception = BulkRequestException::fromResponse($response);
 
     $this->assertEquals(
-        '1 bulk operation(s) did not complete successfully. Error: document_missing_exception. Reason: [_doc][5]: document missing. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::getResponse() method to get more details.',
+        '1 bulk operation(s) did not complete successfully. Error: document_missing_exception. Reason: [_doc][5]: document missing. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::response() method to get more details.',
         $exception->getMessage()
     );
 });
@@ -104,7 +104,7 @@ test('exception can be thrown with many errors in response', function () {
     $exception = BulkRequestException::fromResponse($response);
 
     $this->assertEquals(
-        '2 bulk operation(s) did not complete successfully. First error: document_missing_exception. Reason: [_doc][5]: document missing. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::getResponse() method to get more details.',
+        '2 bulk operation(s) did not complete successfully. First error: document_missing_exception. Reason: [_doc][5]: document missing. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::response() method to get more details.',
         $exception->getMessage()
     );
 });
@@ -128,7 +128,7 @@ test('exception can be thrown with missing error in response', function () {
     $exception = BulkRequestException::fromResponse($response);
 
     $this->assertEquals(
-        '1 bulk operation(s) did not complete successfully. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::getResponse() method to get more details.',
+        '1 bulk operation(s) did not complete successfully. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::response() method to get more details.',
         $exception->getMessage()
     );
 });
@@ -143,7 +143,7 @@ test('exception can be thrown with missing items in response', function () {
     $exception = BulkRequestException::fromResponse($response);
 
     $this->assertEquals(
-        'One or more did not complete successfully. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::getResponse() method to get more details.',
+        'One or more did not complete successfully. Catch the exception and use the DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException::response() method to get more details.',
         $exception->getMessage()
     );
 });

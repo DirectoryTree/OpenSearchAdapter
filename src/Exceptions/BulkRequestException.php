@@ -71,6 +71,6 @@ class BulkRequestException extends ErrorException
             $reason .= sprintf(' %s: %s. Reason: %s.', $count > 1 ? 'First error' : 'Error', $firstError['type'], $firstError['reason']);
         }
 
-        return sprintf('%s Catch the exception and use the %s::getResponse() method to get more details.', $reason, self::class);
+        return sprintf('%s Catch the exception and use the %s::response() method to get more details.', $reason, self::class);
     }
 }
