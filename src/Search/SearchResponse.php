@@ -81,13 +81,10 @@ class SearchResponse implements RawResponseInterface
     {
         $suggest = $this->response['suggest'] ?? [];
 
-        return array_map(
-            fn (array $suggestions) => array_map(
-                fn (array $suggestion) => new Suggestion($suggestion),
-                $suggestions,
-            ),
-            $suggest,
-        );
+        return array_map(fn (array $suggestions) => array_map(
+            fn (array $suggestion) => new Suggestion($suggestion),
+            $suggestions,
+        ), $suggest);
     }
 
     /**

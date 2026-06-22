@@ -10,25 +10,24 @@ use ErrorException;
 class BulkRequestException extends ErrorException
 {
     /**
+     * The OpenSearch bulk response.
+     *
+     * @var array<string, mixed>
+     */
+    protected array $response = [];
+
+    /**
      * Create a new bulk request exception from an OpenSearch response.
      *
      * @param  array<string, mixed>  $response
      */
     public static function fromResponse(array $response): self
     {
-        return new self($response, self::makeMessageFromResponse($response));
-    }
+        $instance = new self(self::makeMessageFromResponse($response));
 
-    /**
-     * Create a new bulk request exception instance.
-     *
-     * @param  array<string, mixed>  $response
-     */
-    public function __construct(
-        protected array $response,
-        string $message = '',
-    ) {
-        parent::__construct($message);
+        $instance->response = $response;
+
+        return $instance;
     }
 
     /**
@@ -39,7 +38,7 @@ class BulkRequestException extends ErrorException
     public function context(): array
     {
         return [
-            'response' => $this->getResponse(),
+            'response' => $this->response(),
         ];
     }
 
@@ -48,7 +47,7 @@ class BulkRequestException extends ErrorException
      *
      * @return array<string, mixed>
      */
-    public function getResponse(): array
+    public function response(): array
     {
         return $this->response;
     }
@@ -59,6 +58,7 @@ class BulkRequestException extends ErrorException
     protected static function makeMessageFromResponse(array $response): string
     {
         $items = $response['items'] ?? [];
+
         $count = count($items);
 
         $reason = sprintf('%s did not complete successfully.', $count > 0 ? $count.' bulk operation(s)' : 'One or more');
@@ -67,7 +67,7 @@ class BulkRequestException extends ErrorException
         $firstOperation = reset($failedOperations);
         $firstError = ($firstOperation ?? [])['error'] ?? null;
 
-        if (isset($firstError) && isset($firstError['type']) && isset($firstError['reason'])) {
+        if (isset($firstError['reason']) && isset($firstError['type'])) {
             $reason .= sprintf(' %s: %s. Reason: %s.', $count > 1 ? 'First error' : 'Error', $firstError['type'], $firstError['reason']);
         }
 

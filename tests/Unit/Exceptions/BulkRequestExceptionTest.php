@@ -29,7 +29,7 @@ test('response can be retrieved', function () {
 
     $exception = BulkRequestException::fromResponse($response);
 
-    $this->assertSame($response, $exception->getResponse());
+    $this->assertSame($response, $exception->response());
 });
 
 test('first error message from response is given in exception message', function () {
