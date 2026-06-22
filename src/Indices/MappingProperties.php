@@ -67,7 +67,7 @@ class MappingProperties
     {
         $this->properties[$name] = ['type' => 'object'];
 
-        if ($parameters instanceof Closure || ! empty($parameters)) {
+        if (! empty($parameters)) {
             $this->properties[$name] += $this->normalizeParametersWithProperties($parameters);
         }
 
@@ -83,7 +83,7 @@ class MappingProperties
     {
         $this->properties[$name] = ['type' => 'nested'];
 
-        if ($parameters instanceof Closure || ! empty($parameters)) {
+        if (! empty($parameters)) {
             $this->properties[$name] += $this->normalizeParametersWithProperties($parameters);
         }
 
