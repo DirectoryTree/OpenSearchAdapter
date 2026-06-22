@@ -11,11 +11,11 @@ class Document
      * Create a new document instance.
      *
      * @param  string  $id  The OpenSearch document identifier.
-     * @param  array<string, mixed>  $content
+     * @param  array<string, mixed>  $source
      */
     public function __construct(
         protected string $id,
-        protected array $content,
+        protected array $source,
     ) {}
 
     /**
@@ -27,27 +27,33 @@ class Document
     }
 
     /**
-     * Get the full document source or a single value from it.
+     * Get the full document source.
+     *
+     * @return array<string, mixed>
      */
-    public function content(?string $key = null): mixed
+    public function source(): array
     {
-        if (is_null($key)) {
-            return $this->content;
-        }
+        return $this->source;
+    }
 
-        return $this->content[$key] ?? null;
+    /**
+     * Get a single value from the document source.
+     */
+    public function get(string $key): mixed
+    {
+        return $this->source[$key] ?? null;
     }
 
     /**
      * Get the array representation of the document.
      *
-     * @return array{id: string, content: array<string, mixed>}
+     * @return array{id: string, source: array<string, mixed>}
      */
     public function toArray(): array
     {
         return [
             'id' => $this->id,
-            'content' => $this->content,
+            'source' => $this->source,
         ];
     }
 }

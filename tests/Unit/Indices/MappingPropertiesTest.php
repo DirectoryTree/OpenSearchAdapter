@@ -35,7 +35,7 @@ dataset('mapping property setters', [
     [
         'type' => 'keyword',
         'name' => 'age',
-        'parameters' => null,
+        'parameters' => [],
         'expected' => [
             'age' => [
                 'type' => 'keyword',
@@ -83,7 +83,7 @@ dataset('mapping property setters', [
     [
         'type' => 'object',
         'name' => 'user',
-        'parameters' => null,
+        'parameters' => [],
         'expected' => [
             'user' => [
                 'type' => 'object',

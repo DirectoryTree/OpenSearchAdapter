@@ -4,49 +4,50 @@ namespace DirectoryTree\OpenSearchAdapter\Indices;
 
 use BadMethodCallException;
 use Closure;
+use DirectoryTree\OpenSearchAdapter\Support\Str;
 
 /**
  * @see https://docs.opensearch.org/latest/field-types/
  * @see https://docs.opensearch.org/latest/mappings/
  *
- * @method $this alias(string $name, array|null $parameters = null)
- * @method $this binary(string $name, array|null $parameters = null)
- * @method $this boolean(string $name, array|null $parameters = null)
- * @method $this byte(string $name, array|null $parameters = null)
- * @method $this completion(string $name, array|null $parameters = null)
- * @method $this constantKeyword(string $name, array|null $parameters = null)
- * @method $this date(string $name, array|null $parameters = null)
- * @method $this dateNanos(string $name, array|null $parameters = null)
- * @method $this dateRange(string $name, array|null $parameters = null)
- * @method $this denseVector(string $name, array|null $parameters = null)
- * @method $this double(string $name, array|null $parameters = null)
- * @method $this doubleRange(string $name, array|null $parameters = null)
- * @method $this flattened(string $name, array|null $parameters = null)
- * @method $this float(string $name, array|null $parameters = null)
- * @method $this floatRange(string $name, array|null $parameters = null)
- * @method $this geoPoint(string $name, array|null $parameters = null)
- * @method $this geoShape(string $name, array|null $parameters = null)
- * @method $this halfFloat(string $name, array|null $parameters = null)
+ * @method $this alias(string $name, array $parameters = [])
+ * @method $this binary(string $name, array $parameters = [])
+ * @method $this boolean(string $name, array $parameters = [])
+ * @method $this byte(string $name, array $parameters = [])
+ * @method $this completion(string $name, array $parameters = [])
+ * @method $this constantKeyword(string $name, array $parameters = [])
+ * @method $this date(string $name, array $parameters = [])
+ * @method $this dateNanos(string $name, array $parameters = [])
+ * @method $this dateRange(string $name, array $parameters = [])
+ * @method $this denseVector(string $name, array $parameters = [])
+ * @method $this double(string $name, array $parameters = [])
+ * @method $this doubleRange(string $name, array $parameters = [])
+ * @method $this flattened(string $name, array $parameters = [])
+ * @method $this float(string $name, array $parameters = [])
+ * @method $this floatRange(string $name, array $parameters = [])
+ * @method $this geoPoint(string $name, array $parameters = [])
+ * @method $this geoShape(string $name, array $parameters = [])
+ * @method $this halfFloat(string $name, array $parameters = [])
  * @method $this histogram(string $name)
- * @method $this integer(string $name, array|null $parameters = null)
- * @method $this integerRange(string $name, array|null $parameters = null)
- * @method $this ip(string $name, array|null $parameters = null)
- * @method $this ipRange(string $name, array|null $parameters = null)
- * @method $this join(string $name, array|null $parameters = null)
- * @method $this keyword(string $name, array|null $parameters = null)
- * @method $this long(string $name, array|null $parameters = null)
- * @method $this longRange(string $name, array|null $parameters = null)
+ * @method $this integer(string $name, array $parameters = [])
+ * @method $this integerRange(string $name, array $parameters = [])
+ * @method $this ip(string $name, array $parameters = [])
+ * @method $this ipRange(string $name, array $parameters = [])
+ * @method $this join(string $name, array $parameters = [])
+ * @method $this keyword(string $name, array $parameters = [])
+ * @method $this long(string $name, array $parameters = [])
+ * @method $this longRange(string $name, array $parameters = [])
  * @method $this percolator(string $name)
- * @method $this rankFeature(string $name, array|null $parameters = null)
+ * @method $this rankFeature(string $name, array $parameters = [])
  * @method $this rankFeatures(string $name)
- * @method $this scaledFloat(string $name, array|null $parameters = null)
- * @method $this searchAsYouType(string $name, array|null $parameters = null)
- * @method $this shape(string $name, array|null $parameters = null)
- * @method $this short(string $name, array|null $parameters = null)
+ * @method $this scaledFloat(string $name, array $parameters = [])
+ * @method $this searchAsYouType(string $name, array $parameters = [])
+ * @method $this shape(string $name, array $parameters = [])
+ * @method $this short(string $name, array $parameters = [])
  * @method $this sparseVector(string $name)
- * @method $this text(string $name, array|null $parameters = null)
- * @method $this tokenCount(string $name, array|null $parameters = null)
- * @method $this wildcard(string $name, array|null $parameters = null)
+ * @method $this text(string $name, array $parameters = [])
+ * @method $this tokenCount(string $name, array $parameters = [])
+ * @method $this wildcard(string $name, array $parameters = [])
  */
 class MappingProperties
 {
@@ -60,13 +61,13 @@ class MappingProperties
     /**
      * Add an object field definition.
      *
-     * @param  Closure|array<string, mixed>|null  $parameters
+     * @param  Closure|array<string, mixed>  $parameters
      */
-    public function object(string $name, Closure|array|null $parameters = null): self
+    public function object(string $name, Closure|array $parameters = []): self
     {
         $this->properties[$name] = ['type' => 'object'];
 
-        if (isset($parameters)) {
+        if ($parameters instanceof Closure || ! empty($parameters)) {
             $this->properties[$name] += $this->normalizeParametersWithProperties($parameters);
         }
 
@@ -76,13 +77,13 @@ class MappingProperties
     /**
      * Add a nested field definition.
      *
-     * @param  Closure|array<string, mixed>|null  $parameters
+     * @param  Closure|array<string, mixed>  $parameters
      */
-    public function nested(string $name, Closure|array|null $parameters = null): self
+    public function nested(string $name, Closure|array $parameters = []): self
     {
         $this->properties[$name] = ['type' => 'nested'];
 
-        if (isset($parameters)) {
+        if ($parameters instanceof Closure || ! empty($parameters)) {
             $this->properties[$name] += $this->normalizeParametersWithProperties($parameters);
         }
 
@@ -102,7 +103,7 @@ class MappingProperties
             throw new BadMethodCallException(sprintf('Invalid number of arguments for %s method', $method));
         }
 
-        $property = ['type' => $this->snake($method)];
+        $property = ['type' => Str::snake($method)];
 
         if (isset($arguments[1])) {
             $property += $arguments[1];
@@ -140,13 +141,5 @@ class MappingProperties
         }
 
         return $parameters;
-    }
-
-    /**
-     * Convert a camel-case field type into an OpenSearch snake-case type.
-     */
-    protected function snake(string $value): string
-    {
-        return strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $value));
     }
 }

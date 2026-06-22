@@ -131,25 +131,6 @@ test('index can be created with empty settings and mapping', function () {
     $this->assertSame($this->indexManager, $this->indexManager->create($index));
 });
 
-test('index can be created with raw mapping and settings', function () {
-    $indexName = 'foo';
-    $mapping = ['properties' => ['bar' => ['type' => 'text']]];
-    $settings = ['index' => ['number_of_replicas' => 2]];
-
-    $this->indices
-        ->expects($this->once())
-        ->method('create')
-        ->with([
-            'index' => $indexName,
-            'body' => [
-                'mappings' => $mapping,
-                'settings' => $settings,
-            ],
-        ]);
-
-    $this->assertSame($this->indexManager, $this->indexManager->createRaw($indexName, $mapping, $settings));
-});
-
 test('mapping can be updated', function () {
     $indexName = 'foo';
     $mapping = (new Mapping)->text('bar');
@@ -169,21 +150,6 @@ test('mapping can be updated', function () {
         ]);
 
     $this->assertSame($this->indexManager, $this->indexManager->putMapping($indexName, $mapping));
-});
-
-test('mapping can be updated with raw data', function () {
-    $indexName = 'foo';
-    $mapping = ['properties' => ['bar' => ['type' => 'text']]];
-
-    $this->indices
-        ->expects($this->once())
-        ->method('putMapping')
-        ->with([
-            'index' => $indexName,
-            'body' => $mapping,
-        ]);
-
-    $this->assertSame($this->indexManager, $this->indexManager->putMappingRaw($indexName, $mapping));
 });
 
 test('settings can be updated', function () {
@@ -207,24 +173,7 @@ test('settings can be updated', function () {
     $this->assertSame($this->indexManager, $this->indexManager->putSettings($indexName, $settings));
 });
 
-test('settings can be updated with raw data', function () {
-    $indexName = 'foo';
-    $settings = ['index' => ['number_of_replicas' => 2]];
-
-    $this->indices
-        ->expects($this->once())
-        ->method('putSettings')
-        ->with([
-            'index' => $indexName,
-            'body' => [
-                'settings' => $settings,
-            ],
-        ]);
-
-    $this->assertSame($this->indexManager, $this->indexManager->putSettingsRaw($indexName, $settings));
-});
-
-test('index can be dropped', function () {
+test('index can be deleted', function () {
     $indexName = 'foo';
 
     $this->indices
@@ -234,7 +183,7 @@ test('index can be dropped', function () {
             'index' => $indexName,
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->drop($indexName));
+    $this->assertSame($this->indexManager, $this->indexManager->delete($indexName));
 });
 
 test('aliases can be retrieved', function () {

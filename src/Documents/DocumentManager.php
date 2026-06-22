@@ -48,7 +48,7 @@ class DocumentManager
             }
 
             $params['body'][] = compact('index');
-            $params['body'][] = $document->content();
+            $params['body'][] = $document->source();
         }
 
         $response = $this->client->bulk($params);

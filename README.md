@@ -49,24 +49,6 @@ $settings = (new Settings)->index([
 $indices->create(new IndexBlueprint('books', $mapping, $settings));
 ```
 
-Raw OpenSearch arrays are supported when you already have a mapping or settings payload:
-
-```php
-$indices->createRaw(
-    'books',
-    mapping: [
-        'properties' => [
-            'title' => ['type' => 'text'],
-        ],
-    ],
-    settings: [
-        'index' => [
-            'number_of_shards' => 1,
-        ],
-    ],
-);
-```
-
 ## Indexing Documents
 
 Documents contain the OpenSearch document ID and source payload:
@@ -119,7 +101,7 @@ $response = $documents->search('books', $request);
 $total = $response->total();
 
 $hits = array_map(
-    fn ($hit) => $hit->document()->content(),
+    fn ($hit) => $hit->document()->source(),
     $response->hits(),
 );
 ```

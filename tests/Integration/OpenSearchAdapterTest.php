@@ -38,7 +38,7 @@ it('manages indices documents aliases and searches against opensearch', function
 
         expect($response->total())->toBe(1)
             ->and($response->hits()[0]->document()->id())->toBe('1')
-            ->and($response->hits()[0]->document()->content('status'))->toBe('published');
+            ->and($response->hits()[0]->document()->get('status'))->toBe('published');
 
         $indexManager->putAlias($indexName, new Alias($aliasName, [
             'term' => ['status' => 'published'],
@@ -62,7 +62,7 @@ it('manages indices documents aliases and searches against opensearch', function
         ]))->total())->toBe(0);
     } finally {
         if ($indexManager->exists($indexName)) {
-            $indexManager->drop($indexName);
+            $indexManager->delete($indexName);
         }
     }
 });
@@ -88,11 +88,7 @@ it('handles mappings settings routing delete by query and rich search responses 
     try {
         $indexManager->create(new IndexBlueprint($indexName, $mapping, $settings));
 
-        $indexManager->putMappingRaw($indexName, [
-            'properties' => [
-                'category' => ['type' => 'keyword'],
-            ],
-        ]);
+        $indexManager->putMapping($indexName, (new Mapping)->keyword('category'));
 
         $documentManager->index($indexName, [
             new Document('1', [
@@ -167,7 +163,7 @@ it('handles mappings settings routing delete by query and rich search responses 
         ]))->total())->toBe(0);
     } finally {
         if ($indexManager->exists($indexName)) {
-            $indexManager->drop($indexName);
+            $indexManager->delete($indexName);
         }
     }
 });

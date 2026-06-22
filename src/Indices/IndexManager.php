@@ -83,31 +83,6 @@ class IndexManager
     }
 
     /**
-     * Create an index using raw mapping and settings arrays.
-     *
-     * @param  array<string, mixed>|null  $mapping
-     * @param  array<string, mixed>|null  $settings
-     */
-    public function createRaw(string $indexName, ?array $mapping = null, ?array $settings = null): self
-    {
-        $params = [
-            'index' => $indexName,
-        ];
-
-        if (isset($mapping)) {
-            $params['body']['mappings'] = $mapping;
-        }
-
-        if (isset($settings)) {
-            $params['body']['settings'] = $settings;
-        }
-
-        $this->indices->create($params);
-
-        return $this;
-    }
-
-    /**
      * Update the mapping for the given index.
      */
     public function putMapping(string $indexName, Mapping $mapping): self
@@ -115,21 +90,6 @@ class IndexManager
         $this->indices->putMapping([
             'index' => $indexName,
             'body' => $mapping->toArray(),
-        ]);
-
-        return $this;
-    }
-
-    /**
-     * Update the mapping for the given index using a raw array.
-     *
-     * @param  array<string, mixed>  $mapping
-     */
-    public function putMappingRaw(string $indexName, array $mapping): self
-    {
-        $this->indices->putMapping([
-            'index' => $indexName,
-            'body' => $mapping,
         ]);
 
         return $this;
@@ -151,26 +111,9 @@ class IndexManager
     }
 
     /**
-     * Update the settings for the given index using a raw array.
-     *
-     * @param  array<string, mixed>  $settings
-     */
-    public function putSettingsRaw(string $indexName, array $settings): self
-    {
-        $this->indices->putSettings([
-            'index' => $indexName,
-            'body' => [
-                'settings' => $settings,
-            ],
-        ]);
-
-        return $this;
-    }
-
-    /**
      * Delete the given index.
      */
-    public function drop(string $indexName): self
+    public function delete(string $indexName): self
     {
         $this->indices->delete([
             'index' => $indexName,
@@ -191,6 +134,7 @@ class IndexManager
         ]);
 
         $aliases = $response[$indexName]['aliases'] ?? [];
+
         $results = [];
 
         foreach ($aliases as $name => $parameters) {

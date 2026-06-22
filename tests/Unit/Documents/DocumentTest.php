@@ -8,8 +8,9 @@ test('document getters', function () {
     $document = new Document('123456', ['title' => 'book', 'price' => 10]);
 
     $this->assertSame('123456', $document->id());
-    $this->assertSame(['title' => 'book', 'price' => 10], $document->content());
-    $this->assertSame('book', $document->content('title'));
+    $this->assertSame(['title' => 'book', 'price' => 10], $document->source());
+    $this->assertSame('book', $document->get('title'));
+    $this->assertNull($document->get('missing'));
 });
 
 test('array casting', function () {
@@ -17,6 +18,6 @@ test('array casting', function () {
 
     $this->assertSame([
         'id' => '1',
-        'content' => ['title' => 'test'],
+        'source' => ['title' => 'test'],
     ], $document->toArray());
 });

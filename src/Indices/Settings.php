@@ -3,6 +3,7 @@
 namespace DirectoryTree\OpenSearchAdapter\Indices;
 
 use BadMethodCallException;
+use DirectoryTree\OpenSearchAdapter\Support\Str;
 
 /**
  * @see https://docs.opensearch.org/latest/install-and-configure/configuring-opensearch/index-settings/
@@ -32,7 +33,7 @@ class Settings
             throw new BadMethodCallException(sprintf('Invalid number of arguments for %s method', $method));
         }
 
-        $this->settings[$this->snake($method)] = $arguments[0];
+        $this->settings[Str::snake($method)] = $arguments[0];
 
         return $this;
     }
@@ -45,13 +46,5 @@ class Settings
     public function toArray(): array
     {
         return $this->settings;
-    }
-
-    /**
-     * Convert a camel-case settings group into snake case.
-     */
-    protected function snake(string $value): string
-    {
-        return strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $value));
     }
 }
