@@ -104,12 +104,12 @@ $documents->index('books', [
 ]);
 ```
 
-Routing values can be attached by document ID:
+Document routing values can be attached by document ID:
 
 ```php
-use DirectoryTree\OpenSearchAdapter\Documents\Routing;
+use DirectoryTree\OpenSearchAdapter\Documents\DocumentRouting;
 
-$routing = (new Routing)->add('1', 'tenant-1');
+$routing = DocumentRouting::make('1', 'tenant-1');
 
 $documents->index('books', [
     new Document('1', [

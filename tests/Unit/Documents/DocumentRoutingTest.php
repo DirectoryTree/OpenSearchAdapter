@@ -2,11 +2,10 @@
 
 namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Documents;
 
-use DirectoryTree\OpenSearchAdapter\Documents\Routing;
+use DirectoryTree\OpenSearchAdapter\Documents\DocumentRouting;
 
 test('routing values can be added and retrieved', function () {
-    $routing = (new Routing)
-        ->add('1', 'user1')
+    $routing = DocumentRouting::make('1', 'user1')
         ->add('2', 'user2');
 
     $this->assertTrue($routing->has('1'));
@@ -15,4 +14,8 @@ test('routing values can be added and retrieved', function () {
     $this->assertSame('user2', $routing->get('2'));
     $this->assertFalse($routing->has('3'));
     $this->assertNull($routing->get('3'));
+    $this->assertSame([
+        '1' => 'user1',
+        '2' => 'user2',
+    ], $routing->toArray());
 });

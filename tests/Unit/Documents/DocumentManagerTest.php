@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Documents;
 
 use DirectoryTree\OpenSearchAdapter\Documents\Document;
 use DirectoryTree\OpenSearchAdapter\Documents\DocumentManager;
-use DirectoryTree\OpenSearchAdapter\Documents\Routing;
+use DirectoryTree\OpenSearchAdapter\Documents\DocumentRouting;
 use DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException;
 use DirectoryTree\OpenSearchAdapter\Search\SearchRequest;
 use OpenSearch\Client;
@@ -93,8 +93,7 @@ test('documents can be indexed with custom routing', function () {
         new Document('2', ['title' => 'Doc 2']),
     ];
 
-    $routing = (new Routing)
-        ->add('1', 'Doc1')
+    $routing = DocumentRouting::make('1', 'Doc1')
         ->add('2', 'Doc2');
 
     $this->assertSame($this->documentManager, $this->documentManager->index('test', $documents, true, $routing));
@@ -118,9 +117,9 @@ test('documents can be deleted with refresh', function () {
             'items' => [],
         ]);
 
-    $documentIds = ['1', '2'];
+    $ids = ['1', '2'];
 
-    $this->assertSame($this->documentManager, $this->documentManager->delete('test', $documentIds, true));
+    $this->assertSame($this->documentManager, $this->documentManager->delete('test', $ids, true));
 });
 
 test('documents can be deleted without refresh', function () {
@@ -140,9 +139,9 @@ test('documents can be deleted without refresh', function () {
             'items' => [],
         ]);
 
-    $documentIds = ['1'];
+    $ids = ['1'];
 
-    $this->assertSame($this->documentManager, $this->documentManager->delete('test', $documentIds, false));
+    $this->assertSame($this->documentManager, $this->documentManager->delete('test', $ids, false));
 });
 
 test('documents can be deleted with custom routing', function () {
@@ -163,13 +162,12 @@ test('documents can be deleted with custom routing', function () {
             'items' => [],
         ]);
 
-    $documentIds = ['1', '2'];
+    $ids = ['1', '2'];
 
-    $routing = (new Routing)
-        ->add('1', 'Doc1')
+    $routing = DocumentRouting::make('1', 'Doc1')
         ->add('2', 'Doc2');
 
-    $this->assertSame($this->documentManager, $this->documentManager->delete('test', $documentIds, true, $routing));
+    $this->assertSame($this->documentManager, $this->documentManager->delete('test', $ids, true, $routing));
 });
 
 test('documents can be deleted by query with refresh', function () {

@@ -22,43 +22,43 @@ beforeEach(function () {
 });
 
 test('index can be opened', function () {
-    $indexName = 'foo';
+    $index = 'foo';
 
     $this->indices
         ->expects($this->once())
         ->method('open')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->open($indexName));
+    $this->assertSame($this->indexManager, $this->indexManager->open($index));
 });
 
 test('index can be closed', function () {
-    $indexName = 'foo';
+    $index = 'foo';
 
     $this->indices
         ->expects($this->once())
         ->method('close')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->close($indexName));
+    $this->assertSame($this->indexManager, $this->indexManager->close($index));
 });
 
 test('index existence can be checked', function () {
-    $indexName = 'foo';
+    $index = 'foo';
 
     $this->indices
         ->expects($this->once())
         ->method('exists')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
         ])
         ->willReturn(true);
 
-    $this->assertTrue($this->indexManager->exists($indexName));
+    $this->assertTrue($this->indexManager->exists($index));
 });
 
 test('index can be created without mapping and settings', function () {
@@ -132,14 +132,14 @@ test('index can be created with empty settings and mapping', function () {
 });
 
 test('mapping can be updated', function () {
-    $indexName = 'foo';
+    $index = 'foo';
     $mapping = (new Mapping)->text('bar');
 
     $this->indices
         ->expects($this->once())
         ->method('putMapping')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
             'body' => [
                 'properties' => [
                     'bar' => [
@@ -149,18 +149,18 @@ test('mapping can be updated', function () {
             ],
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->putMapping($indexName, $mapping));
+    $this->assertSame($this->indexManager, $this->indexManager->putMapping($index, $mapping));
 });
 
 test('settings can be updated', function () {
-    $indexName = 'foo';
+    $index = 'foo';
     $settings = (new Settings)->index(['number_of_replicas' => 2]);
 
     $this->indices
         ->expects($this->once())
         ->method('putSettings')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
             'body' => [
                 'settings' => [
                     'index' => [
@@ -170,34 +170,34 @@ test('settings can be updated', function () {
             ],
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->putSettings($indexName, $settings));
+    $this->assertSame($this->indexManager, $this->indexManager->putSettings($index, $settings));
 });
 
 test('index can be deleted', function () {
-    $indexName = 'foo';
+    $index = 'foo';
 
     $this->indices
         ->expects($this->once())
         ->method('delete')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->delete($indexName));
+    $this->assertSame($this->indexManager, $this->indexManager->delete($index));
 });
 
 test('aliases can be retrieved', function () {
-    $indexName = 'foo';
+    $index = 'foo';
     $aliasName = 'bar';
 
     $this->indices
         ->expects($this->once())
         ->method('getAlias')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
         ])
         ->willReturn([
-            $indexName => [
+            $index => [
                 'aliases' => [
                     $aliasName => [],
                 ],
@@ -206,19 +206,19 @@ test('aliases can be retrieved', function () {
 
     $this->assertEquals(
         [$aliasName => new Alias($aliasName)],
-        $this->indexManager->getAliases($indexName)
+        $this->indexManager->getAliases($index)
     );
 });
 
 test('alias can be created', function () {
-    $indexName = 'foo';
+    $index = 'foo';
     $alias = (new Alias('bar', ['term' => ['user_id' => 12]], '12'));
 
     $this->indices
         ->expects($this->once())
         ->method('putAlias')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
             'name' => $alias->name(),
             'body' => [
                 'routing' => '12',
@@ -230,20 +230,20 @@ test('alias can be created', function () {
             ],
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->putAlias($indexName, $alias));
+    $this->assertSame($this->indexManager, $this->indexManager->putAlias($index, $alias));
 });
 
 test('alias can be deleted', function () {
-    $indexName = 'foo';
+    $index = 'foo';
     $aliasName = 'bar';
 
     $this->indices
         ->expects($this->once())
         ->method('deleteAlias')
         ->with([
-            'index' => $indexName,
+            'index' => $index,
             'name' => $aliasName,
         ]);
 
-    $this->assertSame($this->indexManager, $this->indexManager->deleteAlias($indexName, $aliasName));
+    $this->assertSame($this->indexManager, $this->indexManager->deleteAlias($index, $aliasName));
 });

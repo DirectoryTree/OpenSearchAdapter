@@ -28,14 +28,10 @@ class DocumentManager
      *
      * @throws BulkRequestException
      */
-    public function index(
-        string $indexName,
-        array $documents,
-        bool $refresh = false,
-        ?Routing $routing = null
-    ): self {
+    public function index(string $index, array $documents, bool $refresh = false, ?DocumentRouting $routing = null): self
+    {
         $params = [
-            'index' => $indexName,
+            'index' => $index,
             'refresh' => $refresh ? 'true' : 'false',
             'body' => [],
         ];
@@ -59,27 +55,23 @@ class DocumentManager
     /**
      * Delete the given documents from OpenSearch.
      *
-     * @param  array<int, string>  $documentIds
+     * @param  array<int, string>  $ids
      *
      * @throws BulkRequestException
      */
-    public function delete(
-        string $indexName,
-        array $documentIds,
-        bool $refresh = false,
-        ?Routing $routing = null
-    ): self {
+    public function delete(string $index, array $ids, bool $refresh = false, ?DocumentRouting $routing = null): self
+    {
         $params = [
-            'index' => $indexName,
+            'index' => $index,
             'refresh' => $refresh ? 'true' : 'false',
             'body' => [],
         ];
 
-        foreach ($documentIds as $documentId) {
-            $delete = ['_id' => $documentId];
+        foreach ($ids as $id) {
+            $delete = ['_id' => $id];
 
-            if ($routing && $routing->has($documentId)) {
-                $delete['routing'] = $routing->get($documentId);
+            if ($routing && $routing->has($id)) {
+                $delete['routing'] = $routing->get($id);
             }
 
             $params['body'][] = compact('delete');
@@ -99,15 +91,13 @@ class DocumentManager
      *
      * @param  array<string, mixed>  $query
      */
-    public function deleteByQuery(string $indexName, array $query, bool $refresh = false): self
+    public function deleteByQuery(string $index, array $query, bool $refresh = false): self
     {
-        $params = [
-            'index' => $indexName,
+        $this->client->deleteByQuery([
+            'index' => $index,
             'refresh' => $refresh ? 'true' : 'false',
             'body' => compact('query'),
-        ];
-
-        $this->client->deleteByQuery($params);
+        ]);
 
         return $this;
     }
@@ -115,9 +105,10 @@ class DocumentManager
     /**
      * Search an index using the given search request.
      */
-    public function search(string $indexName, SearchRequest $request): SearchResponse
+    public function search(string $index, SearchRequest $request): SearchResponse
     {
-        $params = array_merge($request->toArray(), ['index' => $indexName]);
+        $params = array_merge($request->toArray(), ['index' => $index]);
+
         $response = $this->client->search($params);
 
         return new SearchResponse($response);

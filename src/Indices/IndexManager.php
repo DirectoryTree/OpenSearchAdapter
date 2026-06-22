@@ -29,10 +29,10 @@ class IndexManager
     /**
      * Open the given index.
      */
-    public function open(string $indexName): self
+    public function open(string $index): self
     {
         $this->indices->open([
-            'index' => $indexName,
+            'index' => $index,
         ]);
 
         return $this;
@@ -41,10 +41,10 @@ class IndexManager
     /**
      * Close the given index.
      */
-    public function close(string $indexName): self
+    public function close(string $index): self
     {
         $this->indices->close([
-            'index' => $indexName,
+            'index' => $index,
         ]);
 
         return $this;
@@ -53,10 +53,10 @@ class IndexManager
     /**
      * Determine if the given index exists.
      */
-    public function exists(string $indexName): bool
+    public function exists(string $index): bool
     {
         return $this->indices->exists([
-            'index' => $indexName,
+            'index' => $index,
         ]);
     }
 
@@ -73,10 +73,10 @@ class IndexManager
     /**
      * Update the mapping for the given index.
      */
-    public function putMapping(string $indexName, Mapping $mapping): self
+    public function putMapping(string $index, Mapping $mapping): self
     {
         $this->indices->putMapping([
-            'index' => $indexName,
+            'index' => $index,
             'body' => $mapping->toArray(),
         ]);
 
@@ -86,10 +86,10 @@ class IndexManager
     /**
      * Update the settings for the given index.
      */
-    public function putSettings(string $indexName, Settings $settings): self
+    public function putSettings(string $index, Settings $settings): self
     {
         $this->indices->putSettings([
-            'index' => $indexName,
+            'index' => $index,
             'body' => [
                 'settings' => $settings->toArray(),
             ],
@@ -101,10 +101,10 @@ class IndexManager
     /**
      * Delete the given index.
      */
-    public function delete(string $indexName): self
+    public function delete(string $index): self
     {
         $this->indices->delete([
-            'index' => $indexName,
+            'index' => $index,
         ]);
 
         return $this;
@@ -115,13 +115,13 @@ class IndexManager
      *
      * @return array<string, Alias>
      */
-    public function getAliases(string $indexName): array
+    public function getAliases(string $index): array
     {
         $response = $this->indices->getAlias([
-            'index' => $indexName,
+            'index' => $index,
         ]);
 
-        $aliases = $response[$indexName]['aliases'] ?? [];
+        $aliases = $response[$index]['aliases'] ?? [];
 
         $results = [];
 
@@ -139,10 +139,10 @@ class IndexManager
     /**
      * Create or update an alias for the given index.
      */
-    public function putAlias(string $indexName, Alias $alias): self
+    public function putAlias(string $index, Alias $alias): self
     {
         $params = [
-            'index' => $indexName,
+            'index' => $index,
             'name' => $alias->name(),
         ];
 
@@ -158,10 +158,10 @@ class IndexManager
     /**
      * Delete the given alias from the index.
      */
-    public function deleteAlias(string $indexName, string $aliasName): self
+    public function deleteAlias(string $index, string $aliasName): self
     {
         $this->indices->deleteAlias([
-            'index' => $indexName,
+            'index' => $index,
             'name' => $aliasName,
         ]);
 

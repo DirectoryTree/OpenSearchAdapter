@@ -2,7 +2,7 @@
 
 use DirectoryTree\OpenSearchAdapter\Documents\Document;
 use DirectoryTree\OpenSearchAdapter\Documents\DocumentManager;
-use DirectoryTree\OpenSearchAdapter\Documents\Routing;
+use DirectoryTree\OpenSearchAdapter\Documents\DocumentRouting;
 use DirectoryTree\OpenSearchAdapter\Indices\Alias;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexBlueprint;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexManager;
@@ -17,20 +17,20 @@ it('manages indices documents aliases and searches against opensearch', function
     $indexManager = new IndexManager($client);
     $documentManager = new DocumentManager($client);
 
-    $indexName = sprintf('adapter_integration_%s', bin2hex(random_bytes(4)));
-    $aliasName = $indexName.'_alias';
+    $index = sprintf('adapter_integration_%s', bin2hex(random_bytes(4)));
+    $aliasName = $index.'_alias';
 
     try {
-        $indexManager->create(new IndexBlueprint($indexName));
+        $indexManager->create(new IndexBlueprint($index));
 
-        expect($indexManager->exists($indexName))->toBeTrue();
+        expect($indexManager->exists($index))->toBeTrue();
 
-        $documentManager->index($indexName, [
+        $documentManager->index($index, [
             new Document('1', ['title' => 'Laravel OpenSearch adapter', 'status' => 'published']),
             new Document('2', ['title' => 'Draft document', 'status' => 'draft']),
         ], refresh: true);
 
-        $response = $documentManager->search($indexName, new SearchRequest([
+        $response = $documentManager->search($index, new SearchRequest([
             'match' => [
                 'title' => 'Laravel',
             ],
@@ -40,29 +40,29 @@ it('manages indices documents aliases and searches against opensearch', function
             ->and($response->hits()[0]->document()->id())->toBe('1')
             ->and($response->hits()[0]->document()->get('status'))->toBe('published');
 
-        $indexManager->putAlias($indexName, new Alias($aliasName, [
+        $indexManager->putAlias($index, new Alias($aliasName, [
             'term' => ['status' => 'published'],
         ]));
 
-        $aliases = $indexManager->getAliases($indexName);
+        $aliases = $indexManager->getAliases($index);
 
         expect($aliases)->toHaveKey($aliasName)
             ->and($aliases[$aliasName]->filter())->toBe(['term' => ['status' => 'published']]);
 
-        $indexManager->deleteAlias($indexName, $aliasName);
+        $indexManager->deleteAlias($index, $aliasName);
 
-        expect($indexManager->getAliases($indexName))->not->toHaveKey($aliasName);
+        expect($indexManager->getAliases($index))->not->toHaveKey($aliasName);
 
-        $documentManager->delete($indexName, ['1'], refresh: true);
+        $documentManager->delete($index, ['1'], refresh: true);
 
-        expect($documentManager->search($indexName, new SearchRequest([
+        expect($documentManager->search($index, new SearchRequest([
             'match' => [
                 'title' => 'Laravel',
             ],
         ]))->total())->toBe(0);
     } finally {
-        if ($indexManager->exists($indexName)) {
-            $indexManager->delete($indexName);
+        if ($indexManager->exists($index)) {
+            $indexManager->delete($index);
         }
     }
 });
@@ -72,7 +72,7 @@ it('handles mappings settings routing delete by query and rich search responses 
     $indexManager = new IndexManager($client);
     $documentManager = new DocumentManager($client);
 
-    $indexName = sprintf('adapter_integration_%s', bin2hex(random_bytes(4)));
+    $index = sprintf('adapter_integration_%s', bin2hex(random_bytes(4)));
 
     $mapping = (new Mapping)
         ->text('title')
@@ -86,11 +86,11 @@ it('handles mappings settings routing delete by query and rich search responses 
     ]);
 
     try {
-        $indexManager->create(new IndexBlueprint($indexName, $mapping, $settings));
+        $indexManager->create(new IndexBlueprint($index, $mapping, $settings));
 
-        $indexManager->putMapping($indexName, (new Mapping)->keyword('category'));
+        $indexManager->putMapping($index, (new Mapping)->keyword('category'));
 
-        $documentManager->index($indexName, [
+        $documentManager->index($index, [
             new Document('1', [
                 'title' => 'Laravel OpenSearch adapter',
                 'status' => 'published',
@@ -112,9 +112,9 @@ it('handles mappings settings routing delete by query and rich search responses 
                 'views' => 7,
                 'category' => 'packages',
             ]),
-        ], refresh: true, routing: (new Routing)->add('3', 'tenant-beta'));
+        ], refresh: true, routing: DocumentRouting::make('3', 'tenant-beta'));
 
-        $response = $documentManager->search($indexName, (new SearchRequest([
+        $response = $documentManager->search($index, (new SearchRequest([
             'match' => [
                 'title' => 'OpenSearch',
             ],
@@ -142,28 +142,28 @@ it('handles mappings settings routing delete by query and rich search responses 
             ->and($response->hits()[0]->highlight()?->snippets('title'))->not->toBeEmpty()
             ->and($response->aggregations()['by_status']->buckets()[0]->key())->toBe('published');
 
-        $documentManager->deleteByQuery($indexName, [
+        $documentManager->deleteByQuery($index, [
             'term' => [
                 'status' => 'draft',
             ],
         ], refresh: true);
 
-        expect($documentManager->search($indexName, new SearchRequest([
+        expect($documentManager->search($index, new SearchRequest([
             'term' => [
                 'status' => 'draft',
             ],
         ]))->total())->toBe(0);
 
-        $documentManager->delete($indexName, ['3'], refresh: true, routing: (new Routing)->add('3', 'tenant-beta'));
+        $documentManager->delete($index, ['3'], refresh: true, routing: DocumentRouting::make('3', 'tenant-beta'));
 
-        expect($documentManager->search($indexName, new SearchRequest([
+        expect($documentManager->search($index, new SearchRequest([
             'term' => [
                 'tenant' => 'beta',
             ],
         ]))->total())->toBe(0);
     } finally {
-        if ($indexManager->exists($indexName)) {
-            $indexManager->delete($indexName);
+        if ($indexManager->exists($index)) {
+            $indexManager->delete($index);
         }
     }
 });
