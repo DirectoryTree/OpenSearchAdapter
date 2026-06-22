@@ -25,7 +25,7 @@ class Aggregation implements RawResponseInterface
     {
         $buckets = $this->aggregation['buckets'] ?? [];
 
-        return array_map(static fn (array $bucket) => new Bucket($bucket), $buckets);
+        return array_map(fn (array $bucket) => new Bucket($bucket), $buckets);
     }
 
     /**

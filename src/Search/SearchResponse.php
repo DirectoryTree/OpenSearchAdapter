@@ -25,7 +25,7 @@ class SearchResponse implements RawResponseInterface
     {
         $hits = $this->response['hits']['hits'];
 
-        return array_map(static fn (array $hit) => new Hit($hit), $hits);
+        return array_map(fn (array $hit) => new Hit($hit), $hits);
     }
 
     /**
@@ -82,8 +82,8 @@ class SearchResponse implements RawResponseInterface
         $suggest = $this->response['suggest'] ?? [];
 
         return array_map(
-            static fn (array $suggestions) => array_map(
-                static fn (array $suggestion) => new Suggestion($suggestion),
+            fn (array $suggestions) => array_map(
+                fn (array $suggestion) => new Suggestion($suggestion),
                 $suggestions,
             ),
             $suggest,
@@ -99,7 +99,7 @@ class SearchResponse implements RawResponseInterface
     {
         $aggregations = $this->response['aggregations'] ?? [];
 
-        return array_map(static fn (array $aggregation) => new Aggregation($aggregation), $aggregations);
+        return array_map(fn (array $aggregation) => new Aggregation($aggregation), $aggregations);
     }
 
     /**

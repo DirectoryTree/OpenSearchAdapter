@@ -98,7 +98,7 @@ test('property setter', function (string $type, string $name, $parameters, array
 })->with('mapping property setters');
 
 test('object properties may be configured with a closure', function () {
-    $actual = (new MappingProperties)->object('user', static function (MappingProperties $properties) {
+    $actual = (new MappingProperties)->object('user', function (MappingProperties $properties) {
         $properties->integer('age');
 
         return [
@@ -121,7 +121,7 @@ test('object properties may be configured with a closure', function () {
 });
 
 test('nested properties may be configured with a closure', function () {
-    $actual = (new MappingProperties)->nested('user', static function (MappingProperties $properties) {
+    $actual = (new MappingProperties)->nested('user', function (MappingProperties $properties) {
         $properties->keyword('age');
 
         return [
