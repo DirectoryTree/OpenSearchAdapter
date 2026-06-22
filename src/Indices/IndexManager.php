@@ -65,19 +65,7 @@ class IndexManager
      */
     public function create(IndexBlueprint $index): self
     {
-        $params = [
-            'index' => $index->name(),
-        ];
-
-        if ($mapping = $index->mapping()?->toArray()) {
-            $params['body']['mappings'] = $mapping;
-        }
-
-        if ($settings = $index->settings()?->toArray()) {
-            $params['body']['settings'] = $settings;
-        }
-
-        $this->indices->create($params);
+        $this->indices->create($index->toArray());
 
         return $this;
     }
@@ -158,12 +146,8 @@ class IndexManager
             'name' => $alias->name(),
         ];
 
-        if ($alias->routing()) {
-            $params['body']['routing'] = $alias->routing();
-        }
-
-        if ($alias->filter()) {
-            $params['body']['filter'] = $alias->filter();
+        if ($body = $alias->toArray()) {
+            $params['body'] = $body;
         }
 
         $this->indices->putAlias($params);

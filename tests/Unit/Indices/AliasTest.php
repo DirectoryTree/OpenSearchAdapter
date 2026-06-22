@@ -11,3 +11,22 @@ test('alias getters', function () {
     $this->assertSame(['term' => ['year' => 2030]], $alias->filter());
     $this->assertSame('year', $alias->routing());
 });
+
+test('array casting without filter and routing', function () {
+    $alias = new Alias('2030');
+
+    $this->assertSame([], $alias->toArray());
+});
+
+test('array casting with filter and routing', function () {
+    $alias = new Alias('2030', ['term' => ['year' => 2030]], 'year');
+
+    $this->assertSame([
+        'routing' => 'year',
+        'filter' => [
+            'term' => [
+                'year' => 2030,
+            ],
+        ],
+    ], $alias->toArray());
+});

@@ -45,4 +45,24 @@ class Alias
     {
         return $this->routing;
     }
+
+    /**
+     * Get the OpenSearch alias body payload.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        $body = [];
+
+        if ($this->routing) {
+            $body['routing'] = $this->routing;
+        }
+
+        if ($this->filter) {
+            $body['filter'] = $this->filter;
+        }
+
+        return $body;
+    }
 }

@@ -41,4 +41,26 @@ class IndexBlueprint
     {
         return $this->settings;
     }
+
+    /**
+     * Get the OpenSearch create index payload.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        $params = [
+            'index' => $this->name,
+        ];
+
+        if ($mapping = $this->mapping?->toArray()) {
+            $params['body']['mappings'] = $mapping;
+        }
+
+        if ($settings = $this->settings?->toArray()) {
+            $params['body']['settings'] = $settings;
+        }
+
+        return $params;
+    }
 }

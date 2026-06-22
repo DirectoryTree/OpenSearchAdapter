@@ -22,3 +22,37 @@ test('index getters', function () {
     $this->assertSame($mapping, $index->mapping());
     $this->assertSame($settings, $index->settings());
 });
+
+test('array casting without mapping and settings', function () {
+    $index = new IndexBlueprint('foo');
+
+    $this->assertSame([
+        'index' => 'foo',
+    ], $index->toArray());
+});
+
+test('array casting with mapping and settings', function () {
+    $index = new IndexBlueprint(
+        'foo',
+        (new Mapping)->text('title'),
+        (new Settings)->index(['number_of_replicas' => 2])
+    );
+
+    $this->assertSame([
+        'index' => 'foo',
+        'body' => [
+            'mappings' => [
+                'properties' => [
+                    'title' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
+            'settings' => [
+                'index' => [
+                    'number_of_replicas' => 2,
+                ],
+            ],
+        ],
+    ], $index->toArray());
+});
