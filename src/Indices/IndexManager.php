@@ -11,7 +11,7 @@ use OpenSearch\Namespaces\IndicesNamespace;
  * @see https://docs.opensearch.org/latest/api-reference/index-apis/update-settings/
  * @see https://docs.opensearch.org/latest/api-reference/index-apis/alias/
  */
-class IndexManager
+class IndexManager implements IndexManagerInterface
 {
     /**
      * The OpenSearch indices namespace.
@@ -29,7 +29,7 @@ class IndexManager
     /**
      * Open the given index.
      */
-    public function open(string $index): self
+    public function open(string $index): static
     {
         $this->indices->open([
             'index' => $index,
@@ -41,7 +41,7 @@ class IndexManager
     /**
      * Close the given index.
      */
-    public function close(string $index): self
+    public function close(string $index): static
     {
         $this->indices->close([
             'index' => $index,
@@ -63,7 +63,7 @@ class IndexManager
     /**
      * Create an index from the given blueprint.
      */
-    public function create(IndexBlueprint $index): self
+    public function create(IndexBlueprint $index): static
     {
         $this->indices->create($index->toArray());
 
@@ -73,7 +73,7 @@ class IndexManager
     /**
      * Update the mapping for the given index.
      */
-    public function putMapping(string $index, Mapping $mapping): self
+    public function putMapping(string $index, Mapping $mapping): static
     {
         $this->indices->putMapping([
             'index' => $index,
@@ -86,7 +86,7 @@ class IndexManager
     /**
      * Update the settings for the given index.
      */
-    public function putSettings(string $index, Settings $settings): self
+    public function putSettings(string $index, Settings $settings): static
     {
         $this->indices->putSettings([
             'index' => $index,
@@ -101,7 +101,7 @@ class IndexManager
     /**
      * Delete the given index.
      */
-    public function delete(string $index): self
+    public function delete(string $index): static
     {
         $this->indices->delete([
             'index' => $index,
@@ -139,7 +139,7 @@ class IndexManager
     /**
      * Create or update an alias for the given index.
      */
-    public function putAlias(string $index, Alias $alias): self
+    public function putAlias(string $index, Alias $alias): static
     {
         $params = [
             'index' => $index,
@@ -158,7 +158,7 @@ class IndexManager
     /**
      * Delete the given alias from the index.
      */
-    public function deleteAlias(string $index, string $aliasName): self
+    public function deleteAlias(string $index, string $aliasName): static
     {
         $this->indices->deleteAlias([
             'index' => $index,
