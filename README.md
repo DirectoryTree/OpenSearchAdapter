@@ -1,6 +1,15 @@
-# OpenSearch Adapter
+<h1 align="center">OpenSearch Adapter</h1>
 
-A PHP adapter for the [OpenSearch PHP client](https://github.com/opensearch-project/opensearch-php).
+<p align="center">A PHP adapter for the <a href="https://github.com/opensearch-project/opensearch-php">OpenSearch PHP client</a>.</p>
+
+<p align="center">
+<a href="https://github.com/directorytree/opensearch-adapter/actions"><img src="https://img.shields.io/github/actions/workflow/status/directorytree/opensearch-adapter/run-tests.yml?branch=master&style=flat-square"></a>
+<a href="https://packagist.org/packages/directorytree/opensearch-adapter"><img src="https://img.shields.io/packagist/v/directorytree/opensearch-adapter.svg?style=flat-square"></a>
+<a href="https://packagist.org/packages/directorytree/opensearch-adapter"><img src="https://img.shields.io/packagist/dt/directorytree/opensearch-adapter.svg?style=flat-square"></a>
+<a href="https://packagist.org/packages/directorytree/opensearch-adapter"><img src="https://img.shields.io/packagist/l/directorytree/opensearch-adapter.svg?style=flat-square"></a>
+</p>
+
+---
 
 ## Installation
 
