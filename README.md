@@ -184,3 +184,9 @@ Search response objects expose the original OpenSearch payload through `raw()`:
 $rawHit = $response->hits()[0]->raw();
 $rawResponse = $response->raw();
 ```
+
+## Credits
+
+This package builds on a lot of the foundation and prior work from [Ivan Babenko](https://github.com/babenkoivan) and his Elasticsearch Laravel ecosystem packages.
+
+We're grateful for the work he has shared with the Laravel community. If this package helps your work, consider supporting Ivan through [GitHub Sponsors](https://github.com/sponsors/babenkoivan).
