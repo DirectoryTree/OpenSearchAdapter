@@ -29,6 +29,8 @@ class SearchRequest
     /**
      * Set the highlight definition.
      *
+     * @see https://docs.opensearch.org/latest/search-plugins/searching-data/highlight/
+     *
      * @param  array<string, mixed>  $highlight
      */
     public function highlight(array $highlight): self
@@ -40,6 +42,8 @@ class SearchRequest
 
     /**
      * Set the sort definition.
+     *
+     * @see https://docs.opensearch.org/latest/search-plugins/searching-data/sort/
      *
      * @param  array<int|string, mixed>  $sort
      */
@@ -53,6 +57,8 @@ class SearchRequest
     /**
      * Set the rescore definition.
      *
+     * @see https://docs.opensearch.org/latest/query-dsl/rescore/
+     *
      * @param  array<string, mixed>  $rescore
      */
     public function rescore(array $rescore): self
@@ -64,6 +70,8 @@ class SearchRequest
 
     /**
      * Set the result offset.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      */
     public function from(int $from): self
     {
@@ -74,6 +82,8 @@ class SearchRequest
 
     /**
      * Set the maximum number of results.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      */
     public function size(int $size): self
     {
@@ -84,6 +94,8 @@ class SearchRequest
 
     /**
      * Set the suggest definition.
+     *
+     * @see https://docs.opensearch.org/latest/search-plugins/searching-data/did-you-mean/
      *
      * @param  array<string, mixed>  $suggest
      */
@@ -97,6 +109,8 @@ class SearchRequest
     /**
      * Set the source filtering definition.
      *
+     * @see https://docs.opensearch.org/latest/search-plugins/searching-data/retrieve-specific-fields/
+     *
      * @param  bool|string|array<int|string, mixed>  $source
      */
     public function source(bool|string|array $source): self
@@ -108,6 +122,8 @@ class SearchRequest
 
     /**
      * Set the field collapse definition.
+     *
+     * @see https://docs.opensearch.org/latest/search-plugins/searching-data/collapse-search/
      *
      * @param  array<string, mixed>  $collapse
      */
@@ -121,6 +137,8 @@ class SearchRequest
     /**
      * Set the aggregation definitions.
      *
+     * @see https://docs.opensearch.org/latest/aggregations/
+     *
      * @param  array<string, mixed>  $aggregations
      */
     public function aggregations(array $aggregations): self
@@ -133,6 +151,8 @@ class SearchRequest
     /**
      * Set the post filter definition.
      *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     *
      * @param  array<string, mixed>  $postFilter
      */
     public function postFilter(array $postFilter): self
@@ -144,6 +164,8 @@ class SearchRequest
 
     /**
      * Set total-hit tracking.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      */
     public function trackTotalHits(int|bool $trackTotalHits): self
     {
@@ -154,6 +176,8 @@ class SearchRequest
 
     /**
      * Set index boost definitions.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      *
      * @param  array<int, array<string, int|float>>  $indicesBoost
      */
@@ -166,6 +190,8 @@ class SearchRequest
 
     /**
      * Set score tracking.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      */
     public function trackScores(bool $trackScores): self
     {
@@ -176,6 +202,8 @@ class SearchRequest
 
     /**
      * Set the minimum score.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      */
     public function minScore(float $minScore): self
     {
@@ -186,6 +214,8 @@ class SearchRequest
 
     /**
      * Set script fields.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      *
      * @param  array<string, mixed>  $scriptFields
      */
@@ -198,6 +228,8 @@ class SearchRequest
 
     /**
      * Set the OpenSearch search type.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      */
     public function searchType(string $searchType): self
     {
@@ -208,6 +240,8 @@ class SearchRequest
 
     /**
      * Set the OpenSearch search preference.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
      */
     public function preference(string $preference): self
     {

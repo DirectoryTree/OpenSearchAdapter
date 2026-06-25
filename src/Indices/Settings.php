@@ -29,6 +29,8 @@ class Settings
     /**
      * Set index-level OpenSearch settings.
      *
+     * @see https://docs.opensearch.org/latest/install-and-configure/configuring-opensearch/index-settings/
+     *
      * @param  array<string, mixed>  $configuration
      */
     public function index(array $configuration): self
@@ -39,6 +41,8 @@ class Settings
     /**
      * Set index analysis settings.
      *
+     * @see https://docs.opensearch.org/latest/analyzers/
+     *
      * @param  array<string, mixed>  $configuration
      */
     public function analysis(array $configuration): self
@@ -48,6 +52,8 @@ class Settings
 
     /**
      * Set index similarity settings.
+     *
+     * @see https://docs.opensearch.org/latest/im-plugin/similarity/
      *
      * @param  array<string, mixed>  $configuration
      */

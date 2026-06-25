@@ -20,6 +20,8 @@ class MappingProperties
     /**
      * Add a field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function field(string $name, string $type, array $parameters = []): self
@@ -32,6 +34,8 @@ class MappingProperties
     /**
      * Add an alias field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/alias/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function alias(string $name, array $parameters = []): self
@@ -41,6 +45,8 @@ class MappingProperties
 
     /**
      * Add a binary field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/binary/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -52,6 +58,8 @@ class MappingProperties
     /**
      * Add a boolean field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/boolean/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function boolean(string $name, array $parameters = []): self
@@ -61,6 +69,8 @@ class MappingProperties
 
     /**
      * Add a byte field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -72,6 +82,8 @@ class MappingProperties
     /**
      * Add a completion field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/completion/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function completion(string $name, array $parameters = []): self
@@ -81,6 +93,8 @@ class MappingProperties
 
     /**
      * Add a constant keyword field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/keyword/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -92,6 +106,8 @@ class MappingProperties
     /**
      * Add a date field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/date/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function date(string $name, array $parameters = []): self
@@ -101,6 +117,8 @@ class MappingProperties
 
     /**
      * Add a date nanos field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/date-nanos/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -112,6 +130,8 @@ class MappingProperties
     /**
      * Add a date range field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/range/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function dateRange(string $name, array $parameters = []): self
@@ -121,6 +141,8 @@ class MappingProperties
 
     /**
      * Add a k-NN vector field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/knn-vector/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -132,6 +154,8 @@ class MappingProperties
     /**
      * Add a k-NN vector field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/knn-vector/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function denseVector(string $name, array $parameters = []): self
@@ -141,6 +165,8 @@ class MappingProperties
 
     /**
      * Add a double field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -152,6 +178,8 @@ class MappingProperties
     /**
      * Add a double range field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/range/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function doubleRange(string $name, array $parameters = []): self
@@ -161,6 +189,8 @@ class MappingProperties
 
     /**
      * Add a flat object field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/flat-object/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -172,6 +202,8 @@ class MappingProperties
     /**
      * Add a flat object field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/flat-object/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function flattened(string $name, array $parameters = []): self
@@ -181,6 +213,8 @@ class MappingProperties
 
     /**
      * Add a float field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -192,6 +226,8 @@ class MappingProperties
     /**
      * Add a float range field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/range/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function floatRange(string $name, array $parameters = []): self
@@ -201,6 +237,8 @@ class MappingProperties
 
     /**
      * Add a geo point field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/geo-point/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -212,6 +250,8 @@ class MappingProperties
     /**
      * Add a geo shape field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/geo-shape/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function geoShape(string $name, array $parameters = []): self
@@ -221,6 +261,8 @@ class MappingProperties
 
     /**
      * Add a half float field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -232,6 +274,8 @@ class MappingProperties
     /**
      * Add a histogram field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function histogram(string $name, array $parameters = []): self
@@ -241,6 +285,8 @@ class MappingProperties
 
     /**
      * Add an integer field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -252,6 +298,8 @@ class MappingProperties
     /**
      * Add an integer range field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/range/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function integerRange(string $name, array $parameters = []): self
@@ -261,6 +309,8 @@ class MappingProperties
 
     /**
      * Add an IP field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/ip/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -272,6 +322,8 @@ class MappingProperties
     /**
      * Add an IP range field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/range/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function ipRange(string $name, array $parameters = []): self
@@ -281,6 +333,8 @@ class MappingProperties
 
     /**
      * Add a join field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/join/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -292,6 +346,8 @@ class MappingProperties
     /**
      * Add a keyword field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/keyword/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function keyword(string $name, array $parameters = []): self
@@ -301,6 +357,8 @@ class MappingProperties
 
     /**
      * Add a long field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -312,6 +370,8 @@ class MappingProperties
     /**
      * Add a long range field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/range/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function longRange(string $name, array $parameters = []): self
@@ -321,6 +381,8 @@ class MappingProperties
 
     /**
      * Add an object field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/object/
      *
      * @param  Closure|array<string, mixed>  $parameters
      */
@@ -338,6 +400,8 @@ class MappingProperties
     /**
      * Add a nested field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/nested/
+     *
      * @param  Closure|array<string, mixed>  $parameters
      */
     public function nested(string $name, Closure|array $parameters = []): self
@@ -354,6 +418,8 @@ class MappingProperties
     /**
      * Add a percolator field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/percolator/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function percolator(string $name, array $parameters = []): self
@@ -363,6 +429,8 @@ class MappingProperties
 
     /**
      * Add a rank feature field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/rank/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -374,6 +442,8 @@ class MappingProperties
     /**
      * Add a rank features field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/rank/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function rankFeatures(string $name, array $parameters = []): self
@@ -383,6 +453,8 @@ class MappingProperties
 
     /**
      * Add a scaled float field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -394,6 +466,8 @@ class MappingProperties
     /**
      * Add a search-as-you-type field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/search-as-you-type/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function searchAsYouType(string $name, array $parameters = []): self
@@ -403,6 +477,8 @@ class MappingProperties
 
     /**
      * Add an xy shape field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/xy-shape/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -414,6 +490,8 @@ class MappingProperties
     /**
      * Add an xy shape field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/xy-shape/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function shape(string $name, array $parameters = []): self
@@ -423,6 +501,8 @@ class MappingProperties
 
     /**
      * Add a short field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/numeric/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -434,6 +514,8 @@ class MappingProperties
     /**
      * Add a sparse vector field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/sparse-vector/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function sparseVector(string $name, array $parameters = []): self
@@ -443,6 +525,8 @@ class MappingProperties
 
     /**
      * Add a text field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/text/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -454,6 +538,8 @@ class MappingProperties
     /**
      * Add a token count field definition.
      *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/token-count/
+     *
      * @param  array<string, mixed>  $parameters
      */
     public function tokenCount(string $name, array $parameters = []): self
@@ -463,6 +549,8 @@ class MappingProperties
 
     /**
      * Add a wildcard field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/wildcard/
      *
      * @param  array<string, mixed>  $parameters
      */

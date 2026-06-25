@@ -121,7 +121,7 @@ class Mapping
     /**
      * Add a completion field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/autocomplete/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/completion/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -135,7 +135,7 @@ class Mapping
     /**
      * Add a constant keyword field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/string/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/keyword/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -555,7 +555,7 @@ class Mapping
     /**
      * Add a search-as-you-type field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/autocomplete/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/search-as-you-type/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -625,7 +625,7 @@ class Mapping
     /**
      * Add a text field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/string/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/text/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -639,7 +639,7 @@ class Mapping
     /**
      * Add a token count field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/string/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/token-count/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -653,7 +653,7 @@ class Mapping
     /**
      * Add a wildcard field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/string/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/wildcard/
      *
      * @param  array<string, mixed>  $parameters
      */
