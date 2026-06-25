@@ -42,6 +42,72 @@ dataset('mapping property setters', [
         ],
     ],
     [
+        'type' => 'flatObject',
+        'name' => 'metadata',
+        'parameters' => [],
+        'expected' => [
+            'metadata' => [
+                'type' => 'flat_object',
+            ],
+        ],
+    ],
+    [
+        'type' => 'flattened',
+        'name' => 'metadata',
+        'parameters' => [],
+        'expected' => [
+            'metadata' => [
+                'type' => 'flat_object',
+            ],
+        ],
+    ],
+    [
+        'type' => 'knnVector',
+        'name' => 'embedding',
+        'parameters' => [
+            'dimension' => 1536,
+        ],
+        'expected' => [
+            'embedding' => [
+                'type' => 'knn_vector',
+                'dimension' => 1536,
+            ],
+        ],
+    ],
+    [
+        'type' => 'denseVector',
+        'name' => 'embedding',
+        'parameters' => [
+            'dimension' => 1536,
+        ],
+        'expected' => [
+            'embedding' => [
+                'type' => 'knn_vector',
+                'dimension' => 1536,
+            ],
+        ],
+    ],
+    [
+        'type' => 'xyShape',
+        'name' => 'bounds',
+        'parameters' => [],
+        'expected' => [
+            'bounds' => [
+                'type' => 'xy_shape',
+            ],
+        ],
+    ],
+    [
+        'type' => 'shape',
+        'name' => 'bounds',
+        'parameters' => [],
+        'expected' => [
+            'bounds' => [
+                'type' => 'xy_shape',
+            ],
+        ],
+    ],
+    [
         'type' => 'object',
         'name' => 'user',
         'parameters' => [

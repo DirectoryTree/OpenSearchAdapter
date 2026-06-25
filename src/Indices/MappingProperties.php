@@ -120,13 +120,23 @@ class MappingProperties
     }
 
     /**
-     * Add a dense vector field definition.
+     * Add a k-NN vector field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function knnVector(string $name, array $parameters = []): self
+    {
+        return $this->field($name, 'knn_vector', $parameters);
+    }
+
+    /**
+     * Add a k-NN vector field definition.
      *
      * @param  array<string, mixed>  $parameters
      */
     public function denseVector(string $name, array $parameters = []): self
     {
-        return $this->field($name, 'dense_vector', $parameters);
+        return $this->knnVector($name, $parameters);
     }
 
     /**
@@ -150,13 +160,23 @@ class MappingProperties
     }
 
     /**
-     * Add a flattened field definition.
+     * Add a flat object field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function flatObject(string $name, array $parameters = []): self
+    {
+        return $this->field($name, 'flat_object', $parameters);
+    }
+
+    /**
+     * Add a flat object field definition.
      *
      * @param  array<string, mixed>  $parameters
      */
     public function flattened(string $name, array $parameters = []): self
     {
-        return $this->field($name, 'flattened', $parameters);
+        return $this->flatObject($name, $parameters);
     }
 
     /**
@@ -382,13 +402,23 @@ class MappingProperties
     }
 
     /**
-     * Add a shape field definition.
+     * Add an xy shape field definition.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function xyShape(string $name, array $parameters = []): self
+    {
+        return $this->field($name, 'xy_shape', $parameters);
+    }
+
+    /**
+     * Add an xy shape field definition.
      *
      * @param  array<string, mixed>  $parameters
      */
     public function shape(string $name, array $parameters = []): self
     {
-        return $this->field($name, 'shape', $parameters);
+        return $this->xyShape($name, $parameters);
     }
 
     /**

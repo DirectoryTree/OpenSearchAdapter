@@ -163,7 +163,7 @@ class Mapping
     /**
      * Add a date nanos field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/date/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/date-nanos/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -189,7 +189,21 @@ class Mapping
     }
 
     /**
-     * Add a dense vector field definition.
+     * Add a k-NN vector field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/knn-vector/
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function knnVector(string $name, array $parameters = []): self
+    {
+        $this->properties->knnVector($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a k-NN vector field definition.
      *
      * @see https://docs.opensearch.org/latest/mappings/supported-field-types/knn-vector/
      *
@@ -197,7 +211,7 @@ class Mapping
      */
     public function denseVector(string $name, array $parameters = []): self
     {
-        $this->properties->denseVector($name, $parameters);
+        $this->properties->knnVector($name, $parameters);
 
         return $this;
     }
@@ -231,7 +245,21 @@ class Mapping
     }
 
     /**
-     * Add a flattened field definition.
+     * Add a flat object field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/flat-object/
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function flatObject(string $name, array $parameters = []): self
+    {
+        $this->properties->flatObject($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add a flat object field definition.
      *
      * @see https://docs.opensearch.org/latest/mappings/supported-field-types/flat-object/
      *
@@ -239,7 +267,7 @@ class Mapping
      */
     public function flattened(string $name, array $parameters = []): self
     {
-        $this->properties->flattened($name, $parameters);
+        $this->properties->flatObject($name, $parameters);
 
         return $this;
     }
@@ -275,7 +303,7 @@ class Mapping
     /**
      * Add a geo point field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/geopoint/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/geo-point/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -289,7 +317,7 @@ class Mapping
     /**
      * Add a geo shape field definition.
      *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/geoshape/
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/geo-shape/
      *
      * @param  array<string, mixed>  $parameters
      */
@@ -539,7 +567,21 @@ class Mapping
     }
 
     /**
-     * Add a shape field definition.
+     * Add an xy shape field definition.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/xy-shape/
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public function xyShape(string $name, array $parameters = []): self
+    {
+        $this->properties->xyShape($name, $parameters);
+
+        return $this;
+    }
+
+    /**
+     * Add an xy shape field definition.
      *
      * @see https://docs.opensearch.org/latest/mappings/supported-field-types/xy-shape/
      *
@@ -547,7 +589,7 @@ class Mapping
      */
     public function shape(string $name, array $parameters = []): self
     {
-        $this->properties->shape($name, $parameters);
+        $this->properties->xyShape($name, $parameters);
 
         return $this;
     }
