@@ -125,7 +125,9 @@ class SearchRequest
     }
 
     /**
-     * Set the point in time definition.
+     * Set the point in time definition for this search request.
+     *
+     * The keep alive value is optional when searching with an existing PIT.
      *
      * @see https://docs.opensearch.org/latest/api-reference/search-apis/point-in-time-api/
      *

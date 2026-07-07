@@ -98,6 +98,25 @@ test('array casting with query and search after', function () {
     ], $request->toArray());
 });
 
+test('array casting with point in time without keep alive', function () {
+    $request = new SearchRequest([
+        'match_all' => new stdClass,
+    ]);
+
+    $request->pit('pit-id');
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+            'pit' => [
+                'id' => 'pit-id',
+            ],
+        ],
+    ]);
+});
+
 test('array casting with query and rescore', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
