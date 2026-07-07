@@ -75,6 +75,29 @@ test('array casting with query and sort', function () {
     ], $request->toArray());
 });
 
+test('array casting with query and search after', function () {
+    $request = new SearchRequest([
+        'match_all' => new stdClass,
+    ]);
+
+    $request->searchAfter([
+        '2026-07-07T12:00:00.000Z',
+        123,
+    ]);
+
+    $this->assertEquals([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+            'search_after' => [
+                '2026-07-07T12:00:00.000Z',
+                123,
+            ],
+        ],
+    ], $request->toArray());
+});
+
 test('array casting with query and rescore', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,

@@ -55,6 +55,20 @@ class SearchRequest
     }
 
     /**
+     * Set the hit sort values to search after.
+     *
+     * @see https://docs.opensearch.org/latest/search-plugins/searching-data/paginate/
+     *
+     * @param  array<int, mixed>  $searchAfter
+     */
+    public function searchAfter(array $searchAfter): self
+    {
+        $this->request['body']['search_after'] = $searchAfter;
+
+        return $this;
+    }
+
+    /**
      * Set the rescore definition.
      *
      * @see https://docs.opensearch.org/latest/query-dsl/rescore/
