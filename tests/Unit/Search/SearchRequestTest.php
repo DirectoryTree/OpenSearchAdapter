@@ -75,6 +75,48 @@ test('array casting with query and sort', function () {
     ], $request->toArray());
 });
 
+test('array casting with query and search after', function () {
+    $request = new SearchRequest([
+        'match_all' => new stdClass,
+    ]);
+
+    $request->searchAfter([
+        '2026-07-07T12:00:00.000Z',
+        123,
+    ]);
+
+    $this->assertEquals([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+            'search_after' => [
+                '2026-07-07T12:00:00.000Z',
+                123,
+            ],
+        ],
+    ], $request->toArray());
+});
+
+test('array casting with point in time without keep alive', function () {
+    $request = new SearchRequest([
+        'match_all' => new stdClass,
+    ]);
+
+    $request->pit('pit-id');
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+            'pit' => [
+                'id' => 'pit-id',
+            ],
+        ],
+    ]);
+});
+
 test('array casting with query and rescore', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
@@ -424,4 +466,179 @@ test('array casting with preference', function () {
         ],
         'preference' => '_local',
     ], $request->toArray());
+});
+
+test('array casting with documented body options', function () {
+    $request = (new SearchRequest)
+        ->query([
+            'match_all' => new stdClass,
+        ])
+        ->aggs([
+            'views' => [
+                'avg' => [
+                    'field' => 'views',
+                ],
+            ],
+        ])
+        ->fields([
+            [
+                'field' => 'published_at',
+                'format' => 'strict_date_optional_time',
+            ],
+        ])
+        ->docValueFields([
+            [
+                'field' => 'published_at',
+                'format' => 'epoch_millis',
+            ],
+        ])
+        ->storedFields(['title'])
+        ->pit('pit-id', '1m')
+        ->explain()
+        ->profile()
+        ->seqNoPrimaryTerm()
+        ->terminateAfter(25)
+        ->timeout('250ms')
+        ->version();
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+            'aggs' => [
+                'views' => [
+                    'avg' => [
+                        'field' => 'views',
+                    ],
+                ],
+            ],
+            'fields' => [
+                [
+                    'field' => 'published_at',
+                    'format' => 'strict_date_optional_time',
+                ],
+            ],
+            'docvalue_fields' => [
+                [
+                    'field' => 'published_at',
+                    'format' => 'epoch_millis',
+                ],
+            ],
+            'stored_fields' => ['title'],
+            'pit' => [
+                'id' => 'pit-id',
+                'keep_alive' => '1m',
+            ],
+            'explain' => true,
+            'profile' => true,
+            'seq_no_primary_term' => true,
+            'terminate_after' => 25,
+            'timeout' => '250ms',
+            'version' => true,
+        ],
+    ]);
+});
+
+test('array casting with documented search parameters', function () {
+    $request = (new SearchRequest([
+        'match_all' => new stdClass,
+    ]))
+        ->sourceIncludes(['title', 'author'])
+        ->sourceExcludes('internal.*')
+        ->requestCache(true)
+        ->routing('tenant-1')
+        ->scroll('1m')
+        ->searchPipeline('search-pipeline');
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+        ],
+        '_source_includes' => ['title', 'author'],
+        '_source_excludes' => 'internal.*',
+        'request_cache' => true,
+        'routing' => 'tenant-1',
+        'scroll' => '1m',
+        'search_pipeline' => 'search-pipeline',
+    ]);
+});
+
+test('array casting with custom body options and parameters', function () {
+    $request = (new SearchRequest)
+        ->body('derived', [
+            'full_name' => [
+                'type' => 'keyword',
+                'script' => [
+                    'source' => "doc['first_name'].value + ' ' + doc['last_name'].value",
+                ],
+            ],
+        ])
+        ->body('slice', [
+            'id' => 0,
+            'max' => 10,
+        ])
+        ->body('search_pipeline', [
+            'request_processors' => [
+                [
+                    'filter_query' => [
+                        'query' => [
+                            'term' => [
+                                'visibility' => 'public',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ])
+        ->body('include_named_queries_score', true)
+        ->body('stats', ['group-1', 'group-2'])
+        ->parameter('allow_no_indices', false)
+        ->parameter('analyze_wildcard', true)
+        ->parameter('default_operator', 'AND')
+        ->parameter('df', 'title')
+        ->parameter('filter_path', 'hits.hits._id')
+        ->parameter('q', 'title:hobbit')
+        ->parameter('typed_keys', true);
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'derived' => [
+                'full_name' => [
+                    'type' => 'keyword',
+                    'script' => [
+                        'source' => "doc['first_name'].value + ' ' + doc['last_name'].value",
+                    ],
+                ],
+            ],
+            'slice' => [
+                'id' => 0,
+                'max' => 10,
+            ],
+            'search_pipeline' => [
+                'request_processors' => [
+                    [
+                        'filter_query' => [
+                            'query' => [
+                                'term' => [
+                                    'visibility' => 'public',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'include_named_queries_score' => true,
+            'stats' => ['group-1', 'group-2'],
+        ],
+        'allow_no_indices' => false,
+        'analyze_wildcard' => true,
+        'default_operator' => 'AND',
+        'df' => 'title',
+        'filter_path' => 'hits.hits._id',
+        'q' => 'title:hobbit',
+        'typed_keys' => true,
+    ]);
 });

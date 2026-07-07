@@ -22,8 +22,34 @@ class SearchRequest
     public function __construct(array $query = [])
     {
         if (! empty($query)) {
-            $this->request['body']['query'] = $query;
+            $this->query($query);
         }
+    }
+
+    /**
+     * Set the query definition.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     *
+     * @param  array<string, mixed>  $query
+     */
+    public function query(array $query): self
+    {
+        return $this->body('query', $query);
+    }
+
+    /**
+     * Set a search request body option.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function body(string $key, mixed $value): self
+    {
+        $body = $this->request['body'] ?? [];
+
+        $body[$key] = $value;
+
+        return $this->parameter('body', $body);
     }
 
     /**
@@ -35,9 +61,7 @@ class SearchRequest
      */
     public function highlight(array $highlight): self
     {
-        $this->request['body']['highlight'] = $highlight;
-
-        return $this;
+        return $this->body('highlight', $highlight);
     }
 
     /**
@@ -49,9 +73,75 @@ class SearchRequest
      */
     public function sort(array $sort): self
     {
-        $this->request['body']['sort'] = $sort;
+        return $this->body('sort', $sort);
+    }
 
-        return $this;
+    /**
+     * Set fields to return with optional formatting.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     *
+     * @param  array<int, mixed>  $fields
+     */
+    public function fields(array $fields): self
+    {
+        return $this->body('fields', $fields);
+    }
+
+    /**
+     * Set fields to return in their doc values representation.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     *
+     * @param  array<int, mixed>  $docValueFields
+     */
+    public function docValueFields(array $docValueFields): self
+    {
+        return $this->body('docvalue_fields', $docValueFields);
+    }
+
+    /**
+     * Set stored fields to return.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     *
+     * @param  string|array<int, string>  $storedFields
+     */
+    public function storedFields(string|array $storedFields): self
+    {
+        return $this->body('stored_fields', $storedFields);
+    }
+
+    /**
+     * Set the hit sort values to search after.
+     *
+     * @see https://docs.opensearch.org/latest/search-plugins/searching-data/paginate/
+     *
+     * @param  array<int, mixed>  $searchAfter
+     */
+    public function searchAfter(array $searchAfter): self
+    {
+        return $this->body('search_after', $searchAfter);
+    }
+
+    /**
+     * Set the point in time definition for this search request.
+     *
+     * The keep alive value is optional when searching with an existing PIT.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/point-in-time-api/
+     *
+     * @param  array{id: string, keep_alive?: string}|string  $pit
+     */
+    public function pit(array|string $pit, ?string $keepAlive = null): self
+    {
+        $pit = is_array($pit) ? $pit : ['id' => $pit];
+
+        if (! is_null($keepAlive)) {
+            $pit['keep_alive'] = $keepAlive;
+        }
+
+        return $this->body('pit', $pit);
     }
 
     /**
@@ -63,9 +153,27 @@ class SearchRequest
      */
     public function rescore(array $rescore): self
     {
-        $this->request['body']['rescore'] = $rescore;
+        return $this->body('rescore', $rescore);
+    }
 
-        return $this;
+    /**
+     * Set explain mode.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function explain(bool $explain = true): self
+    {
+        return $this->body('explain', $explain);
+    }
+
+    /**
+     * Set profiling mode.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/profile/
+     */
+    public function profile(bool $profile = true): self
+    {
+        return $this->body('profile', $profile);
     }
 
     /**
@@ -75,9 +183,7 @@ class SearchRequest
      */
     public function from(int $from): self
     {
-        $this->request['body']['from'] = $from;
-
-        return $this;
+        return $this->body('from', $from);
     }
 
     /**
@@ -87,9 +193,7 @@ class SearchRequest
      */
     public function size(int $size): self
     {
-        $this->request['body']['size'] = $size;
-
-        return $this;
+        return $this->body('size', $size);
     }
 
     /**
@@ -101,9 +205,7 @@ class SearchRequest
      */
     public function suggest(array $suggest): self
     {
-        $this->request['body']['suggest'] = $suggest;
-
-        return $this;
+        return $this->body('suggest', $suggest);
     }
 
     /**
@@ -115,9 +217,31 @@ class SearchRequest
      */
     public function source(bool|string|array $source): self
     {
-        $this->request['body']['_source'] = $source;
+        return $this->body('_source', $source);
+    }
 
-        return $this;
+    /**
+     * Set source fields to include.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     *
+     * @param  string|array<int, string>  $sourceIncludes
+     */
+    public function sourceIncludes(string|array $sourceIncludes): self
+    {
+        return $this->parameter('_source_includes', $sourceIncludes);
+    }
+
+    /**
+     * Set source fields to exclude.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     *
+     * @param  string|array<int, string>  $sourceExcludes
+     */
+    public function sourceExcludes(string|array $sourceExcludes): self
+    {
+        return $this->parameter('_source_excludes', $sourceExcludes);
     }
 
     /**
@@ -129,9 +253,19 @@ class SearchRequest
      */
     public function collapse(array $collapse): self
     {
-        $this->request['body']['collapse'] = $collapse;
+        return $this->body('collapse', $collapse);
+    }
 
-        return $this;
+    /**
+     * Set aggregation definitions using the OpenSearch short key.
+     *
+     * @see https://docs.opensearch.org/latest/aggregations/
+     *
+     * @param  array<string, mixed>  $aggregations
+     */
+    public function aggs(array $aggregations): self
+    {
+        return $this->body('aggs', $aggregations);
     }
 
     /**
@@ -143,9 +277,7 @@ class SearchRequest
      */
     public function aggregations(array $aggregations): self
     {
-        $this->request['body']['aggregations'] = $aggregations;
-
-        return $this;
+        return $this->body('aggregations', $aggregations);
     }
 
     /**
@@ -157,9 +289,7 @@ class SearchRequest
      */
     public function postFilter(array $postFilter): self
     {
-        $this->request['body']['post_filter'] = $postFilter;
-
-        return $this;
+        return $this->body('post_filter', $postFilter);
     }
 
     /**
@@ -169,9 +299,7 @@ class SearchRequest
      */
     public function trackTotalHits(int|bool $trackTotalHits): self
     {
-        $this->request['body']['track_total_hits'] = $trackTotalHits;
-
-        return $this;
+        return $this->body('track_total_hits', $trackTotalHits);
     }
 
     /**
@@ -183,9 +311,17 @@ class SearchRequest
      */
     public function indicesBoost(array $indicesBoost): self
     {
-        $this->request['body']['indices_boost'] = $indicesBoost;
+        return $this->body('indices_boost', $indicesBoost);
+    }
 
-        return $this;
+    /**
+     * Set sequence number and primary term inclusion.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function seqNoPrimaryTerm(bool $seqNoPrimaryTerm = true): self
+    {
+        return $this->body('seq_no_primary_term', $seqNoPrimaryTerm);
     }
 
     /**
@@ -195,9 +331,7 @@ class SearchRequest
      */
     public function trackScores(bool $trackScores): self
     {
-        $this->request['body']['track_scores'] = $trackScores;
-
-        return $this;
+        return $this->body('track_scores', $trackScores);
     }
 
     /**
@@ -207,9 +341,37 @@ class SearchRequest
      */
     public function minScore(float $minScore): self
     {
-        $this->request['body']['min_score'] = $minScore;
+        return $this->body('min_score', $minScore);
+    }
 
-        return $this;
+    /**
+     * Set the maximum number of matching documents to process before terminating.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function terminateAfter(int $terminateAfter): self
+    {
+        return $this->body('terminate_after', $terminateAfter);
+    }
+
+    /**
+     * Set the search timeout.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function timeout(string $timeout): self
+    {
+        return $this->body('timeout', $timeout);
+    }
+
+    /**
+     * Set document version inclusion.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function version(bool $version = true): self
+    {
+        return $this->body('version', $version);
     }
 
     /**
@@ -221,9 +383,47 @@ class SearchRequest
      */
     public function scriptFields(array $scriptFields): self
     {
-        $this->request['body']['script_fields'] = $scriptFields;
+        return $this->body('script_fields', $scriptFields);
+    }
 
-        return $this;
+    /**
+     * Set search request cache usage.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function requestCache(bool $requestCache): self
+    {
+        return $this->parameter('request_cache', $requestCache);
+    }
+
+    /**
+     * Set the routing value.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function routing(string $routing): self
+    {
+        return $this->parameter('routing', $routing);
+    }
+
+    /**
+     * Set how long to retain the scroll context.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function scroll(string $scroll): self
+    {
+        return $this->parameter('scroll', $scroll);
+    }
+
+    /**
+     * Set an existing search pipeline to run.
+     *
+     * @see https://docs.opensearch.org/latest/search-plugins/search-pipelines/debugging-search-pipeline/
+     */
+    public function searchPipeline(string $searchPipeline): self
+    {
+        return $this->parameter('search_pipeline', $searchPipeline);
     }
 
     /**
@@ -233,9 +433,7 @@ class SearchRequest
      */
     public function searchType(string $searchType): self
     {
-        $this->request['search_type'] = $searchType;
-
-        return $this;
+        return $this->parameter('search_type', $searchType);
     }
 
     /**
@@ -245,7 +443,17 @@ class SearchRequest
      */
     public function preference(string $preference): self
     {
-        $this->request['preference'] = $preference;
+        return $this->parameter('preference', $preference);
+    }
+
+    /**
+     * Set a search request query parameter.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
+     */
+    public function parameter(string $key, mixed $value): self
+    {
+        $this->request[$key] = $value;
 
         return $this;
     }
