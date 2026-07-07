@@ -101,18 +101,6 @@ class SearchRequest
     }
 
     /**
-     * Set request-scoped derived fields.
-     *
-     * @see https://docs.opensearch.org/latest/mappings/supported-field-types/derived/
-     *
-     * @param  array<string, mixed>  $derived
-     */
-    public function derived(array $derived): self
-    {
-        return $this->body('derived', $derived);
-    }
-
-    /**
      * Set stored fields to return.
      *
      * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
@@ -134,18 +122,6 @@ class SearchRequest
     public function searchAfter(array $searchAfter): self
     {
         return $this->body('search_after', $searchAfter);
-    }
-
-    /**
-     * Set the sliced scroll definition.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/scroll/#using-sliced-scroll
-     *
-     * @param  array{id: int, max: int}  $slice
-     */
-    public function slice(array $slice): self
-    {
-        return $this->body('slice', $slice);
     }
 
     /**
@@ -216,18 +192,6 @@ class SearchRequest
     public function size(int $size): self
     {
         return $this->body('size', $size);
-    }
-
-    /**
-     * Set a temporary search pipeline definition.
-     *
-     * @see https://docs.opensearch.org/latest/search-plugins/search-pipelines/debugging-search-pipeline/
-     *
-     * @param  array<string, mixed>  $searchPipeline
-     */
-    public function temporarySearchPipeline(array $searchPipeline): self
-    {
-        return $this->body('search_pipeline', $searchPipeline);
     }
 
     /**
@@ -327,16 +291,6 @@ class SearchRequest
     }
 
     /**
-     * Set named-query score inclusion.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function includeNamedQueriesScore(bool $includeNamedQueriesScore = true): self
-    {
-        return $this->body('include_named_queries_score', $includeNamedQueriesScore);
-    }
-
-    /**
      * Set total-hit tracking.
      *
      * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
@@ -366,18 +320,6 @@ class SearchRequest
     public function seqNoPrimaryTerm(bool $seqNoPrimaryTerm = true): self
     {
         return $this->body('seq_no_primary_term', $seqNoPrimaryTerm);
-    }
-
-    /**
-     * Set search stats groups.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/#search-stats-groups
-     *
-     * @param  array<int, string>  $stats
-     */
-    public function stats(array $stats): self
-    {
-        return $this->body('stats', $stats);
     }
 
     /**
@@ -443,176 +385,6 @@ class SearchRequest
     }
 
     /**
-     * Set index wildcard behavior when no concrete indices are resolved.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function allowNoIndices(bool $allowNoIndices): self
-    {
-        return $this->parameter('allow_no_indices', $allowNoIndices);
-    }
-
-    /**
-     * Set partial result handling.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function allowPartialSearchResults(bool $allowPartialSearchResults): self
-    {
-        return $this->parameter('allow_partial_search_results', $allowPartialSearchResults);
-    }
-
-    /**
-     * Set the analyzer for query-string searches.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function analyzer(string $analyzer): self
-    {
-        return $this->parameter('analyzer', $analyzer);
-    }
-
-    /**
-     * Set wildcard analysis for query-string searches.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function analyzeWildcard(bool $analyzeWildcard = true): self
-    {
-        return $this->parameter('analyze_wildcard', $analyzeWildcard);
-    }
-
-    /**
-     * Set the reduce batch size.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function batchedReduceSize(int $batchedReduceSize): self
-    {
-        return $this->parameter('batched_reduce_size', $batchedReduceSize);
-    }
-
-    /**
-     * Set the cancellation time interval.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function cancelAfterTimeInterval(string $cancelAfterTimeInterval): self
-    {
-        return $this->parameter('cancel_after_time_interval', $cancelAfterTimeInterval);
-    }
-
-    /**
-     * Set cross-cluster round trip minimization.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function ccsMinimizeRoundtrips(bool $ccsMinimizeRoundtrips): self
-    {
-        return $this->parameter('ccs_minimize_roundtrips', $ccsMinimizeRoundtrips);
-    }
-
-    /**
-     * Set the default operator for query-string searches.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function defaultOperator(string $defaultOperator): self
-    {
-        return $this->parameter('default_operator', $defaultOperator);
-    }
-
-    /**
-     * Set the default field for query-string searches.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function defaultField(string $defaultField): self
-    {
-        return $this->parameter('df', $defaultField);
-    }
-
-    /**
-     * Set wildcard index expansion.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function expandWildcards(string $expandWildcards): self
-    {
-        return $this->parameter('expand_wildcards', $expandWildcards);
-    }
-
-    /**
-     * Set throttled index handling.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function ignoreThrottled(bool $ignoreThrottled): self
-    {
-        return $this->parameter('ignore_throttled', $ignoreThrottled);
-    }
-
-    /**
-     * Set unavailable index handling.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function ignoreUnavailable(bool $ignoreUnavailable): self
-    {
-        return $this->parameter('ignore_unavailable', $ignoreUnavailable);
-    }
-
-    /**
-     * Set lenient mode for query-string searches.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function lenient(bool $lenient = true): self
-    {
-        return $this->parameter('lenient', $lenient);
-    }
-
-    /**
-     * Set the maximum concurrent shard requests per node.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function maxConcurrentShardRequests(int $maxConcurrentShardRequests): self
-    {
-        return $this->parameter('max_concurrent_shard_requests', $maxConcurrentShardRequests);
-    }
-
-    /**
-     * Set phase-level took reporting.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function phaseTook(bool $phaseTook = true): self
-    {
-        return $this->parameter('phase_took', $phaseTook);
-    }
-
-    /**
-     * Set the pre-filter shard threshold.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function preFilterShardSize(int $preFilterShardSize): self
-    {
-        return $this->parameter('pre_filter_shard_size', $preFilterShardSize);
-    }
-
-    /**
-     * Set a Lucene query-string query.
-     *
-     * @see https://docs.opensearch.org/latest/query-dsl/full-text/query-string/
-     */
-    public function queryString(string $query): self
-    {
-        return $this->parameter('q', $query);
-    }
-
-    /**
      * Set search request cache usage.
      *
      * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
@@ -620,16 +392,6 @@ class SearchRequest
     public function requestCache(bool $requestCache): self
     {
         return $this->parameter('request_cache', $requestCache);
-    }
-
-    /**
-     * Set total-hit rendering as an integer.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function restTotalHitsAsInt(bool $restTotalHitsAsInt = true): self
-    {
-        return $this->parameter('rest_total_hits_as_int', $restTotalHitsAsInt);
     }
 
     /**
@@ -680,66 +442,6 @@ class SearchRequest
     public function preference(string $preference): self
     {
         return $this->parameter('preference', $preference);
-    }
-
-    /**
-     * Set query-string suggestion field.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function suggestField(string $suggestField): self
-    {
-        return $this->parameter('suggest_field', $suggestField);
-    }
-
-    /**
-     * Set query-string suggestion mode.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function suggestMode(string $suggestMode): self
-    {
-        return $this->parameter('suggest_mode', $suggestMode);
-    }
-
-    /**
-     * Set query-string suggestion size.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function suggestSize(int $suggestSize): self
-    {
-        return $this->parameter('suggest_size', $suggestSize);
-    }
-
-    /**
-     * Set query-string suggestion text.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function suggestText(string $suggestText): self
-    {
-        return $this->parameter('suggest_text', $suggestText);
-    }
-
-    /**
-     * Set typed key rendering.
-     *
-     * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
-     */
-    public function typedKeys(bool $typedKeys = true): self
-    {
-        return $this->parameter('typed_keys', $typedKeys);
-    }
-
-    /**
-     * Set verbose search pipeline debugging.
-     *
-     * @see https://docs.opensearch.org/latest/search-plugins/search-pipelines/debugging-search-pipeline/
-     */
-    public function verbosePipeline(bool $verbosePipeline = true): self
-    {
-        return $this->parameter('verbose_pipeline', $verbosePipeline);
     }
 
     /**
