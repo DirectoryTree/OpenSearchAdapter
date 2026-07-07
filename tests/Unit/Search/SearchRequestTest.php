@@ -448,3 +448,230 @@ test('array casting with preference', function () {
         'preference' => '_local',
     ], $request->toArray());
 });
+
+test('array casting with documented body options', function () {
+    $request = (new SearchRequest)
+        ->query([
+            'match_all' => new stdClass,
+        ])
+        ->aggs([
+            'views' => [
+                'avg' => [
+                    'field' => 'views',
+                ],
+            ],
+        ])
+        ->fields([
+            [
+                'field' => 'published_at',
+                'format' => 'strict_date_optional_time',
+            ],
+        ])
+        ->docValueFields([
+            [
+                'field' => 'published_at',
+                'format' => 'epoch_millis',
+            ],
+        ])
+        ->derived([
+            'url' => [
+                'type' => 'text',
+                'script' => [
+                    'source' => 'emit(doc["request"].value.splitOnToken(" ")[2])',
+                ],
+            ],
+        ])
+        ->storedFields(['title'])
+        ->slice([
+            'id' => 0,
+            'max' => 10,
+        ])
+        ->pit('pit-id', '1m')
+        ->explain()
+        ->profile()
+        ->temporarySearchPipeline([
+            'request_processors' => [
+                [
+                    'filter_query' => [
+                        'query' => [
+                            'term' => [
+                                'visibility' => 'public',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ])
+        ->includeNamedQueriesScore()
+        ->seqNoPrimaryTerm()
+        ->stats(['group-1', 'group-2'])
+        ->terminateAfter(25)
+        ->timeout('250ms')
+        ->version();
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+            'aggs' => [
+                'views' => [
+                    'avg' => [
+                        'field' => 'views',
+                    ],
+                ],
+            ],
+            'fields' => [
+                [
+                    'field' => 'published_at',
+                    'format' => 'strict_date_optional_time',
+                ],
+            ],
+            'docvalue_fields' => [
+                [
+                    'field' => 'published_at',
+                    'format' => 'epoch_millis',
+                ],
+            ],
+            'derived' => [
+                'url' => [
+                    'type' => 'text',
+                    'script' => [
+                        'source' => 'emit(doc["request"].value.splitOnToken(" ")[2])',
+                    ],
+                ],
+            ],
+            'stored_fields' => ['title'],
+            'slice' => [
+                'id' => 0,
+                'max' => 10,
+            ],
+            'pit' => [
+                'id' => 'pit-id',
+                'keep_alive' => '1m',
+            ],
+            'explain' => true,
+            'profile' => true,
+            'search_pipeline' => [
+                'request_processors' => [
+                    [
+                        'filter_query' => [
+                            'query' => [
+                                'term' => [
+                                    'visibility' => 'public',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'include_named_queries_score' => true,
+            'seq_no_primary_term' => true,
+            'stats' => ['group-1', 'group-2'],
+            'terminate_after' => 25,
+            'timeout' => '250ms',
+            'version' => true,
+        ],
+    ]);
+});
+
+test('array casting with documented search parameters', function () {
+    $request = (new SearchRequest([
+        'match_all' => new stdClass,
+    ]))
+        ->sourceIncludes(['title', 'author'])
+        ->sourceExcludes('internal.*')
+        ->allowNoIndices(false)
+        ->allowPartialSearchResults(false)
+        ->analyzer('standard')
+        ->analyzeWildcard()
+        ->batchedReduceSize(32)
+        ->cancelAfterTimeInterval('10ms')
+        ->ccsMinimizeRoundtrips(false)
+        ->defaultOperator('AND')
+        ->defaultField('title')
+        ->expandWildcards('open,hidden')
+        ->ignoreThrottled(true)
+        ->ignoreUnavailable(true)
+        ->lenient()
+        ->maxConcurrentShardRequests(3)
+        ->phaseTook()
+        ->preFilterShardSize(16)
+        ->queryString('title:hobbit')
+        ->requestCache(true)
+        ->restTotalHitsAsInt()
+        ->routing('tenant-1')
+        ->scroll('1m')
+        ->searchPipeline('search-pipeline')
+        ->suggestField('title')
+        ->suggestMode('always')
+        ->suggestSize(3)
+        ->suggestText('hobit')
+        ->typedKeys()
+        ->verbosePipeline();
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+        ],
+        '_source_includes' => ['title', 'author'],
+        '_source_excludes' => 'internal.*',
+        'allow_no_indices' => false,
+        'allow_partial_search_results' => false,
+        'analyzer' => 'standard',
+        'analyze_wildcard' => true,
+        'batched_reduce_size' => 32,
+        'cancel_after_time_interval' => '10ms',
+        'ccs_minimize_roundtrips' => false,
+        'default_operator' => 'AND',
+        'df' => 'title',
+        'expand_wildcards' => 'open,hidden',
+        'ignore_throttled' => true,
+        'ignore_unavailable' => true,
+        'lenient' => true,
+        'max_concurrent_shard_requests' => 3,
+        'phase_took' => true,
+        'pre_filter_shard_size' => 16,
+        'q' => 'title:hobbit',
+        'request_cache' => true,
+        'rest_total_hits_as_int' => true,
+        'routing' => 'tenant-1',
+        'scroll' => '1m',
+        'search_pipeline' => 'search-pipeline',
+        'suggest_field' => 'title',
+        'suggest_mode' => 'always',
+        'suggest_size' => 3,
+        'suggest_text' => 'hobit',
+        'typed_keys' => true,
+        'verbose_pipeline' => true,
+    ]);
+});
+
+test('array casting with custom body options and parameters', function () {
+    $request = (new SearchRequest)
+        ->body('derived', [
+            'full_name' => [
+                'type' => 'keyword',
+                'script' => [
+                    'source' => "doc['first_name'].value + ' ' + doc['last_name'].value",
+                ],
+            ],
+        ])
+        ->parameter('filter_path', 'hits.hits._id');
+
+    expect($request->toArray())->toEqual([
+        'body' => [
+            'derived' => [
+                'full_name' => [
+                    'type' => 'keyword',
+                    'script' => [
+                        'source' => "doc['first_name'].value + ' ' + doc['last_name'].value",
+                    ],
+                ],
+            ],
+        ],
+        'filter_path' => 'hits.hits._id',
+    ]);
+});
