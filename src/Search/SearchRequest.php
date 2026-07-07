@@ -53,6 +53,22 @@ class SearchRequest
     }
 
     /**
+     * Determine if the search request body contains the given option.
+     */
+    public function hasBody(string $key): bool
+    {
+        return array_key_exists($key, $this->request['body'] ?? []);
+    }
+
+    /**
+     * Determine if the search request body contains a non-empty option.
+     */
+    public function filledBody(string $key): bool
+    {
+        return ! empty($this->request['body'][$key] ?? null);
+    }
+
+    /**
      * Set the highlight definition.
      *
      * @see https://docs.opensearch.org/latest/search-plugins/searching-data/highlight/
@@ -456,6 +472,22 @@ class SearchRequest
         $this->request[$key] = $value;
 
         return $this;
+    }
+
+    /**
+     * Determine if the search request contains the given parameter.
+     */
+    public function hasParameter(string $key): bool
+    {
+        return array_key_exists($key, $this->request);
+    }
+
+    /**
+     * Determine if the search request contains a non-empty parameter.
+     */
+    public function filledParameter(string $key): bool
+    {
+        return ! empty($this->request[$key] ?? null);
     }
 
     /**

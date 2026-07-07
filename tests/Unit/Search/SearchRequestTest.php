@@ -642,3 +642,32 @@ test('array casting with custom body options and parameters', function () {
         'typed_keys' => true,
     ]);
 });
+
+test('body options can be checked for existence', function () {
+    $request = (new SearchRequest)
+        ->sort([])
+        ->trackScores(false)
+        ->size(10);
+
+    expect($request->hasBody('sort'))->toBeTrue()
+        ->and($request->filledBody('sort'))->toBeFalse()
+        ->and($request->hasBody('track_scores'))->toBeTrue()
+        ->and($request->filledBody('track_scores'))->toBeFalse()
+        ->and($request->hasBody('size'))->toBeTrue()
+        ->and($request->filledBody('size'))->toBeTrue()
+        ->and($request->hasBody('missing'))->toBeFalse()
+        ->and($request->filledBody('missing'))->toBeFalse();
+});
+
+test('parameters can be checked for existence', function () {
+    $request = (new SearchRequest)
+        ->requestCache(false)
+        ->routing('tenant-1');
+
+    expect($request->hasParameter('request_cache'))->toBeTrue()
+        ->and($request->filledParameter('request_cache'))->toBeFalse()
+        ->and($request->hasParameter('routing'))->toBeTrue()
+        ->and($request->filledParameter('routing'))->toBeTrue()
+        ->and($request->hasParameter('missing'))->toBeFalse()
+        ->and($request->filledParameter('missing'))->toBeFalse();
+});
