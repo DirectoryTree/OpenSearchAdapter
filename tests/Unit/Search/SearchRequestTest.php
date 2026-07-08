@@ -75,6 +75,22 @@ test('array casting with query and sort', function () {
     ], $request->toArray());
 });
 
+test('sort clauses can be checked', function () {
+    $request = new SearchRequest;
+
+    expect($request->hasSort())->toBeFalse();
+
+    $request->sort([]);
+
+    expect($request->hasSort())->toBeFalse();
+
+    $request->sort([
+        ['title' => 'asc'],
+    ]);
+
+    expect($request->hasSort())->toBeTrue();
+});
+
 test('array casting with query and search after', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,

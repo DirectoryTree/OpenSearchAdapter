@@ -77,6 +77,14 @@ class SearchRequest
     }
 
     /**
+     * Determine if the request has sort clauses.
+     */
+    public function hasSort(): bool
+    {
+        return ! empty($this->request['body']['sort'] ?? []);
+    }
+
+    /**
      * Set fields to return with optional formatting.
      *
      * @see https://docs.opensearch.org/latest/api-reference/search-apis/search/
