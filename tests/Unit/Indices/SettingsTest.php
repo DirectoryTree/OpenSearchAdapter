@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 
 use DirectoryTree\OpenSearchAdapter\Indices\Settings;
 
-test('top level settings group can be set', function () {
+it('sets top level settings group', function () {
     $settings = (new Settings)->set('analysis', [
         'analyzer' => [
             'content' => [
@@ -26,7 +26,7 @@ test('top level settings group can be set', function () {
     ], $settings->toArray());
 });
 
-test('index settings can be set', function () {
+it('sets index settings', function () {
     $settings = (new Settings)->index([
         'number_of_replicas' => 2,
         'refresh_interval' => -1,
@@ -40,7 +40,7 @@ test('index settings can be set', function () {
     ], $settings->toArray());
 });
 
-test('analysis settings can be set', function () {
+it('sets analysis settings', function () {
     $settings = (new Settings)->analysis([
         'analyzer' => [
             'content' => [
@@ -62,7 +62,7 @@ test('analysis settings can be set', function () {
     ], $settings->toArray());
 });
 
-test('similarity settings can be set', function () {
+it('sets similarity settings', function () {
     $settings = (new Settings)->similarity([
         'default' => [
             'type' => 'BM25',
@@ -78,11 +78,11 @@ test('similarity settings can be set', function () {
     ], $settings->toArray());
 });
 
-test('default array casting', function () {
+it('casts default values to an empty array', function () {
     $this->assertSame([], (new Settings)->toArray());
 });
 
-test('configured array casting', function () {
+it('casts configured values to an array', function () {
     $settings = (new Settings)
         ->index([
             'number_of_replicas' => 2,

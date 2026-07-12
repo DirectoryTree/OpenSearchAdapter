@@ -157,12 +157,12 @@ dataset('mapping property setters', [
     ],
 ]);
 
-test('property setter', function (string $type, string $name, $parameters, array $expected) {
+it('sets mapping properties', function (string $type, string $name, $parameters, array $expected) {
     $actual = (new MappingProperties)->$type($name, $parameters);
     $this->assertEquals($expected, $actual->toArray());
 })->with('mapping property setters');
 
-test('field can be set using a custom type', function () {
+it('sets field using a custom type', function () {
     $actual = (new MappingProperties)->field('embedding', 'custom_vector', [
         'dimension' => 1536,
     ]);
@@ -175,7 +175,7 @@ test('field can be set using a custom type', function () {
     ], $actual->toArray());
 });
 
-test('object properties may be configured with a closure', function () {
+it('configures object properties with a closure', function () {
     $actual = (new MappingProperties)->object('user', function (MappingProperties $properties) {
         $properties->integer('age');
 
@@ -198,7 +198,7 @@ test('object properties may be configured with a closure', function () {
     ], $actual->toArray());
 });
 
-test('nested properties may be configured with a closure', function () {
+it('configures nested properties with a closure', function () {
     $actual = (new MappingProperties)->nested('user', function (MappingProperties $properties) {
         $properties->keyword('age');
 

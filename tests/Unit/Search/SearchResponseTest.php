@@ -10,7 +10,7 @@ use DirectoryTree\OpenSearchAdapter\Search\ShardStatistics;
 use DirectoryTree\OpenSearchAdapter\Search\Suggestion;
 use DirectoryTree\OpenSearchAdapter\Search\TotalHits;
 
-test('empty response can be created', function () {
+it('creates an empty response', function () {
     $searchResponse = new SearchResponse;
 
     expect($searchResponse->hits())->toBe([])
@@ -18,7 +18,7 @@ test('empty response can be created', function () {
         ->and($searchResponse->raw())->toBe([]);
 });
 
-test('hits can be retrieved', function () {
+it('retrieves hits', function () {
     $searchResponse = new SearchResponse([
         'hits' => [
             'hits' => [
@@ -36,7 +36,7 @@ test('hits can be retrieved', function () {
     );
 });
 
-test('total number of hits can be retrieved', function () {
+it('retrieves total number of hits', function () {
     $searchResponse = new SearchResponse([
         'hits' => [
             'total' => ['value' => 100],
@@ -46,7 +46,7 @@ test('total number of hits can be retrieved', function () {
     $this->assertSame(100, $searchResponse->total());
 });
 
-test('total hit metadata can be retrieved', function () {
+it('retrieves total hit metadata', function () {
     $searchResponse = new SearchResponse([
         'hits' => [
             'total' => [
@@ -62,7 +62,7 @@ test('total hit metadata can be retrieved', function () {
     );
 });
 
-test('integer total hit metadata can be retrieved', function () {
+it('retrieves integer total hit metadata', function () {
     $searchResponse = new SearchResponse([
         'hits' => [
             'total' => 100,
@@ -76,7 +76,7 @@ test('integer total hit metadata can be retrieved', function () {
     $this->assertSame(100, $searchResponse->total());
 });
 
-test('execution metadata can be retrieved', function () {
+it('retrieves execution metadata', function () {
     $searchResponse = new SearchResponse([
         'took' => 12,
         'timed_out' => true,
@@ -102,7 +102,7 @@ test('execution metadata can be retrieved', function () {
     );
 });
 
-test('empty array is returned when suggestions are not present', function () {
+it('returns an empty array when suggestions are absent', function () {
     $searchResponse = new SearchResponse([
         'hits' => [],
     ]);
@@ -110,7 +110,7 @@ test('empty array is returned when suggestions are not present', function () {
     $this->assertSame([], $searchResponse->suggestions());
 });
 
-test('suggestions can be retrieved', function () {
+it('retrieves suggestions', function () {
     $searchResponse = new SearchResponse([
         'hits' => [],
         'suggest' => [
@@ -149,7 +149,7 @@ test('suggestions can be retrieved', function () {
     ], $searchResponse->suggestions());
 });
 
-test('aggregations can be retrieved', function () {
+it('retrieves aggregations', function () {
     $searchResponse = new SearchResponse([
         'hits' => [],
         'aggregations' => [
@@ -166,7 +166,7 @@ test('aggregations can be retrieved', function () {
     ], $searchResponse->aggregations());
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $searchResponse = new SearchResponse([
         'hits' => [
             'total' => ['value' => 100],
@@ -200,14 +200,14 @@ test('raw representation can be retrieved', function () {
     ], $searchResponse->raw());
 });
 
-test('fake response can be created without hits', function () {
+it('creates a fake response without hits', function () {
     $searchResponse = SearchResponse::fake();
 
     expect($searchResponse->hits())->toBe([])
         ->and($searchResponse->total())->toBe(0);
 });
 
-test('fake response can be created with documents', function () {
+it('creates a fake response with documents', function () {
     $searchResponse = SearchResponse::fake([
         new Document('1', ['title' => 'First']),
         new Document('2', ['title' => 'Second']),
@@ -219,7 +219,7 @@ test('fake response can be created with documents', function () {
         ->and($searchResponse->hits()[0]->source())->toBe(['title' => 'First']);
 });
 
-test('fake response can be created with source arrays', function () {
+it('creates a fake response with source arrays', function () {
     $searchResponse = SearchResponse::fake([
         ['title' => 'First'],
     ]);
@@ -228,7 +228,7 @@ test('fake response can be created with source arrays', function () {
         ->and($searchResponse->hits()[0]->source())->toBe(['title' => 'First']);
 });
 
-test('fake response can be created with raw hits', function () {
+it('creates a fake response with raw hits', function () {
     $searchResponse = SearchResponse::fake([
         [
             '_index' => 'articles',

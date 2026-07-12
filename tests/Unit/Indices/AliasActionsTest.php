@@ -5,7 +5,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 use DirectoryTree\OpenSearchAdapter\Indices\Alias;
 use DirectoryTree\OpenSearchAdapter\Indices\AliasActions;
 
-test('alias actions can be built', function () {
+it('builds alias actions', function () {
     $actions = (new AliasActions)
         ->remove('posts_blue', 'posts')
         ->add('posts_green', new Alias('posts', isWriteIndex: true))
@@ -35,7 +35,7 @@ test('alias actions can be built', function () {
     ]);
 });
 
-test('add actions include alias routing and filters', function () {
+it('includes alias routing and filters in add actions', function () {
     $actions = (new AliasActions)->add(
         'posts',
         new Alias(

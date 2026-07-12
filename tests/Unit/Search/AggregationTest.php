@@ -18,7 +18,7 @@ beforeEach(function () {
     ]);
 });
 
-test('buckets can be retrieved', function () {
+it('retrieves buckets', function () {
     $this->assertEquals([
         new Bucket([
             'key' => 'electronic',
@@ -27,7 +27,7 @@ test('buckets can be retrieved', function () {
     ], $this->aggregation->buckets());
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $this->assertSame([
         'doc_count_error_upper_bound' => 0,
         'sum_other_doc_count' => 0,

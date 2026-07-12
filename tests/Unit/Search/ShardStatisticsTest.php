@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 
 use DirectoryTree\OpenSearchAdapter\Search\ShardStatistics;
 
-test('shard statistics can be retrieved', function () {
+it('retrieves shard statistics', function () {
     $shards = new ShardStatistics([
         'total' => 3,
         'successful' => 2,
@@ -24,7 +24,7 @@ test('shard statistics can be retrieved', function () {
     ], $shards->failures());
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $shards = new ShardStatistics([
         'total' => 1,
         'successful' => 1,

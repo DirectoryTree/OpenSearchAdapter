@@ -11,15 +11,15 @@ beforeEach(function () {
     ]);
 });
 
-test('key can be retrieved', function () {
+it('retrieves key', function () {
     $this->assertSame('electronic', $this->bucket->key());
 });
 
-test('doc count can be retrieved', function () {
+it('retrieves doc count', function () {
     $this->assertSame(6, $this->bucket->docCount());
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $this->assertSame([
         'key' => 'electronic',
         'doc_count' => 6,

@@ -5,25 +5,25 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 use DirectoryTree\OpenSearchAdapter\Search\Suggestion;
 use DirectoryTree\OpenSearchAdapter\Search\SuggestionOption;
 
-test('text can be retrieved', function () {
+it('retrieves text', function () {
     $suggestion = new Suggestion(['text' => 'foo']);
 
     $this->assertSame('foo', $suggestion->text());
 });
 
-test('offset can be retrieved', function () {
+it('retrieves offset', function () {
     $suggestion = new Suggestion(['offset' => 0]);
 
     $this->assertSame(0, $suggestion->offset());
 });
 
-test('length can be retrieved', function () {
+it('retrieves length', function () {
     $suggestion = new Suggestion(['length' => 5]);
 
     $this->assertSame(5, $suggestion->length());
 });
 
-test('options can be retrieved', function () {
+it('retrieves options', function () {
     $suggestion = new Suggestion([
         'options' => [
             [
@@ -43,7 +43,7 @@ test('options can be retrieved', function () {
     ], $suggestion->options());
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $suggestion = new Suggestion([
         'text' => 'foo',
         'offset' => 0,

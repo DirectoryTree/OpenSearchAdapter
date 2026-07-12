@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 
 use DirectoryTree\OpenSearchAdapter\Search\SuggestionOption;
 
-test('suggestion option values can be retrieved', function () {
+it('retrieves suggestion option values', function () {
     $option = new SuggestionOption([
         'text' => 'foo',
         'score' => 0.8,
@@ -20,7 +20,7 @@ test('suggestion option values can be retrieved', function () {
     $this->assertSame(['title' => 'Foo'], $option->source());
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $option = new SuggestionOption([
         'text' => 'foo',
         'score' => 0.8,

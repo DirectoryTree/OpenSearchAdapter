@@ -15,7 +15,7 @@ beforeEach(function () {
     $this->documentManager = new DocumentManager($this->client);
 });
 
-test('documents can be indexed with refresh', function () {
+it('indexes documents with refresh', function () {
     $this->client
         ->expects($this->once())
         ->method('bulk')
@@ -43,7 +43,7 @@ test('documents can be indexed with refresh', function () {
     $this->assertSame($this->documentManager, $this->documentManager->index('test', $documents, true));
 });
 
-test('documents can be indexed without refresh', function () {
+it('indexes documents without refresh', function () {
     $this->client
         ->expects($this->once())
         ->method('bulk')
@@ -68,7 +68,7 @@ test('documents can be indexed without refresh', function () {
     $this->assertSame($this->documentManager, $this->documentManager->index('test', $documents, false));
 });
 
-test('documents can be indexed with custom routing', function () {
+it('indexes documents with custom routing', function () {
     $this->client
         ->expects($this->once())
         ->method('bulk')
@@ -99,7 +99,7 @@ test('documents can be indexed with custom routing', function () {
     $this->assertSame($this->documentManager, $this->documentManager->index('test', $documents, true, $routing));
 });
 
-test('documents can be deleted with refresh', function () {
+it('deletes documents with refresh', function () {
     $this->client
         ->expects($this->once())
         ->method('bulk')
@@ -122,7 +122,7 @@ test('documents can be deleted with refresh', function () {
     $this->assertSame($this->documentManager, $this->documentManager->delete('test', $ids, true));
 });
 
-test('documents can be deleted without refresh', function () {
+it('deletes documents without refresh', function () {
     $this->client
         ->expects($this->once())
         ->method('bulk')
@@ -144,7 +144,7 @@ test('documents can be deleted without refresh', function () {
     $this->assertSame($this->documentManager, $this->documentManager->delete('test', $ids, false));
 });
 
-test('documents can be deleted with custom routing', function () {
+it('deletes documents with custom routing', function () {
     $this->client
         ->expects($this->once())
         ->method('bulk')
@@ -170,7 +170,7 @@ test('documents can be deleted with custom routing', function () {
     $this->assertSame($this->documentManager, $this->documentManager->delete('test', $ids, true, $routing));
 });
 
-test('documents can be deleted by query with refresh', function () {
+it('deletes documents by query with refresh', function () {
     $this->client
         ->expects($this->once())
         ->method('deleteByQuery')
@@ -189,7 +189,7 @@ test('documents can be deleted by query with refresh', function () {
     $this->assertSame($this->documentManager, $this->documentManager->deleteByQuery('test', $query, true));
 });
 
-test('documents can be deleted by query without refresh', function () {
+it('deletes documents by query without refresh', function () {
     $this->client
         ->expects($this->once())
         ->method('deleteByQuery')
@@ -208,7 +208,7 @@ test('documents can be deleted by query without refresh', function () {
     $this->assertSame($this->documentManager, $this->documentManager->deleteByQuery('test', $query, false));
 });
 
-test('documents can be found', function () {
+it('finds documents', function () {
     $this->client
         ->expects($this->once())
         ->method('search')
@@ -246,7 +246,7 @@ test('documents can be found', function () {
     $this->assertEquals(new Document('1', ['content' => 'foo']), $response->hits()[0]->document());
 });
 
-test('exception is thrown when index operation was unsuccessful', function () {
+it('throws an exception when an index operation is unsuccessful', function () {
     $this->client
         ->expects($this->once())
         ->method('bulk')

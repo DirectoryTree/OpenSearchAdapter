@@ -6,14 +6,14 @@ use DirectoryTree\OpenSearchAdapter\Indices\IndexBlueprint;
 use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
 use DirectoryTree\OpenSearchAdapter\Indices\Settings;
 
-test('index default values', function () {
+it('uses null for mapping and settings by default', function () {
     $index = new IndexBlueprint('foo');
 
     $this->assertNull($index->settings());
     $this->assertNull($index->mapping());
 });
 
-test('index getters', function () {
+it('retrieves index values', function () {
     $mapping = new Mapping;
     $settings = new Settings;
     $index = new IndexBlueprint('foo', $mapping, $settings);
@@ -23,7 +23,7 @@ test('index getters', function () {
     $this->assertSame($settings, $index->settings());
 });
 
-test('array casting without mapping and settings', function () {
+it('casts to an array without mapping or settings', function () {
     $index = new IndexBlueprint('foo');
 
     $this->assertSame([
@@ -31,7 +31,7 @@ test('array casting without mapping and settings', function () {
     ], $index->toArray());
 });
 
-test('array casting with mapping and settings', function () {
+it('casts to an array with mapping and settings', function () {
     $index = new IndexBlueprint(
         'foo',
         (new Mapping)->text('title'),

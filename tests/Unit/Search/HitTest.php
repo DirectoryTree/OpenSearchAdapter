@@ -50,11 +50,11 @@ beforeEach(function () {
     ]);
 });
 
-test('index name can be retrieved', function () {
+it('retrieves index name', function () {
     $this->assertSame('test', $this->hit->index());
 });
 
-test('fake hit can be created from source', function () {
+it('creates a fake hit from source', function () {
     $hit = Hit::fake(['title' => 'foo'], index: 'posts', id: '123', score: 4.2);
 
     expect($hit->index())->toBe('posts')
@@ -63,7 +63,7 @@ test('fake hit can be created from source', function () {
         ->and($hit->source())->toBe(['title' => 'foo']);
 });
 
-test('fake hit can be created from a document', function () {
+it('creates a fake hit from a document', function () {
     $hit = Hit::fake(Document::fake('123', ['title' => 'foo']), index: 'posts');
 
     expect($hit->index())->toBe('posts')
@@ -71,7 +71,7 @@ test('fake hit can be created from a document', function () {
         ->and($hit->source())->toBe(['title' => 'foo']);
 });
 
-test('fake hit can be created from raw hit attributes', function () {
+it('creates a fake hit from raw hit attributes', function () {
     $hit = Hit::fake([
         '_index' => 'articles',
         '_id' => 'post-1',
@@ -86,60 +86,60 @@ test('fake hit can be created from raw hit attributes', function () {
         ->and($hit->score())->toBe(4.2);
 });
 
-test('document can be retrieved', function () {
+it('retrieves document', function () {
     $this->assertEquals(
         new Document('1', ['title' => 'foo']),
         $this->hit->document()
     );
 });
 
-test('highlight can be retrieved if present', function () {
+it('retrieves highlight if present', function () {
     $this->assertEquals(
         new Highlight(['title' => [' <em>foo</em> ']]),
         $this->hit->highlight()
     );
 });
 
-test('nothing is returned when trying to retrieve highlight but it is not present', function () {
+it('returns null when a highlight is absent', function () {
     $hit = new Hit(['_id' => '1']);
 
     $this->assertNull($hit->highlight());
 });
 
-test('score can be retrieved', function () {
+it('retrieves score', function () {
     $this->assertSame(1.3, $this->hit->score());
 });
 
-test('document identifier can be retrieved', function () {
+it('retrieves document identifier', function () {
     $this->assertSame('1', $this->hit->id());
 });
 
-test('source can be retrieved', function () {
+it('retrieves source', function () {
     $this->assertSame(['title' => 'foo'], $this->hit->source());
 });
 
-test('fields can be retrieved', function () {
+it('retrieves fields', function () {
     $this->assertSame([
         'created_at' => ['2026-01-01T00:00:00.000Z'],
     ], $this->hit->fields());
 });
 
-test('sort values can be retrieved', function () {
+it('retrieves sort values', function () {
     $this->assertSame([1.3, '1'], $this->hit->sort());
 });
 
-test('matched queries can be retrieved', function () {
+it('retrieves matched queries', function () {
     $this->assertSame(['title_match'], $this->hit->matchedQueries());
 });
 
-test('explanation can be retrieved', function () {
+it('retrieves explanation', function () {
     $this->assertSame([
         'value' => 1.3,
         'description' => 'score explanation',
     ], $this->hit->explanation());
 });
 
-test('inner hits can be retrieved', function () {
+it('retrieves inner hits', function () {
     $innerHit = new Hit([
         '_id' => '2',
         '_index' => 'test',
@@ -155,7 +155,7 @@ test('inner hits can be retrieved', function () {
     $this->assertEquals($innerHit, $nestedInnerHits[0]);
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $this->assertSame([
         '_id' => '1',
         '_index' => 'test',

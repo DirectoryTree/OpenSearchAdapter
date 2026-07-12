@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Exceptions;
 
 use DirectoryTree\OpenSearchAdapter\Exceptions\BulkRequestException;
 
-test('response can be retrieved', function () {
+it('retrieves response', function () {
     $response = [
         'took' => 486,
         'errors' => true,
@@ -32,7 +32,7 @@ test('response can be retrieved', function () {
     $this->assertSame($response, $exception->response());
 });
 
-test('first error message from response is given in exception message', function () {
+it('uses the first response error as the exception message', function () {
     $response = [
         'took' => 486,
         'errors' => true,
@@ -63,7 +63,7 @@ test('first error message from response is given in exception message', function
     );
 });
 
-test('exception can be thrown with many errors in response', function () {
+it('throws an exception when the response contains multiple errors', function () {
     $response = [
         'took' => 486,
         'errors' => true,
@@ -109,7 +109,7 @@ test('exception can be thrown with many errors in response', function () {
     );
 });
 
-test('exception can be thrown with missing error in response', function () {
+it('throws an exception when the response omits an error', function () {
     $response = [
         'took' => 486,
         'errors' => true,
@@ -133,7 +133,7 @@ test('exception can be thrown with missing error in response', function () {
     );
 });
 
-test('exception can be thrown with missing items in response', function () {
+it('throws an exception when the response omits items', function () {
     $response = [
         'took' => 486,
         'errors' => true,

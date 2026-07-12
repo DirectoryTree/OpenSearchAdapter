@@ -22,7 +22,7 @@ beforeEach(function () {
     $this->indexManager = new IndexManager($client);
 });
 
-test('index can be opened', function () {
+it('opens index', function () {
     $index = 'foo';
 
     $this->indices
@@ -35,7 +35,7 @@ test('index can be opened', function () {
     $this->assertSame($this->indexManager, $this->indexManager->open($index));
 });
 
-test('index can be closed', function () {
+it('closes index', function () {
     $index = 'foo';
 
     $this->indices
@@ -48,7 +48,7 @@ test('index can be closed', function () {
     $this->assertSame($this->indexManager, $this->indexManager->close($index));
 });
 
-test('index existence can be checked', function () {
+it('checks whether an index exists', function () {
     $index = 'foo';
 
     $this->indices
@@ -62,7 +62,7 @@ test('index existence can be checked', function () {
     $this->assertTrue($this->indexManager->exists($index));
 });
 
-test('index can be created without mapping and settings', function () {
+it('creates index without mapping and settings', function () {
     $index = new IndexBlueprint('foo');
 
     $this->indices
@@ -75,7 +75,7 @@ test('index can be created without mapping and settings', function () {
     $this->assertSame($this->indexManager, $this->indexManager->create($index));
 });
 
-test('index can be created without mapping', function () {
+it('creates index without mapping', function () {
     $settings = (new Settings)->index(['number_of_replicas' => 2]);
     $index = new IndexBlueprint('foo', null, $settings);
 
@@ -96,7 +96,7 @@ test('index can be created without mapping', function () {
     $this->assertSame($this->indexManager, $this->indexManager->create($index));
 });
 
-test('index can be created without settings', function () {
+it('creates index without settings', function () {
     $mapping = (new Mapping)->text('foo');
     $index = new IndexBlueprint('bar', $mapping);
 
@@ -119,7 +119,7 @@ test('index can be created without settings', function () {
     $this->assertSame($this->indexManager, $this->indexManager->create($index));
 });
 
-test('index can be created with empty settings and mapping', function () {
+it('creates index with empty settings and mapping', function () {
     $index = new IndexBlueprint('foo', new Mapping, new Settings);
 
     $this->indices
@@ -132,7 +132,7 @@ test('index can be created with empty settings and mapping', function () {
     $this->assertSame($this->indexManager, $this->indexManager->create($index));
 });
 
-test('mapping can be updated', function () {
+it('updates mapping', function () {
     $index = 'foo';
     $mapping = (new Mapping)->text('bar');
 
@@ -153,7 +153,7 @@ test('mapping can be updated', function () {
     $this->assertSame($this->indexManager, $this->indexManager->putMapping($index, $mapping));
 });
 
-test('settings can be updated', function () {
+it('updates settings', function () {
     $index = 'foo';
     $settings = (new Settings)->index(['number_of_replicas' => 2]);
 
@@ -174,7 +174,7 @@ test('settings can be updated', function () {
     $this->assertSame($this->indexManager, $this->indexManager->putSettings($index, $settings));
 });
 
-test('index can be deleted', function () {
+it('deletes index', function () {
     $index = 'foo';
 
     $this->indices
@@ -187,7 +187,7 @@ test('index can be deleted', function () {
     $this->assertSame($this->indexManager, $this->indexManager->delete($index));
 });
 
-test('aliases can be retrieved', function () {
+it('retrieves aliases', function () {
     $index = 'foo';
     $aliasName = 'bar';
 
@@ -213,7 +213,7 @@ test('aliases can be retrieved', function () {
     );
 });
 
-test('alias can be created', function () {
+it('creates alias', function () {
     $index = 'foo';
     $alias = (new Alias('bar', ['term' => ['user_id' => 12]], '12'));
 
@@ -236,7 +236,7 @@ test('alias can be created', function () {
     $this->assertSame($this->indexManager, $this->indexManager->putAlias($index, $alias));
 });
 
-test('aliases can be updated atomically', function () {
+it('updates aliases atomically', function () {
     $actions = (new AliasActions)
         ->remove('posts_blue', 'posts')
         ->add('posts_green', new Alias('posts', isWriteIndex: true));
@@ -267,7 +267,7 @@ test('aliases can be updated atomically', function () {
     $this->assertSame($this->indexManager, $this->indexManager->updateAliases($actions));
 });
 
-test('alias can be deleted', function () {
+it('deletes alias', function () {
     $index = 'foo';
     $aliasName = 'bar';
 

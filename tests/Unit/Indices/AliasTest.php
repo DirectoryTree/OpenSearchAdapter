@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 
 use DirectoryTree\OpenSearchAdapter\Indices\Alias;
 
-test('alias getters', function () {
+it('retrieves alias values', function () {
     $alias = new Alias('2030', ['term' => ['year' => 2030]], 'year');
 
     $this->assertSame('2030', $alias->name());
@@ -12,13 +12,13 @@ test('alias getters', function () {
     $this->assertSame('year', $alias->routing());
 });
 
-test('array casting without filter and routing', function () {
+it('casts to an array without a filter or routing', function () {
     $alias = new Alias('2030');
 
     $this->assertSame([], $alias->toArray());
 });
 
-test('array casting with filter and routing', function () {
+it('casts to an array with a filter and routing', function () {
     $alias = new Alias('2030', ['term' => ['year' => 2030]], 'year');
 
     $this->assertSame([
@@ -31,7 +31,7 @@ test('array casting with filter and routing', function () {
     ], $alias->toArray());
 });
 
-test('write index can be configured', function () {
+it('configures write index', function () {
     $alias = new Alias('2030', isWriteIndex: true);
 
     expect($alias->isWriteIndex())->toBeTrue()
@@ -40,7 +40,7 @@ test('write index can be configured', function () {
         ]);
 });
 
-test('write index false is included in the payload', function () {
+it('includes a false write index in the payload', function () {
     $alias = new Alias('2030', isWriteIndex: false);
 
     expect($alias->isWriteIndex())->toBeFalse()

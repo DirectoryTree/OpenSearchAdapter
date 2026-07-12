@@ -7,11 +7,11 @@ use DirectoryTree\OpenSearchAdapter\Search\SearchRequest;
 use DirectoryTree\OpenSearchAdapter\Search\SearchResponse;
 use DirectoryTree\OpenSearchAdapter\Testing\Fakes\FakeDocumentManager;
 
-test('fake document manager implements the document manager contract', function () {
+it('implements the document manager contract', function () {
     expect(new FakeDocumentManager)->toBeInstanceOf(DocumentManagerInterface::class);
 });
 
-test('fake document manager records indexed documents', function () {
+it('records indexed documents', function () {
     $documents = [
         new Document('1', ['title' => 'First']),
         new Document('2', ['title' => 'Second']),
@@ -27,7 +27,7 @@ test('fake document manager records indexed documents', function () {
     $documentsManager->assertIndexed('posts', $documents, true, $routing);
 });
 
-test('fake document manager records deleted documents', function () {
+it('records deleted documents', function () {
     $routing = DocumentRouting::make('1', 'tenant-1')
         ->add('2', 'tenant-2');
 
@@ -38,7 +38,7 @@ test('fake document manager records deleted documents', function () {
     $documents->assertDeleted('posts', ['1', '2'], true, $routing);
 });
 
-test('fake document manager records delete by query operations', function () {
+it('records delete-by-query operations', function () {
     $documents = new FakeDocumentManager;
 
     $documents->deleteByQuery('posts', $query = [
@@ -50,7 +50,7 @@ test('fake document manager records delete by query operations', function () {
     $documents->assertDeletedByQuery('posts', $query, true);
 });
 
-test('fake document manager records searches and returns configured responses', function () {
+it('records searches and returns configured responses', function () {
     $request = new SearchRequest([
         'match' => [
             'title' => 'OpenSearch',
@@ -84,7 +84,7 @@ test('fake document manager records searches and returns configured responses', 
     $documents->assertSearched('posts', $request);
 });
 
-test('fake document manager can be constructed with a search response', function () {
+it('creates a fake document manager with a search response', function () {
     $documents = new FakeDocumentManager($response = SearchResponse::fake());
 
     expect($documents->search('posts', new SearchRequest))->toBe($response);

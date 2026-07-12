@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 
 use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
 
-test('field names can be disabled', function () {
+it('disables field names', function () {
     $mapping = (new Mapping)->disableFieldNames();
 
     $this->assertSame([
@@ -14,7 +14,7 @@ test('field names can be disabled', function () {
     ], $mapping->toArray());
 });
 
-test('field names can be enabled', function () {
+it('enables field names', function () {
     $mapping = (new Mapping)->enableFieldNames();
 
     $this->assertSame([
@@ -24,7 +24,7 @@ test('field names can be enabled', function () {
     ], $mapping->toArray());
 });
 
-test('source can be disabled', function () {
+it('disables source', function () {
     $mapping = (new Mapping)->disableSource();
 
     $this->assertSame([
@@ -34,7 +34,7 @@ test('source can be disabled', function () {
     ], $mapping->toArray());
 });
 
-test('source can be enabled', function () {
+it('enables source', function () {
     $mapping = (new Mapping)->enableSource();
 
     $this->assertSame([
@@ -44,11 +44,11 @@ test('source can be enabled', function () {
     ], $mapping->toArray());
 });
 
-test('default array casting', function () {
+it('casts default values to an empty array', function () {
     $this->assertSame([], (new Mapping)->toArray());
 });
 
-test('configured array casting', function () {
+it('casts configured values to an array', function () {
     $mapping = (new Mapping)
         ->disableFieldNames()
         ->enableSource()
@@ -92,7 +92,7 @@ test('configured array casting', function () {
     ], $mapping->toArray());
 });
 
-test('field can be set using a custom type', function () {
+it('sets field using a custom type', function () {
     $mapping = (new Mapping)->field('embedding', 'custom_vector', [
         'dimension' => 1536,
     ]);
@@ -107,7 +107,7 @@ test('field can be set using a custom type', function () {
     ], $mapping->toArray());
 });
 
-test('properties builder can be retrieved', function () {
+it('retrieves properties builder', function () {
     $mapping = new Mapping;
 
     $mapping->properties()->keyword('id');

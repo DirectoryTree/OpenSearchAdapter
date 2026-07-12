@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 
 use DirectoryTree\OpenSearchAdapter\Search\Highlight;
 
-test('snippets can be retrieved for highlighted field', function () {
+it('retrieves snippets for highlighted field', function () {
     $highlight = new Highlight([
         'message' => [
             ' with the <em>number</em>',
@@ -18,7 +18,7 @@ test('snippets can be retrieved for highlighted field', function () {
     ], $highlight->snippets('message'));
 });
 
-test('empty array is returned when trying to retrieve snippets for non existing field', function () {
+it('returns an empty array for a missing highlighted field', function () {
     $highlight = new Highlight([
         'foo' => [
             'test fragment',
@@ -28,7 +28,7 @@ test('empty array is returned when trying to retrieve snippets for non existing 
     $this->assertSame([], $highlight->snippets('bar'));
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $highlight = new Highlight([
         'foo' => [
             'test fragment 1',

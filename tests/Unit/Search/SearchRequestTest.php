@@ -5,7 +5,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 use DirectoryTree\OpenSearchAdapter\Search\SearchRequest;
 use stdClass;
 
-test('array casting with query', function () {
+it('casts to an array with a query', function () {
     $request = new SearchRequest([
         'term' => [
             'user' => 'foo',
@@ -23,7 +23,7 @@ test('array casting with query', function () {
     ], $request->toArray());
 });
 
-test('array casting with query and highlight', function () {
+it('casts to an array with a query and highlight', function () {
     $request = new SearchRequest([
         'match' => [
             'content' => 'foo',
@@ -52,7 +52,7 @@ test('array casting with query and highlight', function () {
     ], $request->toArray());
 });
 
-test('array casting with query and sort', function () {
+it('casts to an array with a query and sort', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -75,7 +75,7 @@ test('array casting with query and sort', function () {
     ], $request->toArray());
 });
 
-test('sort clauses can be checked', function () {
+it('checks for sort clauses', function () {
     $request = new SearchRequest;
 
     expect($request->hasSort())->toBeFalse();
@@ -91,7 +91,7 @@ test('sort clauses can be checked', function () {
     expect($request->hasSort())->toBeTrue();
 });
 
-test('array casting with query and search after', function () {
+it('casts to an array with a query and search after', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -114,7 +114,7 @@ test('array casting with query and search after', function () {
     ], $request->toArray());
 });
 
-test('array casting with point in time without keep alive', function () {
+it('casts to an array with a point in time without keep alive', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -133,7 +133,7 @@ test('array casting with point in time without keep alive', function () {
     ]);
 });
 
-test('array casting with query and rescore', function () {
+it('casts to an array with a query and rescore', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -178,7 +178,7 @@ test('array casting with query and rescore', function () {
     ], $request->toArray());
 });
 
-test('array casting with query and from', function () {
+it('casts to an array with a query and from', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -195,7 +195,7 @@ test('array casting with query and from', function () {
     ], $request->toArray());
 });
 
-test('array casting with query and size', function () {
+it('casts to an array with a query and size', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -212,7 +212,7 @@ test('array casting with query and size', function () {
     ], $request->toArray());
 });
 
-test('array casting with query and suggest', function () {
+it('casts to an array with a query and suggest', function () {
     $request = new SearchRequest([
         'match_none' => new stdClass,
     ]);
@@ -250,7 +250,7 @@ dataset('source filters', [
     [['includes' => ['obj1.*', 'obj2.*'], 'excludes' => ['*.description']]],
 ]);
 
-test('array casting with source', function ($source) {
+it('casts to an array with source filtering', function ($source) {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -267,7 +267,7 @@ test('array casting with source', function ($source) {
     ], $request->toArray());
 })->with('source filters');
 
-test('array casting with collapse', function () {
+it('casts to an array with collapse', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -288,7 +288,7 @@ test('array casting with collapse', function () {
     ], $request->toArray());
 });
 
-test('array casting with aggregations', function () {
+it('casts to an array with aggregations', function () {
     $request = new SearchRequest;
 
     $request->aggregations([
@@ -312,7 +312,7 @@ test('array casting with aggregations', function () {
     ], $request->toArray());
 });
 
-test('array casting with post filter', function () {
+it('casts to an array with a post filter', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -337,7 +337,7 @@ test('array casting with post filter', function () {
     ], $request->toArray());
 });
 
-test('array casting with track total hits', function () {
+it('casts to an array with track total hits', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -354,7 +354,7 @@ test('array casting with track total hits', function () {
     ], $request->toArray());
 });
 
-test('array casting with indices boost', function () {
+it('casts to an array with indices boost', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -377,7 +377,7 @@ test('array casting with indices boost', function () {
     ], $request->toArray());
 });
 
-test('array casting with track scores', function () {
+it('casts to an array with track scores', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -394,7 +394,7 @@ test('array casting with track scores', function () {
     ], $request->toArray());
 });
 
-test('array casting with script fields', function () {
+it('casts to an array with script fields', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -433,7 +433,7 @@ test('array casting with script fields', function () {
     ], $request->toArray());
 });
 
-test('array casting with min score', function () {
+it('casts to an array with a minimum score', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -450,7 +450,7 @@ test('array casting with min score', function () {
     ], $request->toArray());
 });
 
-test('array casting with search type', function () {
+it('casts to an array with a search type', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -467,7 +467,7 @@ test('array casting with search type', function () {
     ], $request->toArray());
 });
 
-test('array casting with preference', function () {
+it('casts to an array with a preference', function () {
     $request = new SearchRequest([
         'match_all' => new stdClass,
     ]);
@@ -484,7 +484,7 @@ test('array casting with preference', function () {
     ], $request->toArray());
 });
 
-test('array casting with documented body options', function () {
+it('casts to an array with documented body options', function () {
     $request = (new SearchRequest)
         ->query([
             'match_all' => new stdClass,
@@ -556,7 +556,7 @@ test('array casting with documented body options', function () {
     ]);
 });
 
-test('array casting with documented search parameters', function () {
+it('casts to an array with documented search parameters', function () {
     $request = (new SearchRequest([
         'match_all' => new stdClass,
     ]))
@@ -582,7 +582,7 @@ test('array casting with documented search parameters', function () {
     ]);
 });
 
-test('array casting with custom body options and parameters', function () {
+it('casts to an array with custom body options and parameters', function () {
     $request = (new SearchRequest)
         ->body('derived', [
             'full_name' => [

@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Documents;
 
 use DirectoryTree\OpenSearchAdapter\Documents\DocumentRouting;
 
-test('routing values can be added and retrieved', function () {
+it('adds and retrieves routing values', function () {
     $routing = DocumentRouting::make('1', 'user1')
         ->add('2', 'user2');
 

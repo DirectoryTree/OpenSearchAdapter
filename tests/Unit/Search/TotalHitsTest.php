@@ -4,7 +4,7 @@ namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Search;
 
 use DirectoryTree\OpenSearchAdapter\Search\TotalHits;
 
-test('total hit values can be retrieved', function () {
+it('retrieves total hit values', function () {
     $total = new TotalHits([
         'value' => 100,
         'relation' => 'eq',
@@ -15,7 +15,7 @@ test('total hit values can be retrieved', function () {
     $this->assertTrue($total->isExact());
 });
 
-test('integer total hit values can be retrieved', function () {
+it('retrieves integer total hit values', function () {
     $total = new TotalHits(100);
 
     $this->assertSame(100, $total->value());
@@ -23,7 +23,7 @@ test('integer total hit values can be retrieved', function () {
     $this->assertTrue($total->isExact());
 });
 
-test('raw representation can be retrieved', function () {
+it('retrieves raw representation', function () {
     $total = new TotalHits([
         'value' => 10000,
         'relation' => 'gte',
