@@ -3,6 +3,7 @@
 namespace DirectoryTree\OpenSearchAdapter\Tests\Unit\Indices;
 
 use DirectoryTree\OpenSearchAdapter\Indices\Alias;
+use DirectoryTree\OpenSearchAdapter\Indices\AliasActions;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexBlueprint;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexManager;
 use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
@@ -199,13 +200,15 @@ test('aliases can be retrieved', function () {
         ->willReturn([
             $index => [
                 'aliases' => [
-                    $aliasName => [],
+                    $aliasName => [
+                        'is_write_index' => true,
+                    ],
                 ],
             ],
         ]);
 
     $this->assertEquals(
-        [$aliasName => new Alias($aliasName)],
+        [$aliasName => new Alias($aliasName, isWriteIndex: true)],
         $this->indexManager->getAliases($index)
     );
 });
@@ -231,6 +234,37 @@ test('alias can be created', function () {
         ]);
 
     $this->assertSame($this->indexManager, $this->indexManager->putAlias($index, $alias));
+});
+
+test('aliases can be updated atomically', function () {
+    $actions = (new AliasActions)
+        ->remove('posts_blue', 'posts')
+        ->add('posts_green', new Alias('posts', isWriteIndex: true));
+
+    $this->indices
+        ->expects($this->once())
+        ->method('updateAliases')
+        ->with([
+            'body' => [
+                'actions' => [
+                    [
+                        'remove' => [
+                            'index' => 'posts_blue',
+                            'alias' => 'posts',
+                        ],
+                    ],
+                    [
+                        'add' => [
+                            'index' => 'posts_green',
+                            'alias' => 'posts',
+                            'is_write_index' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+    $this->assertSame($this->indexManager, $this->indexManager->updateAliases($actions));
 });
 
 test('alias can be deleted', function () {

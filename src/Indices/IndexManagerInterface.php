@@ -78,4 +78,11 @@ interface IndexManagerInterface
      * @see https://docs.opensearch.org/latest/api-reference/index-apis/alias/
      */
     public function deleteAlias(string $index, string $aliasName): static;
+
+    /**
+     * Atomically apply multiple alias actions.
+     *
+     * @see https://docs.opensearch.org/latest/api-reference/alias/aliases-api/
+     */
+    public function updateAliases(AliasActions $actions): static;
 }

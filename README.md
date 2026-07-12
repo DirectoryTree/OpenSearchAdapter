@@ -176,6 +176,28 @@ $indices->putAlias('books', new Alias(
 $aliases = $indices->getAliases('books');
 ```
 
+Apply multiple alias changes atomically when switching between versioned indexes:
+
+```php
+use DirectoryTree\OpenSearchAdapter\Indices\Alias;
+use DirectoryTree\OpenSearchAdapter\Indices\AliasActions;
+
+$actions = (new AliasActions)
+    ->remove('books_blue', 'books')
+    ->add('books_green', new Alias('books', isWriteIndex: true));
+
+$indices->updateAliases($actions);
+```
+
+An old physical index can be removed in the same atomic operation:
+
+```php
+$actions = (new AliasActions)
+    ->remove('books_blue', 'books')
+    ->add('books_green', new Alias('books', isWriteIndex: true))
+    ->removeIndex('books_retired');
+```
+
 ## Raw Responses
 
 Search response objects expose the original OpenSearch payload through `raw()`:

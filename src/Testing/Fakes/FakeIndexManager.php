@@ -3,6 +3,7 @@
 namespace DirectoryTree\OpenSearchAdapter\Testing\Fakes;
 
 use DirectoryTree\OpenSearchAdapter\Indices\Alias;
+use DirectoryTree\OpenSearchAdapter\Indices\AliasActions;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexBlueprint;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexManagerInterface;
 use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
@@ -69,6 +70,13 @@ class FakeIndexManager implements IndexManagerInterface
      * @var array<int, array{index: string, alias: Alias}>
      */
     protected array $aliases = [];
+
+    /**
+     * The atomic alias updates.
+     *
+     * @var array<int, AliasActions>
+     */
+    protected array $aliasUpdates = [];
 
     /**
      * The deleted aliases.
@@ -153,7 +161,15 @@ class FakeIndexManager implements IndexManagerInterface
     public function delete(string $index): static
     {
         $this->deleted[] = $index;
-        $this->existing = array_values(array_diff($this->existing, [$index]));
+
+        $this->existing = array_values(
+            array_diff($this->existing, [$index])
+        );
+
+        $this->aliases = array_values(array_filter(
+            $this->aliases,
+            fn (array $operation) => $operation['index'] !== $index,
+        ));
 
         return $this;
     }
@@ -181,6 +197,8 @@ class FakeIndexManager implements IndexManagerInterface
      */
     public function putAlias(string $index, Alias $alias): static
     {
+        $this->removeAlias($index, $alias->name());
+
         $this->aliases[] = compact('index', 'alias');
 
         return $this;
@@ -195,6 +213,49 @@ class FakeIndexManager implements IndexManagerInterface
             'index' => $index,
             'alias' => $aliasName,
         ];
+
+        $this->removeAlias($index, $aliasName);
+
+        return $this;
+    }
+
+    /**
+     * Atomically apply multiple alias actions.
+     */
+    public function updateAliases(AliasActions $actions): static
+    {
+        $this->aliasUpdates[] = $actions;
+
+        foreach ($actions->actions() as $action) {
+            if ($parameters = $action['add'] ?? null) {
+                $alias = new Alias(
+                    $parameters['alias'],
+                    $parameters['filter'] ?? null,
+                    $parameters['routing'] ?? null,
+                    $parameters['is_write_index'] ?? null,
+                );
+
+                $this->removeAlias($parameters['index'], $parameters['alias']);
+
+                $this->aliases[] = [
+                    'index' => $parameters['index'],
+                    'alias' => $alias,
+                ];
+            }
+
+            if ($parameters = $action['remove'] ?? null) {
+                $this->deletedAliases[] = [
+                    'index' => $parameters['index'],
+                    'alias' => $parameters['alias'],
+                ];
+
+                $this->removeAlias($parameters['index'], $parameters['alias']);
+            }
+
+            if ($parameters = $action['remove_index'] ?? null) {
+                $this->delete($parameters['index']);
+            }
+        }
 
         return $this;
     }
@@ -299,5 +360,27 @@ class FakeIndexManager implements IndexManagerInterface
         PHPUnit::assertContainsEquals(compact('index', 'alias'), $this->deletedAliases);
 
         return $this;
+    }
+
+    /**
+     * Assert that the given atomic alias update was performed.
+     */
+    public function assertAliasesUpdated(AliasActions $actions): static
+    {
+        PHPUnit::assertContainsEquals($actions, $this->aliasUpdates);
+
+        return $this;
+    }
+
+    /**
+     * Remove an alias from the fake's current state.
+     */
+    protected function removeAlias(string $index, string $alias): void
+    {
+        $this->aliases = array_values(
+            array_filter($this->aliases, fn (array $operation) => (
+                $operation['index'] !== $index || $operation['alias']->name() !== $alias
+            ))
+        );
     }
 }

@@ -129,7 +129,8 @@ class IndexManager implements IndexManagerInterface
             $results[$name] = new Alias(
                 $name,
                 $parameters['filter'] ?? null,
-                $parameters['routing'] ?? null
+                $parameters['routing'] ?? null,
+                $parameters['is_write_index'] ?? null,
             );
         }
 
@@ -163,6 +164,18 @@ class IndexManager implements IndexManagerInterface
         $this->indices->deleteAlias([
             'index' => $index,
             'name' => $aliasName,
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Atomically apply multiple alias actions.
+     */
+    public function updateAliases(AliasActions $actions): static
+    {
+        $this->indices->updateAliases([
+            'body' => $actions->toArray(),
         ]);
 
         return $this;
