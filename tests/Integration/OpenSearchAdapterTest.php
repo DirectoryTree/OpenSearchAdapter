@@ -4,6 +4,7 @@ use DirectoryTree\OpenSearchAdapter\Documents\Document;
 use DirectoryTree\OpenSearchAdapter\Documents\DocumentManager;
 use DirectoryTree\OpenSearchAdapter\Documents\DocumentRouting;
 use DirectoryTree\OpenSearchAdapter\Indices\Alias;
+use DirectoryTree\OpenSearchAdapter\Indices\AliasActions;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexBlueprint;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexManager;
 use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
@@ -164,6 +165,40 @@ it('handles mappings settings routing delete by query and rich search responses 
     } finally {
         if ($indexManager->exists($index)) {
             $indexManager->delete($index);
+        }
+    }
+});
+
+it('atomically switches an alias between physical indexes', function (): void {
+    $client = openSearchClient();
+    $indices = new IndexManager($client);
+
+    $prefix = sprintf('adapter_integration_%s', bin2hex(random_bytes(4)));
+    $blue = $prefix.'_blue';
+    $green = $prefix.'_green';
+    $alias = $prefix.'_alias';
+
+    try {
+        $indices->create(new IndexBlueprint($blue));
+        $indices->create(new IndexBlueprint($green));
+        $indices->putAlias($blue, new Alias($alias, isWriteIndex: true));
+
+        $indices->updateAliases(
+            (new AliasActions)
+                ->remove($blue, $alias)
+                ->add($green, new Alias($alias, isWriteIndex: true)),
+        );
+
+        expect($indices->getAliases($blue))->not->toHaveKey($alias)
+            ->and($indices->getAliases($green))->toHaveKey($alias)
+            ->and($indices->getAliases($green)[$alias]->isWriteIndex())->toBeTrue();
+    } finally {
+        if ($indices->exists($blue)) {
+            $indices->delete($blue);
+        }
+
+        if ($indices->exists($green)) {
+            $indices->delete($green);
         }
     }
 });

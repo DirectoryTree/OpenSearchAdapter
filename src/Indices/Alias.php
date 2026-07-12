@@ -13,11 +13,13 @@ class Alias
      * @param  string  $name  The alias name.
      * @param  array<string, mixed>|null  $filter
      * @param  string|null  $routing  The optional alias routing value.
+     * @param  bool|null  $isWriteIndex  Whether this is the alias write index.
      */
     public function __construct(
         protected string $name,
         protected ?array $filter = null,
         protected ?string $routing = null,
+        protected ?bool $isWriteIndex = null,
     ) {}
 
     /**
@@ -47,6 +49,14 @@ class Alias
     }
 
     /**
+     * Determine whether this is the alias write index.
+     */
+    public function isWriteIndex(): ?bool
+    {
+        return $this->isWriteIndex;
+    }
+
+    /**
      * Get the OpenSearch alias body payload.
      *
      * @return array<string, mixed>
@@ -61,6 +71,10 @@ class Alias
 
         if ($this->filter) {
             $body['filter'] = $this->filter;
+        }
+
+        if (! is_null($this->isWriteIndex)) {
+            $body['is_write_index'] = $this->isWriteIndex;
         }
 
         return $body;

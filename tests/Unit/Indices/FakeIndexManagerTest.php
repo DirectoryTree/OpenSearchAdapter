@@ -1,6 +1,7 @@
 <?php
 
 use DirectoryTree\OpenSearchAdapter\Indices\Alias;
+use DirectoryTree\OpenSearchAdapter\Indices\AliasActions;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexBlueprint;
 use DirectoryTree\OpenSearchAdapter\Indices\IndexManagerInterface;
 use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
@@ -75,7 +76,10 @@ test('fake index manager records deleted indices', function () {
 
 test('fake index manager records aliases', function () {
     $indices = new FakeIndexManager;
-    $alias = new Alias('published_posts', ['term' => ['status' => 'published']], 'tenant-1');
+
+    $alias = new Alias('published_posts', [
+        'term' => ['status' => 'published'],
+    ], 'tenant-1');
 
     $indices->putAlias('posts', $alias);
 
@@ -89,7 +93,40 @@ test('fake index manager records aliases', function () {
 test('fake index manager records deleted aliases', function () {
     $indices = new FakeIndexManager;
 
+    $indices->putAlias('posts', new Alias('published_posts'));
+
     $indices->deleteAlias('posts', 'published_posts');
 
     $indices->assertAliasDeleted('posts', 'published_posts');
+
+    expect($indices->getAliases('posts'))->toBe([]);
+});
+
+test('fake index manager applies atomic alias updates', function () {
+    $indices = new FakeIndexManager(existing: [
+        'posts_blue',
+        'posts_green',
+        'posts_retired',
+    ]);
+
+    $indices->putAlias('posts_blue', new Alias('posts', isWriteIndex: true));
+
+    $actions = (new AliasActions)
+        ->remove('posts_blue', 'posts')
+        ->add('posts_green', new Alias('posts', isWriteIndex: true))
+        ->removeIndex('posts_retired');
+
+    $indices->updateAliases($actions);
+
+    $indices
+        ->assertAliasesUpdated($actions)
+        ->assertAliasDeleted('posts_blue', 'posts')
+        ->assertAliasPut('posts_green', new Alias('posts', isWriteIndex: true))
+        ->assertDeleted('posts_retired');
+
+    expect($indices->getAliases('posts_blue'))->toBe([])
+        ->and($indices->getAliases('posts_green'))->toEqual([
+            'posts' => new Alias('posts', isWriteIndex: true),
+        ])
+        ->and($indices->exists('posts_retired'))->toBeFalse();
 });
