@@ -42,6 +42,7 @@ use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
 use DirectoryTree\OpenSearchAdapter\Indices\Settings;
 
 $mapping = (new Mapping)
+    ->dynamic('strict')
     ->keyword('id')
     ->text('title')
     ->object('author', [

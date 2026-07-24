@@ -44,6 +44,19 @@ it('enables source', function () {
     ], $mapping->toArray());
 });
 
+it('sets dynamic field mapping behavior', function (bool|string $dynamic) {
+    $mapping = (new Mapping)->dynamic($dynamic);
+
+    expect($mapping->toArray())->toBe([
+        'dynamic' => $dynamic,
+    ]);
+})->with([
+    true,
+    false,
+    'strict',
+    'strict_allow_templates',
+]);
+
 it('casts default values to an empty array', function () {
     $this->assertSame([], (new Mapping)->toArray());
 });

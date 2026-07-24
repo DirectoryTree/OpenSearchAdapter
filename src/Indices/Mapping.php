@@ -11,6 +11,11 @@ use Closure;
 class Mapping
 {
     /**
+     * The dynamic field mapping behavior.
+     */
+    protected bool|string|null $dynamic = null;
+
+    /**
      * The mapping property definitions.
      */
     protected MappingProperties $properties;
@@ -713,6 +718,18 @@ class Mapping
     }
 
     /**
+     * Set the dynamic field mapping behavior.
+     *
+     * @see https://docs.opensearch.org/latest/mappings/mapping-parameters/dynamic/
+     */
+    public function dynamic(bool|string $dynamic): self
+    {
+        $this->dynamic = $dynamic;
+
+        return $this;
+    }
+
+    /**
      * Add a dynamic template definition.
      *
      * @see https://docs.opensearch.org/latest/mappings/#dynamic-templates
@@ -736,6 +753,10 @@ class Mapping
         $mapping = [];
 
         $properties = $this->properties->toArray();
+
+        if (isset($this->dynamic)) {
+            $mapping['dynamic'] = $this->dynamic;
+        }
 
         if (isset($this->isFieldNamesEnabled)) {
             $mapping['_field_names'] = [
