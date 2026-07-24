@@ -272,10 +272,29 @@ class FakeIndexManager implements IndexManagerInterface
 
     /**
      * Assert that the given index was created.
+     *
+     * @param  (callable(IndexBlueprint): bool)|null  $callback
      */
-    public function assertCreated(IndexBlueprint $index): static
+    public function assertCreated(IndexBlueprint|string $index, ?callable $callback = null): static
     {
-        PHPUnit::assertContainsEquals($index, $this->created);
+        if ($index instanceof IndexBlueprint) {
+            PHPUnit::assertContainsEquals($index, $this->created);
+
+            return $this;
+        }
+
+        $created = array_filter(
+            $this->created,
+            fn (IndexBlueprint $created): bool => (
+                $created->name() === $index
+                && (! isset($callback) || $callback($created))
+            )
+        );
+
+        PHPUnit::assertNotEmpty(
+            $created,
+            "The expected index [{$index}] was not created."
+        );
 
         return $this;
     }
@@ -294,20 +313,64 @@ class FakeIndexManager implements IndexManagerInterface
 
     /**
      * Assert that the given index mapping was updated.
+     *
+     * @param  Mapping|(callable(Mapping): bool)|null  $assertion
      */
-    public function assertMappingPut(string $index, Mapping $mapping): static
+    public function assertMappingPut(string $index, Mapping|callable|null $assertion = null): static
     {
-        PHPUnit::assertContainsEquals(compact('index', 'mapping'), $this->mappings);
+        if ($assertion instanceof Mapping) {
+            PHPUnit::assertContainsEquals([
+                'index' => $index,
+                'mapping' => $assertion,
+            ], $this->mappings);
+
+            return $this;
+        }
+
+        $mappings = array_filter(
+            $this->mappings,
+            fn (array $operation): bool => (
+                $operation['index'] === $index
+                && (! isset($assertion) || $assertion($operation['mapping']))
+            )
+        );
+
+        PHPUnit::assertNotEmpty(
+            $mappings,
+            "The expected mapping for index [{$index}] was not updated."
+        );
 
         return $this;
     }
 
     /**
      * Assert that the given index settings were updated.
+     *
+     * @param  Settings|(callable(Settings): bool)|null  $assertion
      */
-    public function assertSettingsPut(string $index, Settings $settings): static
+    public function assertSettingsPut(string $index, Settings|callable|null $assertion = null): static
     {
-        PHPUnit::assertContainsEquals(compact('index', 'settings'), $this->settings);
+        if ($assertion instanceof Settings) {
+            PHPUnit::assertContainsEquals([
+                'index' => $index,
+                'settings' => $assertion,
+            ], $this->settings);
+
+            return $this;
+        }
+
+        $settings = array_filter(
+            $this->settings,
+            fn (array $operation): bool => (
+                $operation['index'] === $index
+                && (! isset($assertion) || $assertion($operation['settings']))
+            )
+        );
+
+        PHPUnit::assertNotEmpty(
+            $settings,
+            "The expected settings for index [{$index}] were not updated."
+        );
 
         return $this;
     }

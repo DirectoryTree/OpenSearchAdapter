@@ -7,6 +7,7 @@ use DirectoryTree\OpenSearchAdapter\Indices\IndexManagerInterface;
 use DirectoryTree\OpenSearchAdapter\Indices\Mapping;
 use DirectoryTree\OpenSearchAdapter\Indices\Settings;
 use DirectoryTree\OpenSearchAdapter\Testing\Fakes\FakeIndexManager;
+use PHPUnit\Framework\ExpectationFailedException;
 
 it('implements the index manager contract', function () {
     expect(new FakeIndexManager)->toBeInstanceOf(IndexManagerInterface::class);
@@ -38,12 +39,66 @@ it('records created indices', function () {
     expect($indices->exists('posts'))->toBeTrue();
 });
 
+it('asserts created indices by name', function () {
+    $indices = new FakeIndexManager;
+
+    $indices->create(new IndexBlueprint(
+        'posts',
+        (new Mapping)->text('title'),
+        (new Settings)->index(['number_of_replicas' => 0])
+    ));
+
+    $indices
+        ->assertCreated('posts')
+        ->assertCreated('posts', fn (IndexBlueprint $index): bool => (
+            $index->mapping()?->toArray() === [
+                'properties' => [
+                    'title' => ['type' => 'text'],
+                ],
+            ]
+            && $index->settings()?->toArray() === [
+                'index' => ['number_of_replicas' => 0],
+            ]
+        ));
+});
+
+it('fails when no created index satisfies the assertion', function () {
+    $indices = new FakeIndexManager;
+
+    $indices->create(new IndexBlueprint('posts'));
+
+    expect(fn () => $indices->assertCreated('comments'))
+        ->toThrow(ExpectationFailedException::class);
+
+    expect(fn () => $indices->assertCreated('posts', fn (): bool => false))
+        ->toThrow(ExpectationFailedException::class);
+});
+
 it('records mapping updates', function () {
     $indices = new FakeIndexManager;
 
     $indices->putMapping('posts', $mapping = (new Mapping)->keyword('status'));
 
-    $indices->assertMappingPut('posts', $mapping);
+    $indices
+        ->assertMappingPut('posts', $mapping)
+        ->assertMappingPut('posts')
+        ->assertMappingPut('posts', fn (Mapping $mapping): bool => $mapping->toArray() === [
+            'properties' => [
+                'status' => ['type' => 'keyword'],
+            ],
+        ]);
+});
+
+it('fails when no mapping update satisfies the assertion', function () {
+    $indices = new FakeIndexManager;
+
+    $indices->putMapping('posts', (new Mapping)->keyword('status'));
+
+    expect(fn () => $indices->assertMappingPut('comments'))
+        ->toThrow(ExpectationFailedException::class);
+
+    expect(fn () => $indices->assertMappingPut('posts', fn (): bool => false))
+        ->toThrow(ExpectationFailedException::class);
 });
 
 it('records settings updates', function () {
@@ -51,7 +106,24 @@ it('records settings updates', function () {
 
     $indices->putSettings('posts', $settings = (new Settings)->index(['refresh_interval' => -1]));
 
-    $indices->assertSettingsPut('posts', $settings);
+    $indices
+        ->assertSettingsPut('posts', $settings)
+        ->assertSettingsPut('posts')
+        ->assertSettingsPut('posts', fn (Settings $settings): bool => $settings->toArray() === [
+            'index' => ['refresh_interval' => -1],
+        ]);
+});
+
+it('fails when no settings update satisfies the assertion', function () {
+    $indices = new FakeIndexManager;
+
+    $indices->putSettings('posts', (new Settings)->index(['refresh_interval' => -1]));
+
+    expect(fn () => $indices->assertSettingsPut('comments'))
+        ->toThrow(ExpectationFailedException::class);
+
+    expect(fn () => $indices->assertSettingsPut('posts', fn (): bool => false))
+        ->toThrow(ExpectationFailedException::class);
 });
 
 it('records open and close operations', function () {
