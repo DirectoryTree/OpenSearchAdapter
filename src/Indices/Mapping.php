@@ -11,14 +11,14 @@ use Closure;
 class Mapping
 {
     /**
-     * The dynamic field mapping behavior.
-     */
-    protected bool|string|null $dynamic = null;
-
-    /**
      * The mapping property definitions.
      */
     protected MappingProperties $properties;
+
+    /**
+     * The dynamic field mapping behavior.
+     */
+    protected bool|string|null $dynamic = null;
 
     /**
      * The dynamic template definitions.
